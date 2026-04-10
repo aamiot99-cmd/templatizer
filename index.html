@@ -522,10 +522,10 @@ input[type=file]{display:none}
 <script>
 // ─── STATE ────────────────────────────────────────────────────────────────
 const DEFAULT_NAV_ENTRIES = [
-  { label: 'Accueil',             dropdown: false },
-  { label: 'Centre documentaire', dropdown: true  },
-  { label: 'Nos directions',      dropdown: true  },
-  { label: 'Centre de news',      dropdown: false },
+  { label: 'Accueil',             dropdown: false, children: [] },
+  { label: 'Centre documentaire', dropdown: true,  children: [] },
+  { label: 'Nos directions',      dropdown: true,  children: [] },
+  { label: 'Centre de news',      dropdown: false, children: [] },
 ];
 
 const ST = {
