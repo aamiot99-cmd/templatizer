@@ -1436,7 +1436,7 @@ function restore(){
     if(c.name){ST.name=c.name;document.getElementById('nameInput').value=c.name;}
     if(c.logo){ST.logo=c.logo;ST.logoName=c.logoName||'';document.getElementById('logoThumb').src=c.logo;document.getElementById('logoFileName').textContent=c.logoName||'';document.getElementById('logoBar').classList.add('vis');}
     if(c.navEntries && Array.isArray(c.navEntries) && c.navEntries.length){
-      ST.navEntries = c.navEntries.map(e => ({ label: e.label || '', dropdown: !!e.dropdown }));
+      ST.navEntries = c.navEntries.map(e => ({ label: e.label || '', dropdown: !!e.dropdown, children: Array.isArray(e.children) ? e.children.slice() : [] }));
     }
     if(c.blocks && typeof c.blocks === 'object'){
       ST.blocks = {
