@@ -776,15 +776,57 @@ function renderNavEntries(){
     const locked = idx === 0;
     const placeholder = DEFAULT_NAV_ENTRIES[idx] ? DEFAULT_NAV_ENTRIES[idx].label : '';
     const safeLabel = (entry.label || '').replace(/"/g, '&quot;');
-    return `<div class="nav-entry-row" data-idx="${idx}">
+    if(!Array.isArray(entry.children)) entry.children = [];
+    let html = `<div class="nav-entry-row" data-idx="${idx}">
       <input type="text" class="nav-entry-input" value="${safeLabel}" placeholder="${placeholder}" ${locked?'disabled':''} oninput="ST.navEntries[${idx}].label=this.value">
       <label class="nav-toggle">
-        <input type="checkbox" ${entry.dropdown?'checked':''} ${locked?'disabled':''} onchange="ST.navEntries[${idx}].dropdown=this.checked">
+        <input type="checkbox" ${entry.dropdown?'checked':''} ${locked?'disabled':''} onchange="onNavDropdownToggle(${idx},this.checked)">
         <span class="nav-toggle-slider"></span>
       </label>
       <span class="nav-toggle-label">Menu déroulant</span>
     </div>`;
+    if(entry.dropdown && !locked){
+      html += `<div class="nav-children" data-idx="${idx}">`;
+      entry.children.forEach((child, ci) => {
+        const safeChild = (child || '').replace(/"/g, '&quot;');
+        html += `<div class="nav-child-row">
+          <span class="nav-child-indent">↳</span>
+          <input type="text" class="nav-child-input" value="${safeChild}" placeholder="Sous-entrée…" oninput="onNavChildInput(${idx},${ci},this.value)">
+          <button type="button" class="nav-child-x" onclick="removeNavChild(${idx},${ci})">×</button>
+        </div>`;
+      });
+      html += `<button type="button" class="nav-child-add" onclick="addNavChild(${idx})">+ Ajouter une sous-entrée</button></div>`;
+    }
+    return html;
   }).join('');
+}
+
+function onNavDropdownToggle(idx, checked){
+  ST.navEntries[idx].dropdown = checked;
+  if(checked && !Array.isArray(ST.navEntries[idx].children)){
+    ST.navEntries[idx].children = [];
+  }
+  renderNavEntries();
+}
+
+function addNavChild(entryIdx){
+  if(!Array.isArray(ST.navEntries[entryIdx].children)) ST.navEntries[entryIdx].children = [];
+  ST.navEntries[entryIdx].children.push('');
+  renderNavEntries();
+  // Focus the new input
+  const list = document.getElementById('navEntriesList');
+  const children = list.querySelectorAll(`.nav-children[data-idx="${entryIdx}"] .nav-child-input`);
+  const last = children[children.length - 1];
+  if(last) last.focus();
+}
+
+function removeNavChild(entryIdx, childIdx){
+  ST.navEntries[entryIdx].children.splice(childIdx, 1);
+  renderNavEntries();
+}
+
+function onNavChildInput(entryIdx, childIdx, value){
+  ST.navEntries[entryIdx].children[childIdx] = value;
 }
 
 function updateNavVisibility(){
