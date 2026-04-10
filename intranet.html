@@ -1954,7 +1954,16 @@ render(cfg){
       ];
       const entries=(cfg.navEntries&&Array.isArray(cfg.navEntries)&&cfg.navEntries.length)?cfg.navEntries:defaults;
       const all=entries.concat([{label:'<span style="color:var(--P);font-weight:600">Modifier</span>',dropdown:false}]);
-      return all.map(({label,dropdown},i)=>`<div class="jt-sh-nav-item${i===0?' active':''}">${label}${dropdown?'<svg height="0.6em" width="0.9em" viewBox="0 0 12 7" fill="none" stroke="#605e5c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:0.05em"><polyline points="1 1 6 6 11 1"/></svg>':''}</div>`).join('');
+      const chevSvg='<svg height="0.6em" width="0.9em" viewBox="0 0 12 7" fill="none" stroke="#605e5c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:0.05em"><polyline points="1 1 6 6 11 1"/></svg>';
+      return all.map((entry,i)=>{
+        const {label,dropdown,children}=entry;
+        const hasChildren=Array.isArray(children)&&children.length>0;
+        let flyout='';
+        if(hasChildren){
+          flyout=`<div class="jt-sh-dropdown">${children.map(c=>`<div class="jt-sh-dropdown-item">${(c||'').replace(/</g,'&lt;')}</div>`).join('')}</div>`;
+        }
+        return `<div class="jt-sh-nav-item${i===0?' active':''}"${hasChildren?' style="position:relative"':''}>${label}${dropdown?chevSvg:''}${flyout}</div>`;
+      }).join('');
     })()}
     <div class="jt-sh-right">
       <div class="jt-sh-action">${I.star} Non suivi</div>
