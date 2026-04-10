@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Widget Test Grid</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f3f2f1;padding:20px}
+h1{font-size:20px;margin-bottom:20px;color:#111}
+.test-row{margin-bottom:32px}
+.test-label{font-size:13px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.test-label .badge{font-size:11px;background:#e0e0e0;padding:2px 8px;border-radius:4px;color:#444}
+.test-container{border:2px dashed #ccc;border-radius:8px;padding:8px;background:#fff;overflow:hidden}
+.width-full .test-container{max-width:1280px}
+.width-2-3 .test-container{max-width:853px}
+.width-1-2 .test-container{max-width:640px}
+.width-1-3 .test-container{max-width:427px}
+</style>
+</head>
+<body>
+<h1>Jint Widget Test Grid</h1>
+<div id="grid"></div>
+<script>
+// Load intranet.html's JS context
+const cfg = {
+  technology: 'jint',
+  colors: { primary: '#2e7d32', secondary: '#1a1a2e', text: '#1a1a1a' },
+  name: 'TestCorp',
+  logo: null,
+  logoName: '',
+  blocks: { priority: [], secondary: [] },
+  ts: Date.now()
+};
+</script>
+<!-- We'll inject the BLOCKS object from intranet.html via the test -->
+<script>
+// This page is loaded via preview; we'll use eval to inject blocks
+window._testCfg = cfg;
+</script>
+</body>
+</html>
