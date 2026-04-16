@@ -1,0 +1,95 @@
+.row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-height: 96px;
+  position: relative;
+}
+
+.rowEmpty {
+  border-style: dashed;
+  background: #fafafb;
+  align-items: center;
+  justify-content: center;
+  color: #6b6375;
+  font-size: 13px;
+  padding: 20px;
+}
+
+.rowDraggingOver {
+  border-color: #08060d;
+  background: #f5f5f7;
+}
+
+.rowSortableDragging {
+  opacity: 0.5;
+}
+
+.handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  margin-right: 8px;
+  color: #b0aeb5;
+  cursor: grab;
+  font-size: 18px;
+  line-height: 1;
+  user-select: none;
+  touch-action: none;
+}
+
+.handle:active {
+  cursor: grabbing;
+}
+
+.handle:hover {
+  color: #08060d;
+}
+
+.cellsContainer {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.cellWrapper {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.deleteRow {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #6b6375;
+  font-size: 16px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+.row:hover .deleteRow {
+  opacity: 1;
+}
+
+.deleteRow:hover {
+  background: #f0eff3;
+  color: #08060d;
+}

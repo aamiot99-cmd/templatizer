@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Templatizer — Intranet Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg2:#f8fafc;--bg3:#f1f5f9;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --blue:#2563EB;--blue2:#1d4ed8;--blue-light:#eff6ff;
+  --orange:#F97316;--orange2:#ea6c0a;
+  --text:#0f172a;--text2:#334155;--text3:#64748b;--text4:#94a3b8;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+header{position:fixed;top:0;left:0;right:0;height:60px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 36px;z-index:200;justify-content:space-between}
+.logo-mark{font-size:18px;font-weight:800;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.logo-dot{width:8px;height:8px;background:var(--orange);border-radius:50%}
+.logo-mark span{color:var(--blue)}
+.header-badge{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:4px 12px;border:1px solid var(--border);border-radius:20px}
+
+.app-layout{display:grid;grid-template-columns:268px 1fr;min-height:100vh;padding-top:60px}
+
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:40px 24px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text4);margin-bottom:24px;padding-left:4px}
+.steps-nav{list-style:none;display:flex;flex-direction:column;gap:4px;flex:1}
+.step-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:13px;font-weight:500;color:var(--text3)}
+.step-item:hover{background:var(--bg3);color:var(--text)}
+.step-item.active{background:var(--blue-light);color:var(--blue)}
+.step-item.done{color:var(--text2)}
+.step-num{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all 0.2s;color:var(--text3)}
+.step-item.active .step-num{border-color:var(--blue);background:var(--blue);color:white}
+.step-item.done .step-num{border-color:#22c55e;background:#22c55e;color:white;font-size:12px}
+.sidebar-footer{margin-top:auto;padding-top:24px;border-top:1px solid var(--border)}
+.progress-bar{height:3px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--orange));border-radius:2px;transition:width 0.4s ease}
+.progress-label{font-size:11px;color:var(--text3);display:flex;justify-content:space-between}
+
+.main-content{padding:60px 72px;max-width:880px}
+.section{display:none}
+.section.active{display:block;animation:fadeUp 0.35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.step-tag{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
+.step-title{font-size:42px;font-weight:900;letter-spacing:-2px;line-height:1.0;margin-bottom:10px;color:var(--text)}
+.step-sub{font-size:15px;color:var(--text3);line-height:1.6;margin-bottom:44px;max-width:500px}
+.section-footer{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:28px;border-top:1px solid var(--border)}
+
+.btn{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.18s;border:1.5px solid transparent;letter-spacing:-0.2px}
+.btn-ghost{background:none;border-color:var(--border2);color:var(--text3)}
+.btn-ghost:hover{border-color:var(--text2);color:var(--text)}
+.btn-next{background:var(--blue);color:white;border-color:var(--blue)}
+.btn-next:hover{background:var(--blue2);border-color:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,99,235,0.25)}
+.btn-generate{background:linear-gradient(135deg,var(--blue) 0%,var(--blue2) 100%);color:white;border:none;padding:18px 52px;font-size:16px;border-radius:12px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:800;transition:all 0.2s;letter-spacing:-0.5px}
+.btn-generate:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(37,99,235,0.3)}
+
+/* ── TECHNOLOGY CARDS ── */
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+.tech-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:0;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.tech-card:hover{border-color:rgba(37,99,235,0.3);box-shadow:0 4px 16px rgba(37,99,235,.08)}
+.tech-card.sel{border-color:var(--blue);box-shadow:0 4px 20px rgba(37,99,235,.15)}
+.tech-card.sel::after{content:'✓';position:absolute;top:14px;right:14px;width:22px;height:22px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
+.tech-banner{height:80px;display:flex;align-items:center;padding:0 22px;gap:14px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.tech-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;flex-shrink:0;color:white}
+.tech-ico-lm{background:linear-gradient(135deg,#1a73e8,#34a853)}
+.tech-ico-sp{background:linear-gradient(135deg,#0078d4,#2b88d8)}
+.tech-ico-jl{background:linear-gradient(135deg,#e63946,#c1121f)}
+.tech-ico-jt{background:linear-gradient(135deg,#7b2ff7,#e040fb)}
+.tech-name{font-size:16px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.tech-version{font-size:10px;color:var(--text3);font-weight:500}
+.tech-body{padding:16px 22px 20px}
+.tech-desc{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:12px}
+.tech-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tech-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);letter-spacing:0.3px}
+
+/* ── COLOR PICKERS ── */
+.pickers-row{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:8px}
+.picker-block{display:flex;flex-direction:column;gap:12px}
+.picker-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.disc-wrap{position:relative;width:100%;aspect-ratio:1}
+.color-disc{width:100%;height:100%;border-radius:50%;cursor:crosshair;position:relative;
+  background:radial-gradient(circle at center,#fff 0%,transparent 65%),
+    conic-gradient(hsl(0,100%,50%),hsl(30,100%,50%),hsl(60,100%,50%),hsl(90,100%,50%),hsl(120,100%,50%),hsl(150,100%,50%),hsl(180,100%,50%),hsl(210,100%,50%),hsl(240,100%,50%),hsl(270,100%,50%),hsl(300,100%,50%),hsl(330,100%,50%),hsl(360,100%,50%))}
+.disc-dark{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.1s}
+.disc-cursor{position:absolute;width:14px;height:14px;border-radius:50%;border:2.5px solid white;box-shadow:0 0 0 1.5px rgba(0,0,0,0.4),0 2px 8px rgba(0,0,0,0.5);transform:translate(-50%,-50%);pointer-events:none}
+.brightness-row{display:flex;align-items:center;gap:10px}
+input[type=range].bright-slider{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:4px;outline:none;cursor:pointer;background:transparent;flex:1}
+input[type=range].bright-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:white;border:2px solid rgba(0,0,0,0.25);box-shadow:0 1px 4px rgba(0,0,0,0.3);cursor:pointer}
+.bright-label{font-size:10px;color:var(--text3);min-width:28px;text-align:right}
+.color-swatch{width:100%;height:42px;border-radius:8px;border:1.5px solid var(--border);transition:background 0.1s}
+.hex-row{display:flex;align-items:center;background:var(--white);border:1.5px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color 0.2s}
+.hex-row:focus-within{border-color:var(--blue)}
+.hex-sign{padding:0 4px 0 12px;color:var(--text3);font-size:13px;font-weight:600;font-family:monospace;user-select:none}
+.hex-input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:monospace;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:11px 12px 11px 0;width:100%}
+.hex-input::placeholder{color:var(--border2);letter-spacing:0}
+
+/* ── PROJECT NAME ── */
+.name-input{width:100%;background:var(--white);border:2px solid var(--border);border-radius:14px;padding:22px 28px;font-size:28px;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:-0.5px;color:var(--text);outline:none;transition:border-color 0.2s}
+.name-input:focus{border-color:var(--blue)}
+.name-input::placeholder{color:var(--text4)}
+
+/* ── LOGO ── */
+.drop-zone{border:2px dashed var(--border2);border-radius:16px;padding:52px 40px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg2)}
+.drop-zone:hover,.drop-zone.over{border-color:var(--blue);background:var(--blue-light)}
+.drop-ico{font-size:36px;margin-bottom:14px;opacity:0.4}
+.drop-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.drop-hint{font-size:12px;color:var(--text3)}
+input[type=file]{display:none}
+.logo-preview-bar{display:none;align-items:center;gap:16px;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:14px}
+.logo-preview-bar.vis{display:flex}
+.logo-preview-bar img{height:52px;max-width:120px;object-fit:contain;border-radius:6px}
+.logo-file-name{flex:1;font-size:13px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-remove{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px;line-height:1}
+.btn-remove:hover{color:var(--orange)}
+
+/* ── SUMMARY ── */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+.s-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.s-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text4);margin-bottom:14px}
+.s-colors{display:flex;gap:10px}
+.s-dot{width:36px;height:36px;border-radius:50%;border:2px solid var(--border)}
+.s-name{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:var(--text)}
+.s-tech{display:flex;align-items:center;gap:10px}
+.s-tech-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:white}
+.s-tech-name{font-size:16px;font-weight:700;color:var(--text)}
+.generate-center{text-align:center;padding:32px 0 20px}
+
+/* ── CONTENT STEPS ── */
+.content-step-layout{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px}
+.content-col{display:flex;flex-direction:column;gap:10px}
+.content-col-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.content-col-hint{font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;color:var(--text4)}
+.content-col-badge{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.content-col-badge--pri{background:var(--blue-light);color:var(--blue);border:1px solid rgba(37,99,235,.2)}
+.content-col-badge--sec{background:#fff7ed;color:var(--orange);border:1px solid rgba(249,115,22,.2)}
+/* ── NAVIGATION SUBSECTION ── */
+.nav-subsection{margin-top:28px;padding-top:24px;border-top:1.5px solid var(--border)}
+.nav-entries{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.nav-entry-row{display:flex;align-items:center;gap:16px;padding:12px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;transition:border-color .15s}
+.nav-entry-row:focus-within{border-color:var(--blue)}
+.nav-entry-input{flex:1;min-width:0;background:transparent;border:none;outline:none;font-size:15px;font-weight:600;color:var(--text);font-family:'Inter',sans-serif;padding:4px 0}
+.nav-entry-input::placeholder{color:var(--text4)}
+.nav-entry-input:disabled{opacity:.45;cursor:not-allowed}
+.nav-toggle{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0}
+.nav-toggle input{opacity:0;width:0;height:0;position:absolute}
+.nav-toggle-slider{position:absolute;inset:0;background:#d4d4d8;border-radius:22px;cursor:pointer;transition:background .2s}
+.nav-toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.nav-toggle input:checked + .nav-toggle-slider{background:var(--blue)}
+.nav-toggle input:checked + .nav-toggle-slider::before{transform:translateX(16px)}
+.nav-toggle input:disabled + .nav-toggle-slider{opacity:.4;cursor:not-allowed}
+.nav-toggle-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);flex-shrink:0;min-width:100px}
+.nav-children{margin-left:40px;margin-top:6px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+.nav-child-row{display:flex;align-items:center;gap:8px}
+.nav-child-indent{color:#bbb;font-size:14px;flex-shrink:0}
+.nav-child-input{flex:1;min-width:0;background:transparent;border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:500;color:var(--text);font-family:'Inter',sans-serif;outline:none}
+.nav-child-input:focus{border-color:var(--blue)}
+.nav-child-input::placeholder{color:var(--text4)}
+.nav-child-x{border:none;background:none;cursor:pointer;color:#bbb;font-size:16px;padding:0 4px;line-height:1}
+.nav-child-x:hover{color:#ef4444}
+.nav-child-add{align-self:flex-start;border:none;background:none;cursor:pointer;color:var(--blue);font-size:12px;font-weight:600;padding:4px 0;margin-top:2px}
+.nav-child-add:hover{text-decoration:underline}
+.block-pool{display:flex;flex-direction:column;gap:8px;min-height:120px;padding:12px;background:var(--bg3);border-radius:12px;border:1.5px solid var(--border)}
+.block-drop-zone{display:flex;flex-direction:column;gap:8px;min-height:280px;padding:12px;background:var(--blue-light);border:2px dashed var(--blue);border-radius:12px;transition:all 0.15s;position:relative}
+.block-drop-zone.drag-over{background:rgba(37,99,235,.1);border-color:var(--blue2)}
+.block-drop-zone--sec{background:#fff7ed;border-color:var(--orange)}
+.block-drop-zone--sec.drag-over{background:#fed7aa;border-color:var(--orange2)}
+.drop-zone-placeholder{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:var(--text4);text-align:center;pointer-events:none;white-space:nowrap}
+.block-drop-zone:not(:empty) .drop-zone-placeholder{display:none}
+.block-card{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;cursor:grab;user-select:none;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.block-card:hover{border-color:rgba(37,99,235,.35);box-shadow:0 2px 8px rgba(37,99,235,.08)}
+.block-card.dragging{opacity:0.35;cursor:grabbing}
+.block-card.in-zone{border-color:var(--blue);background:var(--blue-light);cursor:pointer}
+.block-card.in-zone:hover{border-color:#ef4444;background:#fef2f2;box-shadow:0 2px 8px rgba(239,68,68,.12)}
+.block-card.in-zone:hover .block-order{background:#ef4444}
+.block-drop-zone--sec .block-card.in-zone{border-color:var(--orange);background:#fff7ed}
+.block-drop-zone--sec .block-card.in-zone:hover{border-color:#ef4444;background:#fef2f2}
+.block-drop-zone--sec .block-order{background:var(--orange)}
+.block-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0}
+.block-info{flex:1;min-width:0}
+.block-label{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.block-desc{font-size:11px;color:var(--text3);margin-top:1px}
+.block-handle{font-size:14px;color:var(--text4);cursor:grab;padding:0 2px;flex-shrink:0}
+.block-order{width:20px;height:20px;border-radius:50%;background:var(--blue);color:white;font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+/* ── LAYOUT BUILDER (Jint) ── */
+.layout-builder{display:flex;gap:20px;margin-bottom:8px;align-items:flex-start}
+.layout-col-pool{flex:0 0 260px;display:flex;flex-direction:column;gap:10px}
+.layout-col-canvas{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.wireframe{display:flex;flex-direction:column;gap:12px;padding:16px;background:#fafafa;border:1.5px dashed #d0d0d0;border-radius:12px;min-height:400px}
+.wf-row{position:relative;display:flex;align-items:stretch;gap:8px}
+.wf-row.dragging{opacity:.45}
+.wf-row.drop-above{box-shadow:0 -3px 0 var(--blue)}
+.wf-row.drop-below{box-shadow:0 3px 0 var(--blue)}
+.wf-row-handle{cursor:grab;display:flex;align-items:center;padding:0 6px;color:#bbb;user-select:none;font-size:18px;line-height:1}
+.wf-row-handle:hover{color:var(--blue)}
+.wf-row-handle:active{cursor:grabbing}
+.wf-row-grid{position:relative;flex:1;display:grid;gap:8px;min-height:96px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:8px;overflow:hidden;min-width:0}
+.wf-cell{position:relative;border:1.5px dashed #d8d8d8;border-radius:6px;min-height:80px;min-width:0;display:flex;align-items:center;justify-content:center;padding:10px;transition:border-color .15s,background .15s}
+.wf-cell.drag-over{border-color:var(--blue);background:rgba(37,99,235,.06)}
+.wf-cell.occupied{border-style:solid;border-color:#e5e5e5;background:#fafafa}
+.wf-cell-empty{color:#aaa;font-size:11px;font-weight:500;pointer-events:none;text-align:center}
+.wf-chip{position:relative;z-index:2;display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border:1.5px solid var(--blue);border-radius:8px;cursor:grab;user-select:none;width:100%;max-width:240px;min-width:0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.wf-cell .wf-chip{max-width:none}
+.wf-chip.dragging{opacity:.4;cursor:grabbing}
+.wf-chip-ico{font-size:16px;flex-shrink:0}
+.wf-chip-label{flex:1;font-size:12px;font-weight:700;color:var(--text);line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wf-chip-blank{border-color:#cbd5e1;background:#f8fafc}
+.wf-chip-input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text);padding:2px 0}
+.wf-chip-input:focus{outline:1px solid var(--blue);outline-offset:2px;border-radius:2px}
+.wf-chip-input::placeholder{color:#94a3b8;font-weight:500;font-style:italic}
+.wf-chip-x{border:none;background:none;cursor:pointer;color:#999;font-size:18px;padding:0 4px;line-height:1;flex-shrink:0}
+.wf-chip-x:hover{color:#ef4444}
+.wf-divider{position:absolute;top:6px;bottom:6px;width:12px;margin-left:-6px;cursor:ew-resize;z-index:1;display:flex;align-items:center;justify-content:center}
+.wf-divider::before{content:'';position:absolute;top:0;bottom:0;left:5px;width:2px;background:#d0d0d0;border-radius:1px;transition:background .15s}
+.wf-divider:hover::before,.wf-divider.dragging::before{background:var(--blue);width:3px;left:4.5px}
+.wf-divider.snapped::before{background:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,.25)}
+.wf-divider-x{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;border:1px solid #ccc;background:#fff;color:#888;cursor:pointer;font-size:12px;line-height:1;display:none;align-items:center;justify-content:center;padding:0;z-index:6}
+.wf-divider:hover .wf-divider-x{display:flex}
+.wf-divider-x:hover{border-color:#ef4444;color:#ef4444}
+.wf-add-divider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:1.5px dashed #c0c0c0;background:#fff;color:#999;cursor:pointer;display:grid;place-items:center;font-size:14px;font-weight:700;padding:0;z-index:4;opacity:0;transition:opacity .15s}
+.wf-cell:hover .wf-add-divider{opacity:1}
+.wf-add-divider:hover{border-color:var(--blue);color:var(--blue)}
+.wf-row-del{border:none;background:none;cursor:pointer;color:#bbb;font-size:16px;padding:0 6px;align-self:center;line-height:1}
+.wf-row-del:hover{color:#ef4444}
+.wf-row-del:disabled{opacity:.3;cursor:not-allowed}
+.wireframe-add-row{padding:12px;border:1.5px dashed #c8c8c8;border-radius:10px;background:#fff;color:#888;cursor:pointer;font-weight:700;font-size:13px;font-family:'Inter',sans-serif;transition:all .15s}
+.wireframe-add-row:hover:not(:disabled){border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.wireframe-add-row:disabled{opacity:.4;cursor:not-allowed}
+#jint-pool .wf-chip{cursor:grab}
+#jint-pool .wf-chip:hover{box-shadow:0 2px 8px rgba(37,99,235,.12)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark"><div class="logo-dot"></div>Templatiz<span>er</span></div>
+  <div class="header-badge">Intranet Generator</div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Configuration</div>
+    <ul class="steps-nav" id="stepsNav">
+      <li class="step-item active" data-s="1" onclick="goTo(1)"><div class="step-num">1</div>Technology</li>
+      <li class="step-item" data-s="2" onclick="goTo(2)"><div class="step-num">2</div>Your Project</li>
+      <li class="step-item" data-s="3" onclick="goTo(3)"><div class="step-num">3</div>Contenus</li>
+      <li class="step-item" data-s="4" onclick="goTo(4)"><div class="step-num">4</div>Generate</li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="progress-label"><span>Progress</span><span id="pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- STEP 1 — TECHNOLOGY -->
+    <section class="section active" id="s1">
+      <div class="step-tag">Step 01 — Platform</div>
+      <h1 class="step-title">Choose your<br>technology.</h1>
+      <p class="step-sub">Select the intranet platform you are creating this homepage for. Each option produces a structurally and visually distinct template.</p>
+      <div class="tech-grid">
+
+        <div class="tech-card" id="tc-lumapps" onclick="pickTech('lumapps',this)">
+          <div class="tech-banner">
+            <div class="tech-ico tech-ico-lm">L</div>
+            <div><div class="tech-name">LumApps</div><div class="tech-version">Digital Workplace</div></div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-desc">Google Workspace-integrated digital workplace with a Material Design system, widget-based homepage builder, and sidebar navigation.</div>
+            <div class="tech-tags">
+              <span class="tech-tag">Material Design</span>
+              <span class="tech-tag">Google Workspace</span>
+              <span class="tech-tag">Card-based</span>
+              <span class="tech-tag">Sidebar nav</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card" id="tc-sharepoint" onclick="pickTech('sharepoint',this)">
+          <div class="tech-banner">
+            <div class="tech-ico tech-ico-sp">S</div>
+            <div><div class="tech-name">SharePoint</div><div class="tech-version">Microsoft 365 Modern</div></div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-desc">Microsoft's enterprise collaboration platform. Fluent Design system with Suite Bar, App Launcher, horizontal site navigation, and modular web parts.</div>
+            <div class="tech-tags">
+              <span class="tech-tag">Fluent Design</span>
+              <span class="tech-tag">Microsoft 365</span>
+              <span class="tech-tag">Web parts</span>
+              <span class="tech-tag">Horizontal nav</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card" id="tc-jalios" onclick="pickTech('jalios',this)">
+          <div class="tech-banner">
+            <div class="tech-ico tech-ico-jl">J</div>
+            <div><div class="tech-name">Jalios</div><div class="tech-version">JCMS Digital Workplace</div></div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-desc">French enterprise CMS and digital workplace platform. Publication-based model, three-column layout with accordion tree navigation and community spaces.</div>
+            <div class="tech-tags">
+              <span class="tech-tag">3-column layout</span>
+              <span class="tech-tag">Accordion nav</span>
+              <span class="tech-tag">Publications</span>
+              <span class="tech-tag">Espaces</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-card" id="tc-jint" onclick="pickTech('jint',this)">
+          <div class="tech-banner">
+            <div class="tech-ico tech-ico-jt">Ji</div>
+            <div><div class="tech-name">Jint</div><div class="tech-version">Social Intranet Platform</div></div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-desc">Community-driven social intranet. Stream-based activity feed, community tiles, no sidebar layout — inspired by modern consumer social platforms.</div>
+            <div class="tech-tags">
+              <span class="tech-tag">Social feed</span>
+              <span class="tech-tag">Communities</span>
+              <span class="tech-tag">No sidebar</span>
+              <span class="tech-tag">Modern UI</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="section-footer">
+        <div></div>
+        <button class="btn btn-next" onclick="goTo(2)">Next — Your Project →</button>
+      </div>
+    </section>
+
+    <!-- STEP 2 — YOUR PROJECT -->
+    <section class="section" id="s2">
+      <div class="step-tag">Step 02 — Identity</div>
+      <h1 class="step-title">Your project.</h1>
+      <p class="step-sub">Name your intranet, upload your logo, and define the color palette that will be applied across the entire interface.</p>
+
+      <!-- Project name -->
+      <div style="margin-bottom:36px">
+        <div class="picker-label" style="margin-bottom:12px">Project name</div>
+        <input class="name-input" id="nameInput" type="text" placeholder="e.g. Nexus, HubConnect, MyCompany…" maxlength="60" oninput="ST.name=this.value">
+      </div>
+
+      <!-- Logo -->
+      <div style="margin-bottom:36px">
+        <div class="picker-label" style="margin-bottom:12px">Logo</div>
+        <div class="drop-zone" id="dropZone"
+          onclick="document.getElementById('fileInput').click()"
+          ondrop="onDrop(event)" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)">
+          <div class="drop-ico">⬆</div>
+          <div class="drop-title">Drop your logo here</div>
+          <div class="drop-hint">or click to browse — PNG, SVG, JPG, WebP</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileInput(event)">
+        <div class="logo-preview-bar" id="logoBar">
+          <img id="logoThumb" src="" alt="logo">
+          <span class="logo-file-name" id="logoFileName"></span>
+          <button class="btn-remove" onclick="removeLogo()">✕</button>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div>
+        <div class="picker-label" style="margin-bottom:20px">Color palette</div>
+        <div class="pickers-row">
+          <div class="picker-block">
+            <div class="picker-label">Primary</div>
+            <div class="disc-wrap" id="dw-primary">
+              <div class="color-disc" id="disc-primary"></div>
+              <div class="disc-dark" id="dark-primary"></div>
+              <div class="disc-cursor" id="cursor-primary"></div>
+            </div>
+            <div class="brightness-row">
+              <input type="range" class="bright-slider" id="bright-primary" min="0" max="100" value="85">
+              <span class="bright-label" id="blabel-primary">85</span>
+            </div>
+            <div class="color-swatch" id="swatch-primary"></div>
+            <div class="hex-row">
+              <span class="hex-sign">#</span>
+              <input class="hex-input" id="hex-primary" maxlength="6" placeholder="E8440A" value="E8440A">
+            </div>
+          </div>
+          <div class="picker-block">
+            <div class="picker-label">Secondary</div>
+            <div class="disc-wrap" id="dw-secondary">
+              <div class="color-disc" id="disc-secondary"></div>
+              <div class="disc-dark" id="dark-secondary"></div>
+              <div class="disc-cursor" id="cursor-secondary"></div>
+            </div>
+            <div class="brightness-row">
+              <input type="range" class="bright-slider" id="bright-secondary" min="0" max="100" value="20">
+              <span class="bright-label" id="blabel-secondary">20</span>
+            </div>
+            <div class="color-swatch" id="swatch-secondary"></div>
+            <div class="hex-row">
+              <span class="hex-sign">#</span>
+              <input class="hex-input" id="hex-secondary" maxlength="6" placeholder="1A1A2E" value="1A1A2E">
+            </div>
+          </div>
+          <div class="picker-block">
+            <div class="picker-label">Text</div>
+            <div class="disc-wrap" id="dw-text">
+              <div class="color-disc" id="disc-text"></div>
+              <div class="disc-dark" id="dark-text"></div>
+              <div class="disc-cursor" id="cursor-text"></div>
+            </div>
+            <div class="brightness-row">
+              <input type="range" class="bright-slider" id="bright-text" min="0" max="100" value="10">
+              <span class="bright-label" id="blabel-text">10</span>
+            </div>
+            <div class="color-swatch" id="swatch-text"></div>
+            <div class="hex-row">
+              <span class="hex-sign">#</span>
+              <input class="hex-input" id="hex-text" maxlength="6" placeholder="1A1A1A" value="1A1A1A">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-footer">
+        <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-next" onclick="goTo(3)">Next — Contenus →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 — CONTENUS -->
+    <section class="section" id="s3">
+      <div class="step-tag">Step 03 — Content</div>
+      <h1 class="step-title">Contenus.</h1>
+      <p class="step-sub">Glissez les blocs disponibles vers l'une des deux zones. Les <strong>prioritaires</strong> s'affichent en grands widgets en haut de page ; les <strong>secondaires</strong> en widgets compacts en bas.</p>
+      <div class="content-step-layout" id="contentLayoutClassic">
+        <div class="content-col">
+          <div class="content-col-label">Blocs disponibles</div>
+          <div class="block-pool" id="pool-all"><!-- populated by JS --></div>
+        </div>
+        <div class="content-col">
+          <div class="content-col-label">
+            Prioritaires
+            <span class="content-col-badge content-col-badge--pri">Grand format · haut de page · max 3</span>
+          </div>
+          <div class="block-drop-zone" id="zone-priority" data-zone="priority">
+            <div class="drop-zone-placeholder">Glissez les blocs ici</div>
+          </div>
+        </div>
+        <div class="content-col">
+          <div class="content-col-label">
+            Secondaires
+            <span class="content-col-badge content-col-badge--sec">Format compact · bas de page</span>
+          </div>
+          <div class="block-drop-zone block-drop-zone--sec" id="zone-secondary" data-zone="secondary">
+            <div class="drop-zone-placeholder">Glissez les blocs ici</div>
+          </div>
+        </div>
+      </div>
+      <div class="layout-builder" id="contentLayoutJint" style="display:none">
+        <div class="layout-col-pool">
+          <div class="content-col-label">Widgets disponibles
+            <span class="content-col-badge" style="background:#f0f9ff;color:#0369a1;border:1px solid rgba(3,105,161,.2)">Glissez dans une cellule</span>
+          </div>
+          <div class="block-pool" id="jint-pool"><!-- populated by JS --></div>
+        </div>
+        <div class="layout-col-canvas">
+          <div class="content-col-label">Maquette
+            <span class="content-col-badge" style="background:#fff7ed;color:var(--orange);border:1px solid rgba(249,115,22,.2)">Ajoutez des séparateurs · Glissez pour ajuster</span>
+          </div>
+          <div class="wireframe" id="jint-wireframe"><!-- populated by JS --></div>
+          <button type="button" class="wireframe-add-row" id="jint-addRow" onclick="addRow()">+ Ajouter une ligne</button>
+        </div>
+      </div>
+      <div class="nav-subsection" id="navSubsection" style="display:none">
+        <div class="content-col-label">Navigation
+          <span class="content-col-badge" style="background:#f0f9ff;color:#0369a1;border:1px solid rgba(3,105,161,.2)">Entrées de la barre de menu · Jint uniquement</span>
+        </div>
+        <div class="nav-entries" id="navEntriesList"><!-- populated by JS --></div>
+      </div>
+      <div class="section-footer">
+        <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-next" onclick="goTo(4)">Next — Generate →</button>
+      </div>
+    </section>
+
+    <!-- STEP 4 — GENERATE -->
+    <section class="section" id="s4">
+      <div class="step-tag">Step 04 — Generate</div>
+      <h1 class="step-title">Ready to<br>generate.</h1>
+      <p class="step-sub">Review your configuration and generate the intranet homepage.</p>
+      <div class="summary-grid">
+        <div class="s-card">
+          <div class="s-title">Technology</div>
+          <div class="s-tech">
+            <div class="s-tech-ico" id="sTechIco"></div>
+            <div class="s-tech-name" id="sTechName">—</div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title">Color Palette</div>
+          <div class="s-colors">
+            <div class="s-dot" id="sc-primary" title="Primary"></div>
+            <div class="s-dot" id="sc-secondary" title="Secondary"></div>
+            <div class="s-dot" id="sc-text" title="Text"></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title">Project Name</div>
+          <div class="s-name" id="sName">—</div>
+        </div>
+        <div class="s-card" style="grid-column:1/-1">
+          <div class="s-title">Logo</div>
+          <div id="sLogo" style="font-size:13px;color:#666">No logo uploaded</div>
+        </div>
+      </div>
+      <div class="generate-center">
+        <button class="btn-generate" onclick="generate()">Generate Intranet Homepage →</button>
+      </div>
+      <div class="section-footer">
+        <button class="btn btn-ghost" onclick="goTo(3)">← Back</button>
+        <div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────
+const DEFAULT_NAV_ENTRIES = [
+  { label: 'Accueil',             dropdown: false, children: [] },
+  { label: 'Centre documentaire', dropdown: true,  children: [] },
+  { label: 'Nos directions',      dropdown: true,  children: [] },
+  { label: 'Centre de news',      dropdown: false, children: [] },
+];
+
+const ST = {
+  technology: '',
+  colors: { primary:'#E8440A', secondary:'#1A1A2E', text:'#1A1A1A' },
+  name: '',
+  logo: null,
+  logoName: '',
+  blocks: { priority: [], secondary: [] },
+  navEntries: DEFAULT_NAV_ENTRIES.map(e => ({...e})),
+  layout: { rows: [] }
+};
+
+// ─── LAYOUT BUILDER STATE (Jint only) ─────────────────────────────────────
+let layoutRowIdCounter = 0;
+const layoutRowId = () => 'r' + (++layoutRowIdCounter);
+const MAX_ROWS = 7;
+
+let layoutDraggedChipId = null;          // string widgetId during chip drag
+let layoutDragSource = null;             // 'pool' | {rowId, cellIdx}
+let layoutRowDragId = null;              // rowId during row reorder drag
+let dividerDragState = null;             // {rowId, gridEl, rect, ratio}
+
+function ensureDefaultLayout(){
+  if(!ST.layout || !Array.isArray(ST.layout.rows)) ST.layout = { rows: [] };
+  while(ST.layout.rows.length < 4){
+    ST.layout.rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:null }] });
+  }
+}
+
+function migrateBlocksToLayout(blocks){
+  const rows = [];
+  const pri = (blocks && blocks.priority) || [];
+  const sec = (blocks && blocks.secondary) || [];
+  if(pri[0]) rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:pri[0] }] });
+  const priRest = pri.slice(1, 3);
+  if(priRest.length === 2){
+    rows.push({ id: layoutRowId(), cells: [
+      { width:'1/2', widgetId:priRest[0] },
+      { width:'1/2', widgetId:priRest[1] },
+    ]});
+  } else if(priRest.length === 1){
+    rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:priRest[0] }] });
+  }
+  for(let i=0; i<sec.length; i+=2){
+    if(i+1 < sec.length){
+      rows.push({ id: layoutRowId(), cells: [
+        { width:'1/2', widgetId:sec[i] },
+        { width:'1/2', widgetId:sec[i+1] },
+      ]});
+    } else {
+      rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:sec[i] }] });
+    }
+  }
+  while(rows.length < 4){
+    rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:null }] });
+  }
+  return { rows: rows.slice(0, MAX_ROWS) };
+}
+
+function __debugAssertUnique(){
+  const seen = new Set();
+  for(const row of (ST.layout?.rows || [])){
+    for(const cell of row.cells){
+      if(cell.widgetId && cell.widgetId !== 'blank'){
+        if(seen.has(cell.widgetId)){
+          console.warn('[layout] duplicate widget detected:', cell.widgetId);
+          return false;
+        }
+        seen.add(cell.widgetId);
+      }
+    }
+  }
+  return true;
+}
+
+const HSV = {
+  primary:   { h:15, s:0.94, v:0.91 },
+  secondary: { h:234, s:0.43, v:0.18 },
+  text:      { h:0, s:0, v:0.10 }
+};
+
+const TECH_META = {
+  lumapps:    { cls:'tech-ico-lm', label:'LumApps',    ico:'L'  },
+  sharepoint: { cls:'tech-ico-sp', label:'SharePoint', ico:'S'  },
+  jalios:     { cls:'tech-ico-jl', label:'Jalios',     ico:'J'  },
+  jint:       { cls:'tech-ico-jt', label:'Jint',       ico:'Ji' }
+};
+
+const PLATFORM_BLOCKS = {
+  lumapps: [
+    { id:'news',       label:'Actualités',   icon:'📰', desc:'Carrousel d\'articles à la une' },
+    { id:'feed',       label:'Feed',         icon:'🗞️', desc:'Fil d\'articles et publications' },
+    { id:'spotlight',  label:'Spotlight',    icon:'🎯', desc:'Bannière et CTA' },
+    { id:'communities',label:'Communautés',  icon:'👥', desc:'Espaces collaboratifs' },
+    { id:'apps',       label:'Applications', icon:'⚡', desc:'Raccourcis applicatifs' },
+    { id:'events',     label:'Événements',   icon:'📅', desc:'Agenda et réunions' },
+    { id:'documents',  label:'Documents',    icon:'📄', desc:'Fichiers récents' },
+  ],
+  sharepoint: [
+    { id:'news',       label:'Actualités',   icon:'📰', desc:'Articles et publications' },
+    { id:'categories', label:'Catégories',   icon:'📂', desc:'Topics et rubriques RH' },
+    { id:'contacts',   label:'Contacts',     icon:'👥', desc:'Équipes et interlocuteurs' },
+    { id:'faq',        label:'FAQ',          icon:'❓', desc:'Questions fréquentes' },
+    { id:'calendar',   label:'Calendrier',   icon:'📅', desc:'Jours fériés et dates clés' },
+    { id:'banner',     label:'Bannière',     icon:'🎯', desc:'Hero et CTA pleine largeur' },
+  ],
+  jalios: [
+    { id:'flashinfo',  label:'Flash Info',   icon:'⚡', desc:'Annonces prioritaires' },
+    { id:'activity',   label:"Fil d'activité", icon:'💬', desc:'Posts et publications' },
+    { id:'communities',label:'Communautés',  icon:'👥', desc:'Espaces membres' },
+    { id:'quickaccess',label:'Accès rapide', icon:'⭐', desc:'Favoris et raccourcis' },
+    { id:'documents',  label:'Documents',    icon:'📄', desc:'Fichiers récents' },
+    { id:'agenda',     label:'Agenda',       icon:'📅', desc:'Vue calendrier hebdomadaire' },
+    { id:'presence',   label:'Présence',     icon:'🟢', desc:'Collègues en ligne' },
+  ],
+  jint: [
+    { id:'news',       label:'Actualités',          icon:'📰', desc:'Carrousel d\'articles à la une' },
+    { id:'apps',       label:'Lanceur d\'apps',      icon:'⚡', desc:'Applications et raccourcis' },
+    { id:'contacts',   label:'Contacts / Newcomers', icon:'👥', desc:'Nouveaux arrivants et contacts clés' },
+    { id:'events',     label:'Événements',           icon:'📅', desc:'Agenda et réunions' },
+    { id:'social',     label:'Feed réseaux sociaux', icon:'💬', desc:'Posts LinkedIn et réseaux' },
+    { id:'focus',      label:'Focus',                icon:'🎯', desc:'Article ou message mis en avant' },
+    { id:'directory',  label:'Annuaire',             icon:'🔍', desc:'Recherche et fiche collaborateur' },
+    { id:'blank',      label:'Widget vide',          icon:'⬜', desc:'Placeholder personnalisable (multi)' },
+  ],
+};
+
+const PLATFORM_DEFAULTS = {
+  lumapps:    { priority:['news','spotlight','communities'], secondary:['apps','events','documents'] },
+  sharepoint: { priority:['news','categories','contacts'],  secondary:['faq','calendar','banner'] },
+  jalios:     { priority:['flashinfo','activity','communities'], secondary:['quickaccess','documents','agenda','presence'] },
+  jint:       { priority:['news','focus','contacts'],       secondary:['social','apps','events','directory'] },
+};
+
+// ─── COLOR MATH ───────────────────────────────────────────────────────────
+function hsvToHex(h,s,v){
+  const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;
+  let r,g,b;
+  if(h<60)[r,g,b]=[c,x,0];else if(h<120)[r,g,b]=[x,c,0];
+  else if(h<180)[r,g,b]=[0,c,x];else if(h<240)[r,g,b]=[0,x,c];
+  else if(h<300)[r,g,b]=[x,0,c];else[r,g,b]=[c,0,x];
+  const h2=n=>Math.round((n+m)*255).toString(16).padStart(2,'0');
+  return('#'+h2(r)+h2(g)+h2(b)).toUpperCase();
+}
+function hexToHsv(hex){
+  hex=hex.replace('#','');
+  if(hex.length!==6)return null;
+  const r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.slice(2,4),16)/255,b=parseInt(hex.slice(4,6),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;
+  let h=0;
+  if(d>0){if(max===r)h=((g-b)/d+6)%6;else if(max===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;}
+  return{h,s:max===0?0:d/max,v:max};
+}
+function isHex(h){return/^[0-9a-fA-F]{6}$/.test(h)}
+
+// ─── PICKER ───────────────────────────────────────────────────────────────
+function applyHsv(id){
+  const {h,s,v}=HSV[id];
+  const hex=hsvToHex(h,s,v);
+  ST.colors[id]=hex;
+  document.getElementById('swatch-'+id).style.background=hex;
+  const inp=document.getElementById('hex-'+id);
+  if(document.activeElement!==inp) inp.value=hex.slice(1).toUpperCase();
+  document.getElementById('dark-'+id).style.background=`rgba(0,0,0,${1-v})`;
+  const angle=(h-90)*Math.PI/180;
+  const cur=document.getElementById('cursor-'+id);
+  cur.style.left=(50+Math.cos(angle)*s*50)+'%';
+  cur.style.top=(50+Math.sin(angle)*s*50)+'%';
+  cur.style.background=hex;
+  const sl=document.getElementById('bright-'+id);
+  sl.value=Math.round(v*100);
+  sl.style.background=`linear-gradient(to right,#000 0%,${hsvToHex(h,s,1)} 100%)`;
+  document.getElementById('blabel-'+id).textContent=Math.round(v*100);
+}
+function initPicker(id){
+  const disc=document.getElementById('disc-'+id);
+  let drag=false;
+  function pick(e){
+    const rect=disc.getBoundingClientRect();
+    const dx=e.clientX-(rect.left+rect.width/2),dy=e.clientY-(rect.top+rect.height/2);
+    const r=rect.width/2,dist=Math.min(Math.sqrt(dx*dx+dy*dy),r);
+    HSV[id].h=(Math.atan2(dy,dx)*180/Math.PI+90+360)%360;
+    HSV[id].s=dist/r;
+    applyHsv(id);
+  }
+  disc.addEventListener('mousedown',e=>{drag=true;pick(e);e.preventDefault()});
+  window.addEventListener('mousemove',e=>{if(drag)pick(e)});
+  window.addEventListener('mouseup',()=>drag=false);
+  disc.addEventListener('touchstart',e=>{drag=true;pick(e.touches[0]);e.preventDefault()},{passive:false});
+  disc.addEventListener('touchmove',e=>{pick(e.touches[0]);e.preventDefault()},{passive:false});
+  disc.addEventListener('touchend',()=>drag=false);
+  document.getElementById('bright-'+id).addEventListener('input',function(){HSV[id].v=this.value/100;applyHsv(id);});
+  const hexInp=document.getElementById('hex-'+id);
+  hexInp.addEventListener('input',e=>{
+    const v=e.target.value.replace(/[^0-9a-fA-F]/g,'').slice(0,6);
+    e.target.value=v;
+    if(v.length===6){const hsv=hexToHsv(v);if(hsv){HSV[id]=hsv;applyHsv(id);}}
+  });
+  hexInp.addEventListener('blur',()=>{if(hexInp.value.length<6)hexInp.value=ST.colors[id].slice(1).toUpperCase();});
+  applyHsv(id);
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────
+function goTo(n){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(el=>{
+    const sn=parseInt(el.dataset.s);
+    el.classList.remove('active','done');
+    if(sn===n)el.classList.add('active');
+    else if(sn<n){el.classList.add('done');el.querySelector('.step-num').textContent='✓';}
+    else el.querySelector('.step-num').textContent=sn;
+  });
+  const pct=Math.round((n-1)/3*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('pct').textContent=pct+'%';
+  syncBlocksToState();
+  if(n===3)initContentSteps();
+  if(n===4)renderSummary();
+  window.scrollTo(0,0);
+}
+
+// ─── TECH ─────────────────────────────────────────────────────────────────
+function pickTech(id,el){
+  ST.technology=id;
+  document.querySelectorAll('.tech-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  updateNavVisibility();
+  updateLayoutBuilderVisibility();
+}
+
+// ─── NAV ENTRIES ──────────────────────────────────────────────────────────
+function renderNavEntries(){
+  const list = document.getElementById('navEntriesList');
+  if(!list) return;
+  list.innerHTML = ST.navEntries.map((entry, idx) => {
+    const locked = idx === 0;
+    const placeholder = DEFAULT_NAV_ENTRIES[idx] ? DEFAULT_NAV_ENTRIES[idx].label : '';
+    const safeLabel = (entry.label || '').replace(/"/g, '&quot;');
+    if(!Array.isArray(entry.children)) entry.children = [];
+    let html = `<div class="nav-entry-row" data-idx="${idx}">
+      <input type="text" class="nav-entry-input" value="${safeLabel}" placeholder="${placeholder}" ${locked?'disabled':''} oninput="ST.navEntries[${idx}].label=this.value">
+      <label class="nav-toggle">
+        <input type="checkbox" ${entry.dropdown?'checked':''} ${locked?'disabled':''} onchange="onNavDropdownToggle(${idx},this.checked)">
+        <span class="nav-toggle-slider"></span>
+      </label>
+      <span class="nav-toggle-label">Menu déroulant</span>
+    </div>`;
+    if(entry.dropdown && !locked){
+      html += `<div class="nav-children" data-idx="${idx}">`;
+      entry.children.forEach((child, ci) => {
+        const safeChild = (child || '').replace(/"/g, '&quot;');
+        html += `<div class="nav-child-row">
+          <span class="nav-child-indent">↳</span>
+          <input type="text" class="nav-child-input" value="${safeChild}" placeholder="Sous-entrée…" oninput="onNavChildInput(${idx},${ci},this.value)">
+          <button type="button" class="nav-child-x" onclick="removeNavChild(${idx},${ci})">×</button>
+        </div>`;
+      });
+      html += `<button type="button" class="nav-child-add" onclick="addNavChild(${idx})">+ Ajouter une sous-entrée</button></div>`;
+    }
+    return html;
+  }).join('');
+}
+
+function onNavDropdownToggle(idx, checked){
+  ST.navEntries[idx].dropdown = checked;
+  if(checked && !Array.isArray(ST.navEntries[idx].children)){
+    ST.navEntries[idx].children = [];
+  }
+  renderNavEntries();
+}
+
+function addNavChild(entryIdx){
+  if(!Array.isArray(ST.navEntries[entryIdx].children)) ST.navEntries[entryIdx].children = [];
+  ST.navEntries[entryIdx].children.push('');
+  renderNavEntries();
+  // Focus the new input
+  const list = document.getElementById('navEntriesList');
+  const children = list.querySelectorAll(`.nav-children[data-idx="${entryIdx}"] .nav-child-input`);
+  const last = children[children.length - 1];
+  if(last) last.focus();
+}
+
+function removeNavChild(entryIdx, childIdx){
+  ST.navEntries[entryIdx].children.splice(childIdx, 1);
+  renderNavEntries();
+}
+
+function onNavChildInput(entryIdx, childIdx, value){
+  ST.navEntries[entryIdx].children[childIdx] = value;
+}
+
+function updateNavVisibility(){
+  const el = document.getElementById('navSubsection');
+  if(!el) return;
+  el.style.display = ST.technology === 'jint' ? '' : 'none';
+}
+
+// ─── LAYOUT BUILDER (Jint) ─────────────────────────────────────────────────
+function widthsToCols(widths){
+  return widths.map(w => w === '2/3' ? '2fr' : '1fr').join(' ');
+}
+
+function getPlacedWidgetIds(){
+  // 'blank' is multi-instance: never considered "placed" for pool purposes
+  const placed = new Set();
+  for(const row of (ST.layout?.rows || [])){
+    for(const cell of row.cells){
+      if(cell.widgetId && cell.widgetId !== 'blank') placed.add(cell.widgetId);
+    }
+  }
+  return placed;
+}
+
+function findCellByWidget(widgetId){
+  for(const row of (ST.layout?.rows || [])){
+    for(let i=0;i<row.cells.length;i++){
+      if(row.cells[i].widgetId === widgetId) return { rowId: row.id, cellIdx: i, row, cell: row.cells[i] };
+    }
+  }
+  return null;
+}
+
+function findRow(rowId){
+  return (ST.layout?.rows || []).find(r => r.id === rowId);
+}
+
+function getJintBlock(id){
+  return PLATFORM_BLOCKS.jint.find(b => b.id === id);
+}
+
+function chipHtml(b, draggable, includeX, opts={}){
+  const safeLabel = (b.label || '').replace(/"/g,'&quot;');
+  const isInCell = !!opts.rowId;
+  // Special rendering for blank widget inside a cell: editable label input
+  if(b.id === 'blank' && isInCell){
+    const safeValue = (opts.labelValue || '').replace(/"/g,'&quot;');
+    return `<div class="wf-chip wf-chip-blank" ${draggable?'draggable="true"':''} data-widget-id="blank"
+      ondragstart="onLayoutChipDragStart(event,'blank')" ondragend="onLayoutChipDragEnd(event)">
+      <span class="wf-chip-ico">${b.icon}</span>
+      <input type="text" class="wf-chip-input" placeholder="Contenu à définir…" value="${safeValue}" autocomplete="off" draggable="false"
+        onmousedown="event.stopPropagation()" onclick="event.stopPropagation()"
+        oninput="onBlankLabelInput(event,'${opts.rowId}',${opts.cellIdx})" />
+      ${includeX?`<button type="button" class="wf-chip-x" title="Retirer" onclick="event.stopPropagation();removeCellContent('${opts.rowId}',${opts.cellIdx})">×</button>`:''}
+    </div>`;
+  }
+  // Regular chip (pool or cell)
+  const removeHandler = isInCell
+    ? `event.stopPropagation();removeCellContent('${opts.rowId}',${opts.cellIdx})`
+    : `onChipRemoveClick(event,'${b.id}')`;
+  return `<div class="wf-chip" ${draggable?'draggable="true"':''} data-widget-id="${b.id}"
+    ondragstart="onLayoutChipDragStart(event,'${b.id}')" ondragend="onLayoutChipDragEnd(event)">
+    <span class="wf-chip-ico">${b.icon}</span>
+    <span class="wf-chip-label">${safeLabel}</span>
+    ${includeX?`<button type="button" class="wf-chip-x" title="Retirer" onclick="${removeHandler}">×</button>`:''}
+  </div>`;
+}
+
+function onBlankLabelInput(e, rowId, cellIdx){
+  const row = findRow(rowId);
+  if(!row || !row.cells[cellIdx]) return;
+  row.cells[cellIdx].label = e.target.value;
+}
+
+function removeCellContent(rowId, cellIdx){
+  const row = findRow(rowId);
+  if(!row || !row.cells[cellIdx]) return;
+  row.cells[cellIdx].widgetId = null;
+  row.cells[cellIdx].label = undefined;
+  renderWireframe();
+  renderJintPool();
+}
+
+function renderJintPool(){
+  const pool = document.getElementById('jint-pool');
+  if(!pool) return;
+  const placed = getPlacedWidgetIds();
+  const available = PLATFORM_BLOCKS.jint.filter(b => !placed.has(b.id));
+  pool.innerHTML = available.map(b => chipHtml(b, true, false)).join('') ||
+    '<div style="padding:14px;text-align:center;color:#999;font-size:12px">Tous les widgets sont placés</div>';
+  pool.ondragover = onPoolDragOver;
+  pool.ondrop = onPoolDrop;
+}
+
+function renderWireframe(){
+  const wf = document.getElementById('jint-wireframe');
+  if(!wf) return;
+  ensureDefaultLayout();
+  wf.innerHTML = '';
+  for(const row of ST.layout.rows){
+    wf.appendChild(renderWfRow(row));
+  }
+  // Update add-row button state
+  const addBtn = document.getElementById('jint-addRow');
+  if(addBtn) addBtn.disabled = ST.layout.rows.length >= MAX_ROWS;
+  __debugAssertUnique();
+}
+
+function renderWfRow(row){
+  const rowEl = document.createElement('div');
+  rowEl.className = 'wf-row';
+  rowEl.dataset.rowId = row.id;
+  rowEl.ondragover = (e)=>onRowDragOver(e,row.id);
+  rowEl.ondragleave = (e)=>onRowDragLeave(e,row.id);
+  rowEl.ondrop = (e)=>onRowDrop(e,row.id);
+
+  // Drag handle (only this is draggable for row reorder)
+  const handle = document.createElement('div');
+  handle.className = 'wf-row-handle';
+  handle.title = 'Réordonner la ligne';
+  handle.draggable = true;
+  handle.textContent = '⠿';
+  handle.ondragstart = (e)=>onRowDragStart(e,row.id);
+  handle.ondragend = onRowDragEnd;
+  rowEl.appendChild(handle);
+
+  // Grid with cells and dividers
+  const grid = document.createElement('div');
+  grid.className = 'wf-row-grid';
+  grid.style.gridTemplateColumns = widthsToCols(row.cells.map(c => c.width));
+
+  row.cells.forEach((cell, cellIdx) => {
+    const cellEl = document.createElement('div');
+    cellEl.className = 'wf-cell' + (cell.widgetId ? ' occupied' : '');
+    cellEl.dataset.cellIdx = String(cellIdx);
+    cellEl.dataset.width = cell.width;
+    cellEl.ondragover = (e)=>onCellDragOver(e,row.id,cellIdx);
+    cellEl.ondragleave = (e)=>onCellDragLeave(e,row.id,cellIdx);
+    cellEl.ondrop = (e)=>onCellDrop(e,row.id,cellIdx);
+
+    if(cell.widgetId){
+      const b = getJintBlock(cell.widgetId);
+      if(b) cellEl.innerHTML = chipHtml(b, true, true, { rowId: row.id, cellIdx, labelValue: cell.label });
+    } else {
+      cellEl.innerHTML = `<div class="wf-cell-empty">Déposez un widget</div>`;
+    }
+
+    // "+ divider" button visible on hover, only if row can split
+    if(row.cells.length < 3){
+      const addDiv = document.createElement('button');
+      addDiv.type = 'button';
+      addDiv.className = 'wf-add-divider';
+      addDiv.title = 'Ajouter un séparateur';
+      addDiv.textContent = '+';
+      addDiv.onclick = (e)=>{ e.stopPropagation(); addDivider(row.id); };
+      cellEl.appendChild(addDiv);
+    }
+
+    grid.appendChild(cellEl);
+  });
+
+  // Dividers (positioned absolutely on top of grid)
+  if(row.cells.length === 2){
+    const div0 = document.createElement('div');
+    div0.className = 'wf-divider';
+    div0.dataset.dividerIdx = '0';
+    // Position based on first cell's width
+    const leftPct = row.cells[0].width === '1/3' ? 33.333 : (row.cells[0].width === '2/3' ? 66.666 : 50);
+    div0.style.left = leftPct + '%';
+    div0.onpointerdown = (e)=>onDividerPointerDown(e,row.id,0);
+    const x0 = document.createElement('button');
+    x0.type = 'button';
+    x0.className = 'wf-divider-x';
+    x0.textContent = '×';
+    x0.title = 'Retirer le séparateur';
+    x0.onclick = (e)=>{ e.stopPropagation(); removeDivider(row.id, 0); };
+    div0.appendChild(x0);
+    grid.appendChild(div0);
+  } else if(row.cells.length === 3){
+    [33.333, 66.666].forEach((pct, i) => {
+      const dv = document.createElement('div');
+      dv.className = 'wf-divider';
+      dv.dataset.dividerIdx = String(i);
+      dv.style.left = pct + '%';
+      // No drag for 3-cell rows (fixed thirds)
+      dv.style.cursor = 'default';
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'wf-divider-x';
+      x.textContent = '×';
+      x.title = 'Retirer le séparateur';
+      x.onclick = (e)=>{ e.stopPropagation(); removeDivider(row.id, i); };
+      dv.appendChild(x);
+      grid.appendChild(dv);
+    });
+  }
+
+  rowEl.appendChild(grid);
+
+  // Row delete button
+  const del = document.createElement('button');
+  del.type = 'button';
+  del.className = 'wf-row-del';
+  del.title = 'Supprimer la ligne';
+  del.textContent = '🗑';
+  del.disabled = ST.layout.rows.length <= 1;
+  del.onclick = ()=>deleteRow(row.id);
+  rowEl.appendChild(del);
+
+  return rowEl;
+}
+
+function initJintLayoutBuilder(){
+  ensureDefaultLayout();
+  renderWireframe();
+  renderJintPool();
+}
+
+function updateLayoutBuilderVisibility(){
+  const classic = document.getElementById('contentLayoutClassic');
+  const jint = document.getElementById('contentLayoutJint');
+  if(!classic || !jint) return;
+  if(ST.technology === 'jint'){
+    classic.style.display = 'none';
+    jint.style.display = '';
+  } else {
+    classic.style.display = '';
+    jint.style.display = 'none';
+  }
+}
+
+// ─── LAYOUT MUTATIONS ──────────────────────────────────────────────────────
+function addRow(){
+  if(ST.layout.rows.length >= MAX_ROWS) return;
+  ST.layout.rows.push({ id: layoutRowId(), cells: [{ width:'full', widgetId:null }] });
+  renderWireframe();
+}
+
+function deleteRow(rowId){
+  if(ST.layout.rows.length <= 1) return;
+  const idx = ST.layout.rows.findIndex(r => r.id === rowId);
+  if(idx === -1) return;
+  ST.layout.rows.splice(idx, 1);
+  renderWireframe();
+  renderJintPool();
+}
+
+function addDivider(rowId){
+  const row = findRow(rowId);
+  if(!row) return;
+  if(row.cells.length === 1){
+    // 1 → 2 cells [1/2,1/2], keep widget in cell 0
+    const w = row.cells[0].widgetId;
+    row.cells = [
+      { width:'1/2', widgetId:w },
+      { width:'1/2', widgetId:null },
+    ];
+  } else if(row.cells.length === 2){
+    // 2 → 3 cells [1/3,1/3,1/3], widgets go to 0 and 2
+    const w0 = row.cells[0].widgetId;
+    const w1 = row.cells[1].widgetId;
+    row.cells = [
+      { width:'1/3', widgetId:w0 },
+      { width:'1/3', widgetId:null },
+      { width:'1/3', widgetId:w1 },
+    ];
+  } // else 3 cells: refuse silently
+  renderWireframe();
+  renderJintPool();
+}
+
+function removeDivider(rowId, dividerIdx){
+  const row = findRow(rowId);
+  if(!row) return;
+  if(row.cells.length === 3){
+    // 3 → 2 cells [1/2,1/2]. dividerIdx 0 merges cells 0+1, dividerIdx 1 merges cells 1+2
+    if(dividerIdx === 0){
+      // Keep cells[0] widget; cells[1] returns to pool; cells[2] becomes new cells[1]
+      const wKeep = row.cells[0].widgetId;
+      const wRight = row.cells[2].widgetId;
+      row.cells = [
+        { width:'1/2', widgetId:wKeep },
+        { width:'1/2', widgetId:wRight },
+      ];
+    } else {
+      // Keep cells[1] widget on right; cells[2] is merged in (its widget returns to pool); cells[0] becomes new cells[0]
+      const wLeft = row.cells[0].widgetId;
+      const wKeep = row.cells[1].widgetId;
+      row.cells = [
+        { width:'1/2', widgetId:wLeft },
+        { width:'1/2', widgetId:wKeep },
+      ];
+    }
+  } else if(row.cells.length === 2){
+    // 2 → 1 cell [full]. Keep cells[0] widget; cells[1] returns to pool
+    const wKeep = row.cells[0].widgetId;
+    row.cells = [{ width:'full', widgetId:wKeep }];
+  }
+  renderWireframe();
+  renderJintPool();
+}
+
+function removeWidgetFromLayout(widgetId){
+  const found = findCellByWidget(widgetId);
+  if(found){
+    found.cell.widgetId = null;
+  }
+  return found;
+}
+
+function placeWidgetInCell(widgetId, rowId, cellIdx){
+  removeWidgetFromLayout(widgetId);
+  const row = findRow(rowId);
+  if(!row) return;
+  row.cells[cellIdx].widgetId = widgetId;
+}
+
+// ─── DRAG-AND-DROP HANDLERS (widgets) ──────────────────────────────────────
+function onLayoutChipDragStart(e, widgetId){
+  // Don't start drag if a row reorder is in progress
+  if(layoutRowDragId) return;
+  e.stopPropagation();
+  layoutDraggedChipId = widgetId;
+  // Determine source: pool or cell
+  const cellEl = e.target.closest('.wf-cell');
+  if(cellEl){
+    const rowEl = cellEl.closest('.wf-row');
+    layoutDragSource = { rowId: rowEl.dataset.rowId, cellIdx: parseInt(cellEl.dataset.cellIdx,10) };
+  } else {
+    layoutDragSource = 'pool';
+  }
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', widgetId); }catch(_){}
+  e.target.classList.add('dragging');
+}
+
+function onLayoutChipDragEnd(e){
+  e.target.classList.remove('dragging');
+  layoutDraggedChipId = null;
+  layoutDragSource = null;
+  document.querySelectorAll('.wf-cell.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function onCellDragOver(e, rowId, cellIdx){
+  if(layoutRowDragId) return;
+  if(!layoutDraggedChipId) return;
+  e.preventDefault();
+  e.stopPropagation();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function onCellDragLeave(e, rowId, cellIdx){
+  if(e.currentTarget.contains(e.relatedTarget)) return;
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function onCellDrop(e, rowId, cellIdx){
+  if(layoutRowDragId) return;
+  if(!layoutDraggedChipId) return;
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.classList.remove('drag-over');
+  const widgetId = layoutDraggedChipId;
+  const targetRow = findRow(rowId);
+  if(!targetRow) return;
+  const targetCell = targetRow.cells[cellIdx];
+
+  if(layoutDragSource === 'pool'){
+    // Pool → cell. Blank creates a fresh instance with empty label.
+    if(widgetId === 'blank'){
+      targetCell.widgetId = 'blank';
+      targetCell.label = '';
+    } else {
+      targetCell.widgetId = widgetId;
+      targetCell.label = undefined;
+    }
+  } else if(layoutDragSource && typeof layoutDragSource === 'object'){
+    const srcRow = findRow(layoutDragSource.rowId);
+    if(!srcRow) return;
+    const srcCell = srcRow.cells[layoutDragSource.cellIdx];
+    if(srcRow === targetRow && layoutDragSource.cellIdx === cellIdx) return; // same cell
+    // Atomic swap of (widgetId, label) — label follows blank instances
+    const tw = targetCell.widgetId, tl = targetCell.label;
+    targetCell.widgetId = srcCell.widgetId;
+    targetCell.label = srcCell.label;
+    srcCell.widgetId = tw;
+    srcCell.label = tl;
+  }
+  renderWireframe();
+  renderJintPool();
+}
+
+function onPoolDragOver(e){
+  if(layoutRowDragId) return;
+  if(!layoutDraggedChipId) return;
+  // Only accept drops from cells (returning a widget to pool)
+  if(layoutDragSource === 'pool') return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+
+function onPoolDrop(e){
+  if(layoutRowDragId) return;
+  if(!layoutDraggedChipId || layoutDragSource === 'pool') return;
+  e.preventDefault();
+  const src = layoutDragSource;
+  const srcRow = findRow(src.rowId);
+  if(srcRow){
+    srcRow.cells[src.cellIdx].widgetId = null;
+    srcRow.cells[src.cellIdx].label = undefined;
+  }
+  renderWireframe();
+  renderJintPool();
+}
+
+function onChipRemoveClick(e, widgetId){
+  e.stopPropagation();
+  removeWidgetFromLayout(widgetId);
+  renderWireframe();
+  renderJintPool();
+}
+
+// ─── DIVIDER DRAG (Pointer Events with magnetic snap) ──────────────────────
+function onDividerPointerDown(e, rowId, dividerIdx){
+  const row = findRow(rowId);
+  if(!row || row.cells.length !== 2) return; // only 2-cell rows are draggable
+  e.stopPropagation();
+  e.preventDefault();
+  const dividerEl = e.currentTarget;
+  const gridEl = dividerEl.closest('.wf-row-grid');
+  const rect = gridEl.getBoundingClientRect();
+  dividerDragState = { rowId, gridEl, rect, dividerEl, finalRatio: null };
+  dividerEl.classList.add('dragging');
+  try{ dividerEl.setPointerCapture(e.pointerId); }catch(_){}
+  dividerEl.onpointermove = onDividerPointerMove;
+  dividerEl.onpointerup = onDividerPointerUp;
+  dividerEl.onpointercancel = onDividerPointerUp;
+}
+
+function onDividerPointerMove(e){
+  if(!dividerDragState) return;
+  e.preventDefault();
+  const { gridEl, rect, dividerEl } = dividerDragState;
+  const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  // Magnetic snap to 1/3, 1/2, 2/3 with tolerance 0.06; otherwise show nearest
+  const targets = [1/3, 1/2, 2/3];
+  let nearest = targets[0];
+  let nearestDist = Math.abs(ratio - nearest);
+  for(const t of targets){
+    const d = Math.abs(ratio - t);
+    if(d < nearestDist){ nearest = t; nearestDist = d; }
+  }
+  dividerDragState.finalRatio = nearest;
+  // Live update grid template
+  const cols = nearest === 1/3 ? '1fr 2fr' : (nearest === 2/3 ? '2fr 1fr' : '1fr 1fr');
+  gridEl.style.gridTemplateColumns = cols;
+  dividerEl.style.left = (nearest * 100) + '%';
+  dividerEl.classList.add('snapped');
+}
+
+function onDividerPointerUp(e){
+  if(!dividerDragState) return;
+  const { rowId, dividerEl, finalRatio } = dividerDragState;
+  dividerEl.classList.remove('dragging','snapped');
+  try{ dividerEl.releasePointerCapture(e.pointerId); }catch(_){}
+  dividerEl.onpointermove = null;
+  dividerEl.onpointerup = null;
+  dividerEl.onpointercancel = null;
+  if(finalRatio != null){
+    const row = findRow(rowId);
+    if(row && row.cells.length === 2){
+      if(finalRatio === 1/3){ row.cells[0].width = '1/3'; row.cells[1].width = '2/3'; }
+      else if(finalRatio === 2/3){ row.cells[0].width = '2/3'; row.cells[1].width = '1/3'; }
+      else { row.cells[0].width = '1/2'; row.cells[1].width = '1/2'; }
+    }
+  }
+  dividerDragState = null;
+  renderWireframe();
+}
+
+// ─── ROW REORDER (HTML5 DnD on handle) ─────────────────────────────────────
+function onRowDragStart(e, rowId){
+  // If a chip drag is in progress, ignore
+  if(layoutDraggedChipId) return;
+  e.stopPropagation();
+  layoutRowDragId = rowId;
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain','row:'+rowId); }catch(_){}
+  const rowEl = e.target.closest('.wf-row');
+  if(rowEl) rowEl.classList.add('dragging');
+}
+
+function onRowDragOver(e, rowId){
+  if(!layoutRowDragId || layoutRowDragId === rowId) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const rowEl = e.currentTarget;
+  const rect = rowEl.getBoundingClientRect();
+  const isUpper = (e.clientY - rect.top) < rect.height / 2;
+  rowEl.classList.toggle('drop-above', isUpper);
+  rowEl.classList.toggle('drop-below', !isUpper);
+}
+
+function onRowDragLeave(e, rowId){
+  if(!layoutRowDragId) return;
+  const rowEl = e.currentTarget;
+  if(rowEl.contains(e.relatedTarget)) return;
+  rowEl.classList.remove('drop-above','drop-below');
+}
+
+function onRowDrop(e, rowId){
+  if(!layoutRowDragId || layoutRowDragId === rowId) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const srcId = layoutRowDragId;
+  const rowEl = e.currentTarget;
+  const rect = rowEl.getBoundingClientRect();
+  const isUpper = (e.clientY - rect.top) < rect.height / 2;
+  rowEl.classList.remove('drop-above','drop-below');
+  const srcIdx = ST.layout.rows.findIndex(r => r.id === srcId);
+  let dstIdx = ST.layout.rows.findIndex(r => r.id === rowId);
+  if(srcIdx === -1 || dstIdx === -1) return;
+  const [moved] = ST.layout.rows.splice(srcIdx, 1);
+  if(srcIdx < dstIdx) dstIdx -= 1;
+  if(!isUpper) dstIdx += 1;
+  ST.layout.rows.splice(dstIdx, 0, moved);
+  renderWireframe();
+}
+
+function onRowDragEnd(e){
+  document.querySelectorAll('.wf-row.dragging').forEach(el => el.classList.remove('dragging'));
+  document.querySelectorAll('.wf-row.drop-above,.wf-row.drop-below').forEach(el => {
+    el.classList.remove('drop-above','drop-below');
+  });
+  layoutRowDragId = null;
+}
+
+// ─── LOGO ─────────────────────────────────────────────────────────────────
+function processFile(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    ST.logo=e.target.result;ST.logoName=file.name;
+    document.getElementById('logoThumb').src=ST.logo;
+    document.getElementById('logoFileName').textContent=file.name;
+    document.getElementById('logoBar').classList.add('vis');
+  };
+  reader.readAsDataURL(file);
+}
+function onFileInput(e){processFile(e.target.files[0]);}
+function onDrop(e){e.preventDefault();document.getElementById('dropZone').classList.remove('over');processFile(e.dataTransfer.files[0]);}
+function onDragOver(e){e.preventDefault();document.getElementById('dropZone').classList.add('over');}
+function onDragLeave(){document.getElementById('dropZone').classList.remove('over');}
+function removeLogo(){ST.logo=null;ST.logoName='';document.getElementById('logoBar').classList.remove('vis');document.getElementById('fileInput').value='';}
+
+// ─── SUMMARY ──────────────────────────────────────────────────────────────
+function renderSummary(){
+  ['primary','secondary','text'].forEach(k=>{document.getElementById('sc-'+k).style.background=ST.colors[k];});
+  document.getElementById('sName').textContent=ST.name||'—';
+  const tm=TECH_META[ST.technology];
+  if(tm){
+    const ico=document.getElementById('sTechIco');
+    ico.textContent=tm.ico; ico.className='s-tech-ico '+tm.cls;
+    document.getElementById('sTechName').textContent=tm.label;
+  } else {
+    document.getElementById('sTechName').textContent='—';
+  }
+  const el=document.getElementById('sLogo');
+  el.innerHTML=ST.logo?`<img src="${ST.logo}" style="height:44px;object-fit:contain;border-radius:4px">`:'<span style="color:#666;font-size:13px">No logo uploaded</span>';
+}
+
+// ─── GENERATE ─────────────────────────────────────────────────────────────
+function generate(){
+  syncBlocksToState();
+  const tech = ST.technology || 'lumapps';
+  // Apply blocks defaults only for non-Jint techs (Jint uses ST.layout)
+  if(tech !== 'jint'){
+    if(!ST.blocks.priority.length) ST.blocks.priority = [...(PLATFORM_DEFAULTS[tech]?.priority || [])];
+    if(!ST.blocks.secondary.length) ST.blocks.secondary = [...(PLATFORM_DEFAULTS[tech]?.secondary || [])];
+  } else {
+    ensureDefaultLayout();
+  }
+
+  const cfg={
+    technology: tech,
+    colors: ST.colors,
+    name: ST.name||'My Intranet',
+    logo: ST.logo,
+    logoName: ST.logoName,
+    blocks: ST.blocks,
+    layout: ST.layout,
+    navEntries: ST.navEntries,
+    ts: Date.now()
+  };
+  localStorage.setItem('tpl_cfg',JSON.stringify(cfg));
+  window.open('intranet.html','_blank');
+}
+
+// ─── RESTORE ──────────────────────────────────────────────────────────────
+function restore(){
+  try{
+    const c=JSON.parse(localStorage.getItem('tpl_cfg')||'null');
+    if(!c)return;
+    if(c.technology){ST.technology=c.technology;const el=document.getElementById('tc-'+c.technology);if(el)el.classList.add('sel');}
+    if(c.colors){Object.assign(ST.colors,c.colors);['primary','secondary','text'].forEach(k=>{const hsv=hexToHsv(ST.colors[k].replace('#',''));if(hsv){HSV[k]=hsv;document.getElementById('hex-'+k).value=ST.colors[k].replace('#','').toUpperCase();}});}
+    if(c.name){ST.name=c.name;document.getElementById('nameInput').value=c.name;}
+    if(c.logo){ST.logo=c.logo;ST.logoName=c.logoName||'';document.getElementById('logoThumb').src=c.logo;document.getElementById('logoFileName').textContent=c.logoName||'';document.getElementById('logoBar').classList.add('vis');}
+    if(c.navEntries && Array.isArray(c.navEntries) && c.navEntries.length){
+      ST.navEntries = c.navEntries.map(e => ({ label: e.label || '', dropdown: !!e.dropdown, children: Array.isArray(e.children) ? e.children.slice() : [] }));
+    }
+    if(c.blocks && typeof c.blocks === 'object'){
+      ST.blocks = {
+        priority: Array.isArray(c.blocks.priority) ? c.blocks.priority.slice() : [],
+        secondary: Array.isArray(c.blocks.secondary) ? c.blocks.secondary.slice() : [],
+      };
+    }
+    if(c.layout && Array.isArray(c.layout.rows) && c.layout.rows.length){
+      ST.layout = { rows: c.layout.rows.map(r => ({
+        id: r.id || layoutRowId(),
+        cells: (r.cells || []).map(cell => ({
+          width: cell.width || 'full',
+          widgetId: cell.widgetId || null
+        }))
+      })) };
+      // ensure counter does not reuse ids
+      const maxId = c.layout.rows.reduce((m, r) => {
+        const n = parseInt(String(r.id || '').replace(/^r/, ''), 10);
+        return isNaN(n) ? m : Math.max(m, n);
+      }, 0);
+      if(maxId > layoutRowIdCounter) layoutRowIdCounter = maxId;
+    } else if(c.technology === 'jint' && c.blocks && (c.blocks.priority?.length || c.blocks.secondary?.length)){
+      // Migrate legacy jint cfg
+      ST.layout = migrateBlocksToLayout(c.blocks);
+    }
+  }catch(e){}
+}
+
+restore();
+['primary','secondary','text'].forEach(initPicker);
+renderNavEntries();
+updateNavVisibility();
+
+// ─── CONTENT STEP ─────────────────────────────────────────────────────────
+function initContentSteps(){
+  renderNavEntries();
+  updateNavVisibility();
+  updateLayoutBuilderVisibility();
+  if(ST.technology === 'jint'){
+    initJintLayoutBuilder();
+    return;
+  }
+  const tech = ST.technology || 'lumapps';
+  const blocks = PLATFORM_BLOCKS[tech] || [];
+  const priIds = new Set(ST.blocks.priority);
+  const secIds = new Set(ST.blocks.secondary);
+
+  const poolAll = document.getElementById('pool-all');
+  const zonePri = document.getElementById('zone-priority');
+  const zoneSec = document.getElementById('zone-secondary');
+
+  // Reset all three containers
+  poolAll.innerHTML = '';
+  zonePri.innerHTML = '<div class="drop-zone-placeholder">Glissez les blocs ici</div>';
+  zoneSec.innerHTML = '<div class="drop-zone-placeholder">Glissez les blocs ici</div>';
+
+  // Pool: blocks not placed in either zone
+  blocks.filter(b => !priIds.has(b.id) && !secIds.has(b.id)).forEach(b => {
+    poolAll.appendChild(makeBlockCard(b, false));
+  });
+
+  // Restore priority zone
+  ST.blocks.priority.forEach((id, i) => {
+    const b = blocks.find(x => x.id === id);
+    if(b) zonePri.appendChild(makeBlockCard(b, true, i + 1));
+  });
+
+  // Restore secondary zone
+  ST.blocks.secondary.forEach((id, i) => {
+    const b = blocks.find(x => x.id === id);
+    if(b) zoneSec.appendChild(makeBlockCard(b, true, i + 1));
+  });
+
+  setupDropZone(poolAll, 'pool');
+  setupDropZone(zonePri, 'priority');
+  setupDropZone(zoneSec, 'secondary');
+  updateBlockOrders();
+}
+
+function makeBlockCard(block, inZone, order){
+  const div = document.createElement('div');
+  div.className = 'block-card' + (inZone ? ' in-zone' : '');
+  div.draggable = true;
+  div.dataset.blockId = block.id;
+  div.innerHTML = `
+    <span class="block-icon">${block.icon}</span>
+    <div class="block-info">
+      <div class="block-label">${block.label}</div>
+      <div class="block-desc">${block.desc}</div>
+    </div>
+    ${inZone && order ? `<div class="block-order">${order}</div>` : '<span class="block-handle">⠿</span>'}
+  `;
+  div.addEventListener('dragstart', onBlockDragStart);
+  div.addEventListener('dragend', onBlockDragEnd);
+  div.addEventListener('click', onBlockCardClick);
+  return div;
+}
+
+let draggedCard = null;
+let dragSource = null;
+
+function onBlockCardClick(e){
+  const card = e.currentTarget;
+  // Only act when card is placed in a zone (not in the pool)
+  if(!card.classList.contains('in-zone')) return;
+  // Don't fire if this was the end of a drag operation
+  if(card.classList.contains('dragging')) return;
+  const pool = document.getElementById('pool-all');
+  if(!pool) return;
+  card.classList.remove('in-zone');
+  pool.appendChild(card);
+  syncBlocksToState();
+  updateBlockOrders();
+}
+
+function onBlockDragStart(e){
+  draggedCard = e.currentTarget;
+  dragSource = draggedCard.parentElement;
+  draggedCard.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onBlockDragEnd(e){
+  if(draggedCard) draggedCard.classList.remove('dragging');
+  document.querySelectorAll('.block-drop-zone').forEach(z=>z.classList.remove('drag-over'));
+  draggedCard = null;
+  dragSource = null;
+  syncBlocksToState();
+  updateBlockOrders();
+}
+
+function setupDropZone(el, type){
+  el.addEventListener('dragover', e=>{
+    e.preventDefault();
+    // Block drop on priority zone if already at 3 cards
+    if(el.id === 'zone-priority'){
+      const count = el.querySelectorAll('.block-card').length;
+      const cardAlreadyInZone = draggedCard && el.contains(draggedCard);
+      if(count >= 3 && !cardAlreadyInZone){ e.dataTransfer.dropEffect='none'; return; }
+    }
+    if(el.classList.contains('block-drop-zone')) el.classList.add('drag-over');
+    if(draggedCard && el.contains(e.target)){
+      const after = getDragAfterElement(el, e.clientY);
+      if(after == null) el.appendChild(draggedCard);
+      else el.insertBefore(draggedCard, after);
+    }
+  });
+  el.addEventListener('dragleave', e=>{
+    if(!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
+  });
+  el.addEventListener('drop', e=>{
+    e.preventDefault();
+    el.classList.remove('drag-over');
+    if(draggedCard){
+      // Enforce max 3 for priority zone
+      if(el.id === 'zone-priority'){
+        const count = el.querySelectorAll('.block-card').length;
+        const cardAlreadyInZone = el.contains(draggedCard);
+        if(count >= 3 && !cardAlreadyInZone){
+          // Return card to pool
+          const pool = document.getElementById('pool-all');
+          if(pool){ draggedCard.classList.remove('in-zone'); pool.appendChild(draggedCard); }
+          syncBlocksToState(); updateBlockOrders(); return;
+        }
+      }
+      const after = getDragAfterElement(el, e.clientY);
+      if(after == null) el.appendChild(draggedCard);
+      else el.insertBefore(draggedCard, after);
+      if(el.classList.contains('block-drop-zone')){
+        draggedCard.classList.add('in-zone');
+      } else {
+        draggedCard.classList.remove('in-zone');
+      }
+    }
+  });
+}
+
+function getDragAfterElement(container, y){
+  const els = [...container.querySelectorAll('.block-card:not(.dragging)')];
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    if(offset < 0 && offset > closest.offset) return {offset, element:child};
+    return closest;
+  }, {offset: Number.NEGATIVE_INFINITY}).element;
+}
+
+function updateBlockOrders(){
+  document.querySelectorAll('.block-drop-zone').forEach(zone=>{
+    const cards = zone.querySelectorAll('.block-card');
+    cards.forEach((card, i)=>{
+      let orderEl = card.querySelector('.block-order');
+      let handleEl = card.querySelector('.block-handle');
+      if(!orderEl){
+        if(handleEl){ handleEl.outerHTML = `<div class="block-order">${i+1}</div>`; }
+        else { card.insertAdjacentHTML('beforeend',`<div class="block-order">${i+1}</div>`); }
+      } else {
+        orderEl.textContent = i+1;
+      }
+    });
+  });
+  document.querySelectorAll('.block-pool').forEach(pool=>{
+    pool.querySelectorAll('.block-card').forEach(card=>{
+      let orderEl = card.querySelector('.block-order');
+      let handleEl = card.querySelector('.block-handle');
+      if(orderEl){ orderEl.outerHTML = '<span class="block-handle">⠿</span>'; }
+    });
+  });
+}
+
+function syncBlocksToState(){
+  // Skip when Jint builder is active — its state lives in ST.layout
+  if(ST.technology === 'jint') return;
+  const classic = document.getElementById('contentLayoutClassic');
+  if(classic && classic.style.display === 'none') return;
+  const zonePri = document.getElementById('zone-priority');
+  const zoneSec = document.getElementById('zone-secondary');
+  if(zonePri) ST.blocks.priority  = [...zonePri.querySelectorAll('.block-card')].map(c=>c.dataset.blockId);
+  if(zoneSec) ST.blocks.secondary = [...zoneSec.querySelectorAll('.block-card')].map(c=>c.dataset.blockId);
+}
+</script>
+</body>
+</html>

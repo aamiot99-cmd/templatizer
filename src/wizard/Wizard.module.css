@@ -1,0 +1,199 @@
+.wizard {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 36px;
+  min-height: 80vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.sidebarTitle {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin: 0 0 14px;
+  padding-left: 14px;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 27px;
+  top: 18px;
+  bottom: 18px;
+  width: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  z-index: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.step:hover {
+  background: var(--bg-subtle);
+  color: var(--text);
+}
+
+.stepActive {
+  background: var(--wizard-accent-soft) !important;
+  color: var(--wizard-accent) !important;
+  font-weight: 600;
+}
+
+.stepNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.step:hover .stepNumber {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.stepActive .stepNumber {
+  background: var(--wizard-accent);
+  color: #fff;
+  border-color: var(--wizard-accent);
+  box-shadow: 0 0 0 4px var(--wizard-accent-ring);
+}
+
+.stepLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.content {
+  min-width: 0;
+}
+
+.contentHeader {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.contentEyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--wizard-accent);
+  margin: 0 0 6px;
+}
+
+.contentTitle {
+  font-family: var(--heading);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+
+.contentSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 680px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.navButton {
+  appearance: none;
+  padding: 11px 22px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.navButton:hover:not(:disabled) {
+  background: var(--bg-subtle);
+  border-color: var(--border-strong);
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.navButtonPrimary {
+  background: var(--wizard-accent);
+  color: #fff;
+  border-color: var(--wizard-accent);
+  box-shadow: 0 1px 3px rgba(99, 102, 241, 0.3);
+}
+
+.navButtonPrimary:hover:not(:disabled) {
+  background: var(--wizard-accent-hover);
+  border-color: var(--wizard-accent-hover);
+}

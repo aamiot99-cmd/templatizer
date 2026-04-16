@@ -1,0 +1,97 @@
+import type { ComponentType } from 'react'
+import type { Branding, Platform } from './platform'
+
+export type WidgetSize = 'large' | 'compact'
+
+export type UsageCategory =
+  | 'communicate'
+  | 'access'
+  | 'collaborate'
+  | 'live'
+
+export const USAGE_CATEGORY_LABELS: Record<UsageCategory, string> = {
+  communicate: 'Communiquer',
+  access: 'Accéder aux outils',
+  collaborate: 'Collaborer',
+  live: "Vivre l'entreprise",
+}
+
+export type ConfigFieldType =
+  | 'text'
+  | 'number'
+  | 'boolean'
+  | 'color'
+  | 'select'
+  | 'icon'
+
+interface BaseField {
+  key: string
+  label: string
+  description?: string
+}
+
+export interface TextField extends BaseField {
+  type: 'text'
+  default: string
+  placeholder?: string
+}
+
+export interface NumberField extends BaseField {
+  type: 'number'
+  default: number
+  min?: number
+  max?: number
+}
+
+export interface BooleanField extends BaseField {
+  type: 'boolean'
+  default: boolean
+}
+
+export interface ColorField extends BaseField {
+  type: 'color'
+  default: string
+}
+
+export interface SelectField extends BaseField {
+  type: 'select'
+  default: string
+  options: Array<{ value: string; label: string }>
+}
+
+export interface IconField extends BaseField {
+  type: 'icon'
+  default: string
+}
+
+export type ConfigSchemaField =
+  | TextField
+  | NumberField
+  | BooleanField
+  | ColorField
+  | SelectField
+  | IconField
+
+export type ConfigValues = Record<string, string | number | boolean>
+
+export interface WidgetPurpose {
+  category: UsageCategory
+  label: string
+  description: string
+  keywords: string[]
+}
+
+export interface WidgetRendererProps {
+  config: ConfigValues
+  size: WidgetSize
+  branding: Branding
+}
+
+export interface WidgetDefinition {
+  id: string
+  purpose: WidgetPurpose
+  platformLabels: Record<Platform, string>
+  configSchema: ConfigSchemaField[]
+  supportedSizes?: Partial<Record<Platform, WidgetSize[]>>
+  renderers: Partial<Record<Platform, ComponentType<WidgetRendererProps>>>
+}

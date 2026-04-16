@@ -1,0 +1,83 @@
+.chip {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: grab;
+  user-select: none;
+  width: 100%;
+  min-width: 0;
+  min-height: 72px;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  touch-action: none;
+  box-sizing: border-box;
+}
+
+.chip:hover {
+  border-color: #a0a0a8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.chip:active {
+  cursor: grabbing;
+}
+
+.chipDragging {
+  opacity: 0.4;
+}
+
+.chipSelected {
+  border-color: #08060d;
+  box-shadow: 0 0 0 3px rgba(8, 6, 13, 0.12);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #08060d;
+  padding-right: 24px;
+}
+
+.category {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #6b6375;
+}
+
+.removeButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #6b6375;
+  font-size: 16px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+.chip:hover .removeButton {
+  opacity: 1;
+}
+
+.removeButton:hover {
+  background: #f0eff3;
+  color: #08060d;
+}

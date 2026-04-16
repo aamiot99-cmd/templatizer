@@ -1,0 +1,166 @@
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.3px;
+}
+
+.more {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  min-height: 280px;
+}
+
+.hero {
+  grid-row: span 2;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.side {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  min-height: 130px;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.hero:hover .bgImage,
+.side:hover .bgImage {
+  transform: scale(1.06);
+}
+
+.sideContent {
+  position: relative;
+  padding: 12px 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sideOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 30%, rgba(0, 0, 0, 0.65));
+}
+
+.sideAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: grid;
+  place-items: center;
+  font-size: 7px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sideAuthor {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 30%, rgba(0, 0, 0, 0.82));
+}
+
+.content {
+  position: relative;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.heroTitle {
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.sideTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.author {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.likes {
+  margin-left: auto;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.sideMeta {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+}

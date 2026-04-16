@@ -1,0 +1,244 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 820px;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.countPill {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wizard-accent);
+  background: var(--wizard-accent-soft);
+  border: 1px solid var(--wizard-accent-border);
+  border-radius: 20px;
+  padding: 5px 14px;
+}
+
+.resetButton {
+  appearance: none;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.resetButton:hover {
+  color: var(--wizard-accent);
+  border-color: var(--wizard-accent-border);
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.entry {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+
+.entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--wizard-accent);
+  border-radius: 10px 0 0 10px;
+}
+
+.entry:hover {
+  border-color: var(--wizard-accent-border);
+  box-shadow: var(--shadow-md);
+}
+
+.entryRow {
+  display: grid;
+  grid-template-columns: 32px 1fr 1.5fr auto;
+  gap: 10px;
+  padding: 14px 14px 14px 18px;
+  align-items: center;
+}
+
+.entryBadge {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--wizard-accent-soft);
+  color: var(--wizard-accent);
+  border: 1px solid var(--wizard-accent-border);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: var(--heading);
+}
+
+.input {
+  appearance: none;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--wizard-accent);
+  box-shadow: 0 0 0 3px var(--wizard-accent-ring);
+}
+
+.rowButtons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.addChildButton {
+  appearance: none;
+  padding: 6px 10px;
+  border: 1px solid var(--wizard-accent-border);
+  background: var(--wizard-accent-soft);
+  border-radius: 6px;
+  color: var(--wizard-accent);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.addChildButton:hover {
+  background: var(--wizard-accent);
+  color: #fff;
+}
+
+.removeButton {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.removeButton:hover {
+  background: #f0eff3;
+  color: var(--text);
+}
+
+.children {
+  margin-left: 18px;
+  padding: 10px 14px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-subtle);
+  border-top: 1px dashed var(--wizard-accent-border);
+  border-left: 1px dashed var(--wizard-accent-border);
+  border-radius: 0 0 0 8px;
+  position: relative;
+}
+
+.childrenLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--wizard-accent);
+  margin-bottom: 2px;
+}
+
+.childRow {
+  display: grid;
+  grid-template-columns: 36px 1fr 1.5fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.childBullet {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wizard-accent);
+  background: #fff;
+  border: 1px solid var(--wizard-accent-border);
+  border-radius: 6px;
+  padding: 3px 4px;
+  text-align: center;
+}
+
+.addButton {
+  appearance: none;
+  padding: 14px;
+  border: 1px dashed var(--wizard-accent-border);
+  border-radius: 10px;
+  background: var(--wizard-accent-soft);
+  color: var(--wizard-accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.addButton:hover {
+  background: var(--wizard-accent);
+  color: #fff;
+  border-color: var(--wizard-accent);
+  border-style: solid;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  background: var(--bg-subtle);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  margin-bottom: 14px;
+}

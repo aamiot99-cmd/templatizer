@@ -1,0 +1,101 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  appearance: none;
+  padding: 24px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+.card:hover {
+  border-color: #a0a0a8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.cardSelected {
+  border-color: #08060d;
+  box-shadow: 0 0 0 4px rgba(8, 6, 13, 0.06);
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.logoLumapps {
+  background: linear-gradient(135deg, #1a73e8, #34a853);
+}
+
+.logoSharepoint {
+  background: linear-gradient(135deg, #0078d4, #2b88d8);
+}
+
+.logoJalios {
+  background: linear-gradient(135deg, #e63946, #c1121f);
+}
+
+.logoJint {
+  background: linear-gradient(135deg, #7b2ff7, #e040fb);
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 2px;
+  color: #08060d;
+  letter-spacing: -0.3px;
+}
+
+.tagline {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary, #6b6375);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.description {
+  font-size: 13px;
+  color: #6b6375;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.checkmark {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  background: #08060d;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}

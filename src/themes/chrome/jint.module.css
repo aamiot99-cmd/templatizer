@@ -1,0 +1,422 @@
+.chrome {
+  display: flex;
+  flex-direction: column;
+  background: #f3f2f1;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #1a1a1a;
+  min-height: 600px;
+  border: 1px solid #e0e0e0;
+}
+
+.m365Bar {
+  height: 48px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.m365Left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.m365Waffle {
+  width: 42px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+
+.m365LogoWrap {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  height: 48px;
+}
+
+.m365LogoImg {
+  height: 26px;
+  max-width: 110px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.m365LogoText {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+
+.m365AppName {
+  font-size: 13.5px;
+  color: #fff;
+  font-weight: 600;
+  padding-left: 14px;
+  white-space: nowrap;
+}
+
+.m365Search {
+  flex: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 30px;
+  background: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 10px;
+  color: #605e5c;
+}
+
+.m365SearchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 12.5px;
+  color: #1b1b1b;
+  font-family: inherit;
+}
+
+.m365SearchInput::placeholder {
+  color: #605e5c;
+}
+
+.m365Right {
+  display: flex;
+  align-items: center;
+  padding-right: 14px;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.m365Icon {
+  width: 34px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.m365Icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.m365Badge {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  background: #e8440a;
+  border-radius: 50%;
+  border: 1.5px solid #000;
+}
+
+.m365User {
+  font-size: 12.5px;
+  color: #fff;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.m365Av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.appBar {
+  width: 48px;
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 0;
+  border-right: 1px solid #edebe9;
+}
+
+.appBarPill {
+  background: var(--color-primary);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.appBarIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.appBarIcon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.appBarIconActive {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.siteHeader {
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.shTop {
+  display: flex;
+  align-items: center;
+  height: 72px;
+  padding: 0 0 0 20px;
+  overflow: hidden;
+}
+
+.shLogoWrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 14px;
+  z-index: 1;
+}
+
+.shLogoImg {
+  height: 38px;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+.shBrand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  letter-spacing: -0.3px;
+}
+
+.shTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  padding-right: 18px;
+  border-right: 2px solid #edebe9;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.shBanner {
+  flex: 1;
+  position: relative;
+  align-self: stretch;
+  overflow: hidden;
+}
+
+.shBannerBase {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    color-mix(in srgb, var(--color-primary) 5%, #fff) 100%
+  );
+}
+
+.shBannerBlobA {
+  position: absolute;
+  left: 5%;
+  top: -80%;
+  width: 55%;
+  height: 260%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color-secondary) 22%, transparent),
+    transparent 60%
+  );
+}
+
+.shBannerBlobB {
+  position: absolute;
+  left: 38%;
+  top: -50%;
+  width: 55%;
+  height: 200%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color-primary) 16%, transparent),
+    transparent 60%
+  );
+}
+
+.shBannerBlobC {
+  position: absolute;
+  right: -4%;
+  top: -30%;
+  width: 38%;
+  height: 160%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color-primary) 28%, transparent),
+    transparent 60%
+  );
+}
+
+.shSep {
+  height: 1px;
+  background: #edebe9;
+}
+
+.shNav {
+  display: flex;
+  align-items: stretch;
+  height: 40px;
+  padding: 0 8px;
+}
+
+.shNavItem {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  gap: 4px;
+}
+
+.shNavItem:hover {
+  background: #faf9f8;
+}
+
+.shNavItemHasChildren {
+  padding-right: 10px;
+}
+
+.shChevron {
+  flex-shrink: 0;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.shDropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #edebe9;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  padding: 6px 0;
+  z-index: 50;
+}
+
+.shNavItem:hover .shDropdown {
+  display: block;
+}
+
+.shDropdownItem {
+  padding: 8px 16px;
+  font-size: 12.5px;
+  color: #323130;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.shDropdownItem:hover {
+  background: #f3f2f1;
+}
+
+.shNavItemActive {
+  font-weight: 600;
+  color: #000;
+}
+
+.shNavItemActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 2.5px;
+  background: var(--color-primary);
+  border-radius: 2px 2px 0 0;
+}
+
+.shRight {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: 8px;
+}
+
+.shAction {
+  font-size: 11.5px;
+  color: #605e5c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+
+.shAction:hover {
+  background: #f3f2f1;
+}
+
+.content {
+  flex: 1;
+  padding: 24px 32px;
+  min-width: 0;
+}

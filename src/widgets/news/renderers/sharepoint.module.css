@@ -1,0 +1,39 @@
+.section {
+  padding: 28px 32px;
+  background: var(--color-surface);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.wp {
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  gap: 8px;
+}
+
+.icon {
+  color: #c0bebe;
+}
+
+.empty {
+  font-size: 13px;
+  color: #a19f9d;
+}
