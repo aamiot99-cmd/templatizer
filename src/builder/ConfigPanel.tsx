@@ -42,16 +42,18 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
       <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
       <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
       <div className={styles.fields}>
-        {widget.configSchema.map((field) => (
-          <ConfigField
-            key={field.key}
-            field={field}
-            value={cell.config[field.key]}
-            onChange={(value) =>
-              updateCellConfig(rowId, cell.id, { [field.key]: value })
-            }
-          />
-        ))}
+        {widget.configSchema
+          .filter((field) => !field.platforms || field.platforms.includes(platform))
+          .map((field) => (
+            <ConfigField
+              key={field.key}
+              field={field}
+              value={cell.config[field.key]}
+              onChange={(value) =>
+                updateCellConfig(rowId, cell.id, { [field.key]: value })
+              }
+            />
+          ))}
       </div>
     </aside>
   )

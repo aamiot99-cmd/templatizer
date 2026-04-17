@@ -1,0 +1,393 @@
+.chrome {
+  display: flex;
+  flex-direction: column;
+  background: #f3f2f1;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #323130;
+  min-height: 100vh;
+  border: 1px solid #e0e0e0;
+}
+
+/* ── M365 top bar ── */
+.m365Bar {
+  height: 48px;
+  background: #1b1a19;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-right: 12px;
+}
+
+.m365Left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.m365Waffle {
+  width: 42px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+
+.m365Waffle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.m365AppName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding: 0 16px 0 4px;
+  white-space: nowrap;
+}
+
+.m365Search {
+  flex: 1;
+  max-width: 460px;
+  margin: 0 auto;
+  height: 30px;
+  background: #fff;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 8px;
+  color: #605e5c;
+}
+
+.m365SearchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 12.5px;
+  color: #1b1b1b;
+  font-family: inherit;
+}
+
+.m365SearchInput::placeholder {
+  color: #605e5c;
+}
+
+.m365Right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.m365Icon {
+  width: 34px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+
+.m365Icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.m365User {
+  font-size: 12.5px;
+  color: #fff;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.m365Av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Body layout ── */
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* ── Left sidebar ── */
+.sidebar {
+  width: 40px;
+  background: #1b1a19;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 2px;
+  align-self: stretch;
+}
+
+.sidebarIcon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.sidebarIcon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebarIconActive {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sidebarIconPlus {
+  margin-top: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.sidebarIconPlus:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ── Main area ── */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f3f2f1;
+}
+
+/* ── Site header bar ── */
+.siteHeader {
+  background: #3b3a39;
+  flex-shrink: 0;
+}
+
+.siteHeaderInner {
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  padding: 0 12px;
+  gap: 0;
+}
+
+.siteLogoWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+.siteLogoInitials {
+  width: 32px;
+  height: 32px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.siteLogoImg {
+  height: 32px;
+  max-width: 120px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.siteName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── Site navigation ── */
+.siteNav {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  gap: 4px;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.navItemActive {
+  color: #fff;
+  font-weight: 600;
+}
+
+.navItemActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: #fff;
+}
+
+.navChevron {
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #edebe9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+  z-index: 50;
+}
+
+.navItem:hover .dropdown {
+  display: block;
+}
+
+.dropdownItem {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #f3f2f1;
+}
+
+/* ── Site actions (right of nav) ── */
+.siteActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding-left: 8px;
+}
+
+.siteAction {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 4px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.siteAction:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ── Page action bar ── */
+.pageBar {
+  height: 36px;
+  background: #fff;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+.pageBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageBarRight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pageBarAction {
+  font-size: 12px;
+  color: #323130;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.pageBarAction:hover {
+  background: #f3f2f1;
+}
+
+.pageBarMeta {
+  font-size: 12px;
+  color: #605e5c;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* ── Content area ── */
+.content {
+  flex: 1;
+  background: #f3f2f1;
+  min-width: 0;
+  padding: 24px 0;
+}
+
+.contentInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}

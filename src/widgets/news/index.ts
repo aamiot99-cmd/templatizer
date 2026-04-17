@@ -28,10 +28,24 @@ export const newsWidget: WidgetDefinition = {
       placeholder: 'Ex. : Actualités',
     },
     {
+      key: 'layout',
+      label: 'Disposition',
+      type: 'select',
+      default: 'featured',
+      platforms: ['sharepoint'],
+      options: [
+        { value: 'featured', label: 'Articles à la une' },
+        { value: 'list', label: 'Liste' },
+        { value: 'sidebyside', label: 'Côte à côte' },
+        { value: 'carousel', label: 'Carrousel' },
+      ],
+    },
+    {
       key: 'showMetrics',
       label: 'Afficher les réactions (likes, commentaires)',
       type: 'boolean',
       default: true,
+      platforms: ['lumapps', 'jalios', 'jint'],
     },
   ],
   renderers: {

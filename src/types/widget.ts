@@ -28,6 +28,7 @@ interface BaseField {
   key: string
   label: string
   description?: string
+  platforms?: Platform[]
 }
 
 export interface TextField extends BaseField {
