@@ -5,14 +5,17 @@ const DEFAULTS_BY_SIZE = {
   large: {
     tag: 'Ressources Humaines',
     image: '/focus/handshake.jpg',
+    imagePosition: '50% 22%',
   },
   medium: {
     tag: 'Événement',
     image: '/focus/pro-meeting.jpg',
+    imagePosition: '50% 50%',
   },
   compact: {
     tag: 'Formation',
     image: '/focus/teambuilding.jpg',
+    imagePosition: '50% 50%',
   },
 } as const
 
