@@ -8,7 +8,7 @@ const DEFAULTS_BY_SIZE = {
   },
   medium: {
     tag: 'Événement',
-    image: '/news/pexels-sevenstormphotography-934351.jpg',
+    image: '/news/pexels-brunogobofoto-3861712.jpg',
   },
   compact: {
     tag: 'Formation',
