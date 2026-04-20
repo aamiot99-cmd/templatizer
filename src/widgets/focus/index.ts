@@ -68,8 +68,9 @@ export const focusWidget: WidgetDefinition = {
       key: 'imageUrl',
       label: "URL de l'image",
       type: 'text',
-      default: '/news/pexels-jibarofoto-2774556.jpg',
+      default: '',
       placeholder: '/news/ma-photo.jpg',
+      description: "Laissez vide pour utiliser la photo adaptée au layout.",
     },
     {
       key: 'showImage',
