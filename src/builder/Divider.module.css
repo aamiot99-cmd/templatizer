@@ -11,11 +11,9 @@
 
 .bar {
   width: 2px;
-  background: var(--border);
-  border-radius: 1px;
-  transition:
-    background 0.12s,
-    width 0.12s;
+  background: #e0dfe3;
+  border-radius: 2px;
+  transition: all 0.12s;
 }
 
 .divider:hover .bar {
@@ -34,14 +32,14 @@
 }
 
 .dividerDisabled:hover .bar {
-  background: var(--border);
+  background: #e0dfe3;
   width: 2px;
 }
 
 .dividerSnapped .bar {
-  background: #e8440a;
+  background: #08060d;
   width: 4px;
-  box-shadow: 0 0 0 2px rgba(232, 68, 10, 0.15);
+  box-shadow: 0 0 0 2px rgba(8, 6, 13, 0.1);
 }
 
 .label {
@@ -49,20 +47,20 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 4px 10px;
+  padding: 3px 8px;
   background: #08060d;
   color: #fff;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   font-family: ui-monospace, Consolas, monospace;
   border-radius: 4px;
   white-space: nowrap;
   pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .labelSnapped {
-  background: #e8440a;
-  font-size: 12px;
-  padding: 5px 12px;
+  background: #08060d;
+  font-size: 11px;
+  padding: 4px 10px;
 }

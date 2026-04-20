@@ -1,19 +1,24 @@
 .pool {
-  background: #fafafb;
+  background: #fff;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .poolTitle {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 12px;
-  color: #08060d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  color: #6b6375;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 .category {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .category:last-child {
@@ -21,58 +26,88 @@
 }
 
 .categoryLabel {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: #6b6375;
-  margin: 0 0 8px;
+  color: #8a8793;
+  margin: 0 0 6px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
+.categoryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.category[data-category='communicate'] .categoryDot { background: #8b5cf6; }
+.category[data-category='access'] .categoryDot { background: #3b82f6; }
+.category[data-category='collaborate'] .categoryDot { background: #10b981; }
+.category[data-category='live'] .categoryDot { background: #f59e0b; }
 
 .items {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  background: #fff;
-  border: 1px solid var(--border);
+  padding: 8px 10px;
+  background: #fafafb;
+  border: 1px solid transparent;
   border-radius: 8px;
   cursor: grab;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
+  transition: all 0.15s;
   touch-action: none;
+  position: relative;
+}
+
+.item::before {
+  content: '⠿';
+  font-size: 12px;
+  color: #d0cfd4;
+  flex-shrink: 0;
+  transition: color 0.15s;
 }
 
 .item:hover {
-  border-color: #a0a0a8;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background: #fff;
+  border-color: var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.item:hover::before {
+  color: #8a8793;
 }
 
 .item:active {
   cursor: grabbing;
+  transform: scale(0.98);
 }
 
 .itemDragging {
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .itemLabel {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: #08060d;
+  line-height: 1.3;
 }
 
 .itemDescription {
-  font-size: 11px;
-  color: #6b6375;
-  line-height: 1.35;
+  font-size: 10.5px;
+  color: #8a8793;
+  line-height: 1.3;
 }
 
 .itemText {

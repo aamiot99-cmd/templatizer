@@ -23,23 +23,50 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.clip {
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
   gap: 10px;
-  flex: 1;
+  transition: transform 0.35s ease;
 }
 
 .tile {
   background: #fff;
   border-radius: var(--radius-md);
-  aspect-ratio: 1;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: transform 0.15s;
+}
+
+/* Compact mode (1/3) — waffle grid 3x3 */
+.gridCompact {
+  overflow: visible;
+}
+
+.gridCompact .track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  transition: none;
+}
+
+.gridCompact .tile {
+  width: 100%;
 }
 
 .tile:hover {
@@ -47,10 +74,12 @@
 }
 
 .icon {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1;
   object-fit: contain;
   display: block;
+  border-radius: 4px;
 }
 
 .label {
@@ -67,7 +96,8 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: auto;
+  padding-top: 12px;
   flex-shrink: 0;
 }
 

@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import type { Branding, Platform } from './platform'
 
-export type WidgetSize = 'large' | 'compact'
+export type WidgetSize = 'large' | 'medium' | 'compact'
 
 export type UsageCategory =
   | 'communicate'

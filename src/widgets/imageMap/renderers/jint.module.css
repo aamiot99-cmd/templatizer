@@ -1,0 +1,104 @@
+.widget {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.mapContainer {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.map {
+  width: 100%;
+  aspect-ratio: 1280 / 1110;
+  background: var(--color-primary);
+  -webkit-mask-image: url('/france-map.svg');
+  mask-image: url('/france-map.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s;
+}
+
+.pin:hover {
+  transform: translate(-50%, -50%) scale(1.3);
+  z-index: 3;
+}
+
+.pinRing {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.pinDot {
+  fill: var(--color-primary);
+}
+
+.popup {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 18px));
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.popup::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.popupCity {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.popupLabel {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+}
