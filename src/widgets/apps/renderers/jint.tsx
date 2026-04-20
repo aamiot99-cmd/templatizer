@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import type { WidgetRendererProps } from '../../../types'
+import { PagerControls } from '../../_shared/PagerControls'
 import styles from './jint.module.css'
 
 interface AppItem {
