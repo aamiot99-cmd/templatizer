@@ -72,7 +72,7 @@ export function JintFocus({ config, size }: WidgetRendererProps) {
 
       {showImage && (
         <div className={styles.image}>
-          <img src={imageUrl} alt="" />
+          <img src={imageUrl} alt="" style={{ objectPosition: imagePosition }} />
         </div>
       )}
     </div>
