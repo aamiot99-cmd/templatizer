@@ -118,3 +118,19 @@
   object-fit: cover;
   display: block;
 }
+
+/* Compact (1/3 width) variant */
+.widgetCompact .content {
+  flex: 1 1 auto;
+}
+
+.widgetCompact .image {
+  flex: 0 0 32%;
+}
+
+.widgetCompact .title {
+  font-size: 19px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
