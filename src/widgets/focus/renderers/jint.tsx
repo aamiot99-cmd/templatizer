@@ -16,9 +16,17 @@ const DEFAULTS_BY_SIZE = {
   },
 } as const
 
+// Any value that appears as a default for some size is treated as "unset" so
+// the renderer can always substitute the layout-appropriate default. This lets
+// existing widgets whose config was saved with an older hardcoded default pick
+// up the new size-based image automatically.
+const DEFAULT_IMAGES = new Set(Object.values(DEFAULTS_BY_SIZE).map((d) => d.image))
+const DEFAULT_TAGS = new Set(Object.values(DEFAULTS_BY_SIZE).map((d) => d.tag))
+
 export function JintFocus({ config, size }: WidgetRendererProps) {
   const defaults = DEFAULTS_BY_SIZE[size] ?? DEFAULTS_BY_SIZE.large
-  const tag = (config.tag as string) || defaults.tag
+  const rawTag = (config.tag as string) || ''
+  const tag = rawTag && !DEFAULT_TAGS.has(rawTag) ? rawTag : defaults.tag
   const title = (config.title as string) ?? 'Créons ensemble !'
   const subtitle =
     (config.subtitle as string) ??
@@ -26,7 +34,9 @@ export function JintFocus({ config, size }: WidgetRendererProps) {
   const ctaLabel = (config.ctaLabel as string) ?? "Rejoindre l'atelier"
   const showCta = (config.showCta as boolean) ?? true
   const showTag = ((config.showTag as boolean) ?? true) && Boolean(tag)
-  const imageUrl = (config.imageUrl as string) || defaults.image
+  const rawImageUrl = (config.imageUrl as string) || ''
+  const imageUrl =
+    rawImageUrl && !DEFAULT_IMAGES.has(rawImageUrl) ? rawImageUrl : defaults.image
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
   const isCompact = size === 'compact'
 
