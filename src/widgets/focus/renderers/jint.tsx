@@ -26,7 +26,7 @@ export function JintFocus({ config, size }: WidgetRendererProps) {
   const ctaLabel = (config.ctaLabel as string) ?? "Rejoindre l'atelier"
   const showCta = (config.showCta as boolean) ?? true
   const showTag = ((config.showTag as boolean) ?? true) && Boolean(tag)
-  const imageUrl = (config.imageUrl as string) ?? defaults.image
+  const imageUrl = (config.imageUrl as string) || defaults.image
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
   const isCompact = size === 'compact'
 
