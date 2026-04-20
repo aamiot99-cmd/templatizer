@@ -6,6 +6,7 @@ import { directoryWidget } from './directory'
 import { contactsWidget } from './contacts'
 import { socialWidget } from './social'
 import { imageMapWidget } from './imageMap'
+import { meetingsWidget } from './meetings'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [newsWidget.id]: newsWidget,
@@ -14,6 +15,7 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [directoryWidget.id]: directoryWidget,
   [contactsWidget.id]: contactsWidget,
   [eventsWidget.id]: eventsWidget,
+  [meetingsWidget.id]: meetingsWidget,
   [imageMapWidget.id]: imageMapWidget,
 }
 
