@@ -1,7 +1,7 @@
 import type { WidgetRendererProps } from '../../../types'
 import styles from './jint.module.css'
 
-export function JintFocus({ config }: WidgetRendererProps) {
+export function JintFocus({ config, size }: WidgetRendererProps) {
   const tag = (config.tag as string) ?? 'ressources humaines'
   const title = (config.title as string) ?? 'Créons ensemble !'
   const subtitle =
@@ -13,15 +13,16 @@ export function JintFocus({ config }: WidgetRendererProps) {
   const imageUrl =
     (config.imageUrl as string) ?? '/news/pexels-jibarofoto-2774556.jpg'
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
+  const isCompact = size === 'compact'
 
   return (
-    <div className={styles.widget}>
+    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
       <div className={styles.background} aria-hidden="true" />
 
       <div className={styles.content}>
         {showTag && <div className={styles.tag}>#{tag}</div>}
         <div className={styles.title}>{title}</div>
-        <div className={styles.subtitle}>{subtitle}</div>
+        {!isCompact && <div className={styles.subtitle}>{subtitle}</div>}
         {showCta && (
           <button type="button" className={styles.cta}>
             {ctaLabel}
