@@ -18,7 +18,7 @@ const DEFAULTS_BY_SIZE = {
 
 export function JintFocus({ config, size }: WidgetRendererProps) {
   const defaults = DEFAULTS_BY_SIZE[size] ?? DEFAULTS_BY_SIZE.large
-  const tag = (config.tag as string) ?? defaults.tag
+  const tag = (config.tag as string) || defaults.tag
   const title = (config.title as string) ?? 'Créons ensemble !'
   const subtitle =
     (config.subtitle as string) ??
