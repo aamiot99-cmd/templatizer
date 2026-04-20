@@ -8,7 +8,8 @@ export function JintFocus({ config }: WidgetRendererProps) {
     "6 clés pour un travail d'équipe efficace."
   const ctaLabel = (config.ctaLabel as string) ?? "Rejoindre l'atelier"
   const showCta = (config.showCta as boolean) ?? true
-  const imageUrl = (config.imageUrl as string) ?? ''
+  const imageUrl =
+    (config.imageUrl as string) ?? '/news/pexels-jibarofoto-2774556.jpg'
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
 
   return (
