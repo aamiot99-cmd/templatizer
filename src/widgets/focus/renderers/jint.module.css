@@ -4,7 +4,7 @@
   align-items: stretch;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  min-height: 200px;
+  min-height: 150px;
   height: 100%;
   box-sizing: border-box;
   isolation: isolate;
@@ -43,45 +43,61 @@
   z-index: 1;
   flex: 1 1 0;
   min-width: 0;
-  padding: 32px 36px;
+  padding: 18px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 18px;
+  gap: 10px;
   color: #fff;
+}
+
+.tag {
+  align-self: flex-start;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
 }
 
 .title {
   font-size: 22px;
   font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   color: #fff;
+  margin-top: auto;
 }
 
 .subtitle {
-  font-size: 14px;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: -6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: -4px;
 }
 
 .cta {
   align-self: flex-start;
-  background: color-mix(in srgb, var(--color-primary) 70%, #fff 30%);
+  margin-top: auto;
+  background: color-mix(in srgb, var(--color-primary) 55%, #000 45%);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
   font-family: inherit;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   transition: filter 0.15s ease, transform 0.15s ease;
 }
 
 .cta:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.12);
   transform: translateY(-1px);
 }
 
@@ -90,8 +106,8 @@
   z-index: 1;
   flex: 1 1 0;
   min-width: 0;
-  margin: 14px 14px 14px 0;
-  border-radius: var(--radius-lg);
+  margin: 10px 10px 10px 0;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
