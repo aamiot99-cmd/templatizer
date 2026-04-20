@@ -135,32 +135,12 @@ export function JintContacts({ config, size }: WidgetRendererProps) {
           </div>
         </div>
       </div>
-      {totalPages > 1 && (
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={`${styles.arrow} ${page === 0 ? styles.arrowDisabled : ''}`}
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-          >
-            ‹
-          </button>
-          <div className={styles.dots}>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <div
-                key={i}
-                className={`${styles.dot} ${i === page ? styles.dotActive : ''}`}
-              />
-            ))}
-          </div>
-          <button
-            type="button"
-            className={`${styles.arrow} ${page >= totalPages - 1 ? styles.arrowDisabled : ''}`}
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-          >
-            ›
-          </button>
-        </div>
-      )}
+      <PagerControls
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        variant="dark"
+      />
     </div>
   )
 }
