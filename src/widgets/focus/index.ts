@@ -25,6 +25,19 @@ export const focusWidget: WidgetDefinition = {
   },
   configSchema: [
     {
+      key: 'tag',
+      label: 'Tag',
+      type: 'text',
+      default: 'ressources humaines',
+      placeholder: 'Ex. : ressources humaines',
+    },
+    {
+      key: 'showTag',
+      label: 'Afficher le tag',
+      type: 'boolean',
+      default: true,
+    },
+    {
       key: 'title',
       label: 'Titre',
       type: 'text',
