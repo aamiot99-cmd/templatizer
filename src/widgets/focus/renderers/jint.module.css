@@ -90,6 +90,8 @@
   z-index: 1;
   flex: 1 1 0;
   min-width: 0;
+  margin: 14px 14px 14px 0;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
