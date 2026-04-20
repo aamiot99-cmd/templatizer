@@ -4,23 +4,32 @@ import styles from './jint.module.css'
 const DEFAULTS_BY_SIZE = {
   large: {
     tag: 'Ressources Humaines',
-    image: '/news/pexels-jibarofoto-2774556.jpg',
+    image: '/focus/handshake.jpg',
   },
   medium: {
     tag: 'Événement',
-    image: '/news/pexels-brunogobofoto-3861712.jpg',
+    image: '/focus/pro-meeting.jpg',
   },
   compact: {
     tag: 'Formation',
-    image: '/news/pexels-runffwpu-2530124.jpg',
+    image: '/focus/teambuilding.jpg',
   },
 } as const
 
-// Any value that appears as a default for some size is treated as "unset" so
-// the renderer can always substitute the layout-appropriate default. This lets
-// existing widgets whose config was saved with an older hardcoded default pick
-// up the new size-based image automatically.
-const DEFAULT_IMAGES = new Set(Object.values(DEFAULTS_BY_SIZE).map((d) => d.image))
+// Any value that matches a known default (current or legacy) is treated as
+// "unset" so the renderer can always substitute the layout-appropriate image.
+// This lets widgets saved with an older hardcoded default auto-pick the new
+// size-based image without requiring users to re-drop them.
+const LEGACY_IMAGES = [
+  '/news/pexels-jibarofoto-2774556.jpg',
+  '/news/pexels-brunogobofoto-3861712.jpg',
+  '/news/pexels-runffwpu-2530124.jpg',
+  '/news/pexels-sevenstormphotography-934351.jpg',
+]
+const DEFAULT_IMAGES = new Set([
+  ...Object.values(DEFAULTS_BY_SIZE).map((d) => d.image),
+  ...LEGACY_IMAGES,
+])
 const DEFAULT_TAGS = new Set(Object.values(DEFAULTS_BY_SIZE).map((d) => d.tag))
 
 export function JintFocus({ config, size }: WidgetRendererProps) {
