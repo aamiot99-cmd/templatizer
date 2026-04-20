@@ -1,0 +1,101 @@
+.widget {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 200px;
+  height: 100%;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse at 30% 20%,
+      color-mix(in srgb, var(--color-primary) 55%, #000) 0%,
+      color-mix(in srgb, var(--color-primary) 80%, #000) 55%,
+      color-mix(in srgb, var(--color-primary) 90%, #000) 100%
+    );
+}
+
+.background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.06) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.05) 1px, transparent 1.5px),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.04) 1px, transparent 1.5px),
+    radial-gradient(circle at 85% 15%, rgba(0, 0, 0, 0.18) 1px, transparent 2px),
+    radial-gradient(circle at 25% 70%, rgba(0, 0, 0, 0.15) 1px, transparent 2px);
+  background-size: 120px 120px, 80px 80px, 160px 160px, 100px 100px, 140px 140px;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  color: #fff;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.subtitle {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: -6px;
+}
+
+.cta {
+  align-self: flex-start;
+  background: color-mix(in srgb, var(--color-primary) 70%, #fff 30%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.image {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
