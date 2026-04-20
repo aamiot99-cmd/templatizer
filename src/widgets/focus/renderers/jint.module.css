@@ -4,7 +4,8 @@
   align-items: stretch;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  min-height: 150px;
+  min-height: 160px;
+  max-height: 200px;
   height: 100%;
   box-sizing: border-box;
   isolation: isolate;
