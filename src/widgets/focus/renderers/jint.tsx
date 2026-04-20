@@ -4,13 +4,13 @@ import styles from './jint.module.css'
 const DEFAULTS_BY_SIZE = {
   large: {
     tag: 'Ressources Humaines',
-    image: '/focus/handshake.jpg',
-    imagePosition: '50% 22%',
+    image: '/focus/pro-meeting.jpg',
+    imagePosition: '50% 50%',
   },
   medium: {
     tag: 'Événement',
-    image: '/focus/pro-meeting.jpg',
-    imagePosition: '50% 50%',
+    image: '/focus/handshake.jpg',
+    imagePosition: '50% 22%',
   },
   compact: {
     tag: 'Formation',
