@@ -28,8 +28,8 @@ export const focusWidget: WidgetDefinition = {
       key: 'tag',
       label: 'Tag',
       type: 'text',
-      default: 'ressources humaines',
-      placeholder: 'Ex. : ressources humaines',
+      default: 'Ressources Humaines',
+      placeholder: 'Ex. : Ressources Humaines',
     },
     {
       key: 'showTag',
