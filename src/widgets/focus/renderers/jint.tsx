@@ -47,8 +47,11 @@ export function JintFocus({ config, size }: WidgetRendererProps) {
   const showCta = (config.showCta as boolean) ?? true
   const showTag = ((config.showTag as boolean) ?? true) && Boolean(tag)
   const rawImageUrl = (config.imageUrl as string) || ''
-  const imageUrl =
-    rawImageUrl && !DEFAULT_IMAGES.has(rawImageUrl) ? rawImageUrl : defaults.image
+  const isCustomImage = Boolean(rawImageUrl) && !DEFAULT_IMAGES.has(rawImageUrl)
+  const imageUrl = isCustomImage ? rawImageUrl : defaults.image
+  // When the user provided their own image, we don't know the focal point,
+  // so default to center. Otherwise use the tuned position for the default.
+  const imagePosition = isCustomImage ? '50% 50%' : defaults.imagePosition
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
   const isCompact = size === 'compact'
 
