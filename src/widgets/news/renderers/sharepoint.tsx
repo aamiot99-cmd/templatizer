@@ -107,7 +107,30 @@ function FeaturedLayout({ featured, secondary }: { featured: Article; secondary:
   )
 }
 
-function ListLayout({ secondary }: { featured: Article; secondary: Article[] }) {
+function ListLayout({ secondary, size }: { featured: Article; secondary: Article[]; size?: string }) {
+  if (size === 'one-third') {
+    return (
+      <div className={styles.listLayout}>
+        {secondary.map((item) => (
+          <div key={item.title} className={styles.listItemCompact}>
+            <div className={styles.listImageCompact}>
+              <img src={item.image} alt={item.title} />
+            </div>
+            <div className={styles.listBodyCompact}>
+              <div className={styles.listTitleCompact}>{item.title}</div>
+              <div className={styles.listExcerptCompact}>{item.excerpt}</div>
+              <div className={styles.metaCompact}>
+                <span className={styles.authorCompact}>{item.author}</span>
+                <span className={styles.timeCompact}>{item.time}</span>
+              </div>
+              {item.views && <div className={styles.viewsCompact}>{item.views}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className={styles.listLayout}>
       {secondary.map((item) => (
@@ -141,7 +164,7 @@ function SideBySideLayout({ secondary }: { secondary: Article[] }) {
   )
 }
 
-function CarouselLayout({ featured, secondary }: { featured: Article; secondary: Article[] }) {
+function CarouselLayout({ featured, secondary, size }: { featured: Article; secondary: Article[]; size?: string }) {
   const all = [featured, ...secondary]
   const [index, setIndex] = useState(0)
   const current = all[index]
@@ -151,7 +174,7 @@ function CarouselLayout({ featured, secondary }: { featured: Article; secondary:
 
   return (
     <div className={styles.carousel}>
-      <div className={styles.carouselSlide}>
+      <div className={`${styles.carouselSlide} ${size === 'one-third' ? styles.carouselSlideCompact : ''}`}>
         <img src={current.image} alt={current.title} className={styles.carouselImg} />
         <div className={styles.carouselGradient} />
         <div className={styles.carouselTitle}>{current.title}</div>
@@ -192,9 +215,12 @@ function ChevronRight() {
   )
 }
 
-export function SharepointNews({ config, branding }: WidgetRendererProps) {
+const FULL_ONLY_LAYOUTS = ['featured', 'sidebyside']
+
+export function SharepointNews({ config, branding, size }: WidgetRendererProps) {
   const title = (config.title as string) || 'Actualités'
-  const layout = (config.layout as string) || 'featured'
+  const rawLayout = (config.layout as string) || 'featured'
+  const layout = size !== 'full' && FULL_ONLY_LAYOUTS.includes(rawLayout) ? 'list' : rawLayout
   const { featured, secondary } = getArticles(branding.name)
 
   return (
@@ -205,11 +231,11 @@ export function SharepointNews({ config, branding }: WidgetRendererProps) {
       </div>
 
       {layout === 'list' ? (
-        <ListLayout featured={featured} secondary={secondary} />
+        <ListLayout featured={featured} secondary={secondary} size={size} />
       ) : layout === 'sidebyside' ? (
         <SideBySideLayout secondary={secondary} />
       ) : layout === 'carousel' ? (
-        <CarouselLayout featured={featured} secondary={secondary} />
+        <CarouselLayout featured={featured} secondary={secondary} size={size} />
       ) : (
         <FeaturedLayout featured={featured} secondary={secondary} />
       )}

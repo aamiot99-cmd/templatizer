@@ -34,9 +34,9 @@ export const newsWidget: WidgetDefinition = {
       default: 'featured',
       platforms: ['sharepoint'],
       options: [
-        { value: 'featured', label: 'Articles à la une' },
+        { value: 'featured', label: 'Articles à la une', sizes: ['full'] },
         { value: 'list', label: 'Liste' },
-        { value: 'sidebyside', label: 'Côte à côte' },
+        { value: 'sidebyside', label: 'Côte à côte', sizes: ['full'] },
         { value: 'carousel', label: 'Carrousel' },
       ],
     },
