@@ -283,7 +283,10 @@ export function JintChrome({ branding, navEntries, children }: JintChromeProps) 
               })}
               <div className={styles.shRight}>
                 <div className={styles.shAction}>
-                  <PeopleIcon /> Accès au site
+                  <StarIcon /> Non suivi
+                </div>
+                <div className={styles.shAction}>
+                  <PersonAddIcon /> Accès au site
                 </div>
               </div>
             </nav>
