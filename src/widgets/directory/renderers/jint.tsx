@@ -36,8 +36,8 @@ export function JintDirectory({ config, size }: WidgetRendererProps) {
     (config.searchPlaceholder as string) ?? 'Rechercher une personne...'
   const showSearch = (config.showSearch as boolean) ?? true
   const showChips = (config.showChips as boolean) ?? true
-  const isCompact = size === 'compact'
-  const isMedium = size === 'medium'
+  const isCompact = size === 'one-third'
+  const isMedium = size === 'half'
   const people = isCompact
     ? DEFAULT_PEOPLE.slice(0, 1)
     : isMedium
