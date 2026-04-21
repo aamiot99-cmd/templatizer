@@ -93,7 +93,7 @@ function MemberCard({ person }: { person: NewMember }) {
 export function JintContacts({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Nouveaux arrivants'
   const linkLabel = (config.linkLabel as string) ?? 'Annuaire →'
-  const isCompact = size === 'compact'
+  const isCompact = size === 'one-third'
 
   const gridRef = useRef<HTMLDivElement>(null)
   const [perPage, setPerPage] = useState(DEFAULT_MEMBERS.length)
