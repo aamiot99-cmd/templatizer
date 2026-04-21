@@ -1,4 +1,5 @@
-import type { Platform } from '../types'
+import { ratioToSize } from '../types'
+import type { Platform, SelectField } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
@@ -26,7 +27,8 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
     )
   }
 
-  const { rowId, cell } = found
+  const { rowId, cell, ratio } = found
+  const size = ratioToSize(ratio)
   const widget = getWidget(cell.widgetId)
 
   if (!widget) {
@@ -35,6 +37,19 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
         <h3 className={styles.panelTitle}>Widget inconnu</h3>
       </aside>
     )
+  }
+
+  function filterField(field: (typeof widget.configSchema)[number]) {
+    if (field.platforms && !field.platforms.includes(platform)) return false
+    return true
+  }
+
+  function applySelectSizeFilter(field: (typeof widget.configSchema)[number]) {
+    if (field.type !== 'select') return field
+    const filtered = (field as SelectField).options.filter(
+      (opt) => !opt.sizes || opt.sizes.includes(size),
+    )
+    return { ...field, options: filtered } as SelectField
   }
 
   return (
@@ -48,7 +63,8 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
       </div>
       <div className={styles.fields}>
         {widget.configSchema
-          .filter((field) => !field.platforms || field.platforms.includes(platform))
+          .filter(filterField)
+          .map(applySelectSizeFilter)
           .map((field) => (
             <ConfigField
               key={field.key}
@@ -70,8 +86,14 @@ function findCell(
 ) {
   if (!cellId) return null
   for (const row of rows) {
-    const cell = row.cells.find((c) => c.id === cellId)
-    if (cell) return { rowId: row.id, cell }
+    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
+    if (cellIdx === -1) continue
+    const cell = row.cells[cellIdx]
+    const ratios = row.columnRatios?.length === row.cells.length
+      ? row.columnRatios
+      : new Array(row.cells.length).fill(1 / row.cells.length)
+    const ratio = ratios[cellIdx]
+    return { rowId: row.id, cell, ratio }
   }
   return null
 }

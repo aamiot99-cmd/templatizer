@@ -4,6 +4,7 @@ import { getChrome } from '../themes/chrome'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
+import { ratioToSize } from '../types'
 import type { WireframeRow } from '../types'
 import styles from './PreviewPage.module.css'
 
@@ -88,6 +89,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         const Renderer = widget.renderers[platform]
         if (!Renderer) return null
         const flex = ratios[idx] ?? 1 / row.cells.length
+        const size = ratioToSize(flex)
         return (
           <div
             key={cell.id}
@@ -97,7 +99,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
             <div className={styles.widgetCellInner}>
               <Renderer
                 config={cell.config}
-                size={flex <= 0.34 ? 'compact' : flex <= 0.51 ? 'medium' : 'large'}
+                size={size}
                 branding={branding}
               />
             </div>

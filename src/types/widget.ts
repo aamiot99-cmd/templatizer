@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import type { Branding, Platform } from './platform'
 
-export type WidgetSize = 'large' | 'medium' | 'compact'
+export type WidgetSize = 'full' | 'two-thirds' | 'half' | 'one-third'
 
 export type UsageCategory =
   | 'communicate'
@@ -57,7 +57,14 @@ export interface ColorField extends BaseField {
 export interface SelectField extends BaseField {
   type: 'select'
   default: string
-  options: Array<{ value: string; label: string }>
+  options: Array<{ value: string; label: string; sizes?: WidgetSize[] }>
+}
+
+export function ratioToSize(ratio: number): WidgetSize {
+  if (ratio >= 0.9) return 'full'
+  if (ratio >= 0.6) return 'two-thirds'
+  if (ratio >= 0.4) return 'half'
+  return 'one-third'
 }
 
 export interface IconField extends BaseField {

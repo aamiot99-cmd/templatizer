@@ -240,7 +240,7 @@ export const useProjectStore = create<ProjectStore>()(
           },
         })),
 
-      addCell: (rowId, widgetId, config, size = 'large', index) => {
+      addCell: (rowId, widgetId, config, size = 'full', index) => {
         const newCell: WireframeCell = {
           id: uid(),
           widgetId,
