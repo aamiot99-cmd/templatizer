@@ -1,5 +1,5 @@
 import { ratioToSize } from '../types'
-import type { Platform, SelectField } from '../types'
+import type { ConfigSchemaField, Platform, SelectField } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
