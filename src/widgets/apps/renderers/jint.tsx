@@ -28,7 +28,7 @@ const DEFAULT_APPS: AppItem[] = [
 export function JintApps({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Mes applications'
   const tileCount = Number(config.tileCount ?? 6)
-  const isCompact = size === 'compact'
+  const isCompact = size === 'one-third'
   const apps = DEFAULT_APPS.slice(0, isCompact ? Math.min(tileCount, 9) : tileCount)
 
   const gridRef = useRef<HTMLDivElement>(null)
