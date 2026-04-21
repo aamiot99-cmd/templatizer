@@ -36,8 +36,8 @@ export function PreviewPage() {
 
   const widgetContent = (
     <div className={styles.widgetRows}>
-      {rows.map((row) => (
-        <RenderedRow key={row.id} row={row} />
+      {rows.map((row, idx) => (
+        <RenderedRow key={row.id} row={row} index={idx} />
       ))}
     </div>
   )
@@ -67,7 +67,7 @@ export function PreviewPage() {
   )
 }
 
-function RenderedRow({ row }: { row: WireframeRow }) {
+function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
@@ -78,8 +78,11 @@ function RenderedRow({ row }: { row: WireframeRow }) {
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
+  const sectionClass = index % 2 === 0 ? styles.sectionEven : styles.sectionOdd
+
   return (
-    <div className={styles.widgetRow}>
+    <div className={sectionClass}>
+      <div className={styles.widgetRow}>
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
@@ -103,6 +106,7 @@ function RenderedRow({ row }: { row: WireframeRow }) {
           </div>
         )
       })}
+      </div>
     </div>
   )
 }

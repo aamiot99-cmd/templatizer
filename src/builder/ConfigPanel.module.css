@@ -1,76 +1,118 @@
 .panel {
-  background: #fafafb;
+  background: #fff;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 14px;
   position: sticky;
   top: 24px;
   align-self: start;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
+  scrollbar-width: thin;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
+.panelHeader {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panelBadge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.panelHeader[data-category='communicate'] .panelBadge { background: #8b5cf6; }
+.panelHeader[data-category='access'] .panelBadge { background: #3b82f6; }
+.panelHeader[data-category='collaborate'] .panelBadge { background: #10b981; }
+.panelHeader[data-category='live'] .panelBadge { background: #f59e0b; }
+
 .panelTitle {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 2px;
   color: #08060d;
+  letter-spacing: -0.2px;
 }
 
 .panelSubtitle {
-  font-size: 12px;
-  color: #6b6375;
-  margin: 0 0 16px;
+  font-size: 11px;
+  color: #8a8793;
+  margin: 0;
 }
 
 .empty {
-  padding: 40px 16px;
+  padding: 32px 12px;
   text-align: center;
-  font-size: 13px;
-  color: #6b6375;
-  line-height: 1.5;
+  font-size: 12px;
+  color: #a09cab;
+  line-height: 1.6;
+}
+
+.empty::before {
+  content: '  ';
+  display: block;
+  font-size: 28px;
+  margin-bottom: 8px;
+  opacity: 0.6;
 }
 
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .fieldLabel {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: #08060d;
+  letter-spacing: 0.1px;
 }
 
 .fieldDescription {
-  font-size: 11px;
-  color: #6b6375;
+  font-size: 10.5px;
+  color: #8a8793;
   line-height: 1.4;
 }
 
 .input {
   appearance: none;
-  padding: 8px 12px;
+  padding: 7px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
   font: inherit;
-  font-size: 13px;
-  background: #fff;
+  font-size: 12px;
+  background: #fafafb;
   color: #08060d;
   width: 100%;
   box-sizing: border-box;
+  transition: all 0.15s;
 }
 
 .input:focus {
   outline: none;
   border-color: #08060d;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(8, 6, 13, 0.06);
 }
 
 .checkboxRow {
@@ -81,25 +123,26 @@
 }
 
 .checkbox {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
+  accent-color: #08060d;
 }
 
 .colorRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
+  gap: 8px;
+  padding: 5px 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #fff;
+  background: #fafafb;
 }
 
 .colorPicker {
   appearance: none;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: none;
   border-radius: 4px;
@@ -119,5 +162,5 @@
 .colorHex {
   font-family: ui-monospace, Consolas, monospace;
   font-size: 11px;
-  color: #6b6375;
+  color: #8a8793;
 }

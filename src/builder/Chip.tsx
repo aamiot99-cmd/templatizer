@@ -1,7 +1,14 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import type { Platform, WireframeCell } from '../types'
+import type { Platform, UsageCategory, WireframeCell } from '../types'
 import { USAGE_CATEGORY_LABELS } from '../types'
+
+const CATEGORY_COLORS: Record<UsageCategory, string> = {
+  communicate: 'communicate',
+  access: 'access',
+  collaborate: 'collaborate',
+  live: 'live',
+}
 import { getWidget } from '../widgets/registry'
 import { useProjectStore } from '../store/projectStore'
 import styles from './Chip.module.css'
@@ -25,10 +32,14 @@ export function Chip({ cell, rowId, platform, isSelected, onSelect }: ChipProps)
     transform,
     transition,
     isDragging,
+    isOver,
+    active,
   } = useSortable({
     id: `cell-${cell.id}`,
     data: { type: 'cell', rowId, cellId: cell.id },
   })
+
+  const showDropIndicator = isOver && active && active.id !== `cell-${cell.id}`
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -47,9 +58,10 @@ export function Chip({ cell, rowId, platform, isSelected, onSelect }: ChipProps)
     <div
       ref={setNodeRef}
       style={style}
+      data-category={CATEGORY_COLORS[widget.purpose.category]}
       className={`${styles.chip} ${isDragging ? styles.chipDragging : ''} ${
         isSelected ? styles.chipSelected : ''
-      }`}
+      } ${showDropIndicator ? styles.chipDropTarget : ''}`}
       onClick={(e) => {
         e.stopPropagation()
         onSelect(cell.id)
@@ -57,6 +69,7 @@ export function Chip({ cell, rowId, platform, isSelected, onSelect }: ChipProps)
       {...listeners}
       {...attributes}
     >
+      {showDropIndicator && <div className={styles.dropIndicator} />}
       <div className={styles.category}>
         {USAGE_CATEGORY_LABELS[widget.purpose.category]}
       </div>

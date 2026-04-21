@@ -1,4 +1,6 @@
+import { useRef, useState, useEffect } from 'react'
 import type { WidgetRendererProps } from '../../../types'
+import { PagerControls } from '../../_shared/PagerControls'
 import styles from './jint.module.css'
 
 interface NewMember {
@@ -8,6 +10,9 @@ interface NewMember {
   role: string
   date: string
 }
+
+const CARD_WIDTH = 140
+const CARD_GAP = 12
 
 const DEFAULT_MEMBERS: NewMember[] = [
   {
@@ -38,36 +43,104 @@ const DEFAULT_MEMBERS: NewMember[] = [
     role: 'Content Strategist',
     date: '24/03/2025',
   },
+  {
+    initials: 'JP',
+    bgColor: '#d97706',
+    name: 'Jean Petit',
+    role: 'Data Analyst',
+    date: '01/04/2025',
+  },
+  {
+    initials: 'CR',
+    bgColor: '#dc2626',
+    name: 'Clara Rousseau',
+    role: 'UX Researcher',
+    date: '03/04/2025',
+  },
+  {
+    initials: 'NB',
+    bgColor: '#0891b2',
+    name: 'Nicolas Blanc',
+    role: 'DevOps Engineer',
+    date: '07/04/2025',
+  },
+  {
+    initials: 'LD',
+    bgColor: '#7e22ce',
+    name: 'Lucie Duval',
+    role: 'Marketing Manager',
+    date: '10/04/2025',
+  },
 ]
 
-export function JintContacts({ config }: WidgetRendererProps) {
+function MemberCard({ person }: { person: NewMember }) {
+  return (
+    <div className={styles.card}>
+      <div
+        className={styles.avatar}
+        style={{ backgroundColor: person.bgColor }}
+      >
+        <span>{person.initials}</span>
+        <div className={styles.onlineBadge}>●</div>
+      </div>
+      <div className={styles.name}>{person.name}</div>
+      <div className={styles.role}>{person.role}</div>
+      <div className={styles.date}>{person.date}</div>
+    </div>
+  )
+}
+
+export function JintContacts({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Nouveaux arrivants'
   const linkLabel = (config.linkLabel as string) ?? 'Annuaire →'
+  const isCompact = size === 'compact'
+
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [perPage, setPerPage] = useState(DEFAULT_MEMBERS.length)
+  const [page, setPage] = useState(0)
+
+  useEffect(() => {
+    if (!gridRef.current) return
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width
+      const count = Math.max(1, Math.floor((width + CARD_GAP) / (CARD_WIDTH + CARD_GAP)))
+      setPerPage(count)
+      setPage(0)
+    })
+    observer.observe(gridRef.current)
+    return () => observer.disconnect()
+  }, [])
+
+  const totalPages = Math.ceil(DEFAULT_MEMBERS.length / perPage)
+  const pageWidth = perPage * CARD_WIDTH + (perPage - 1) * CARD_GAP
+  const offset = page * (pageWidth + CARD_GAP)
 
   return (
-    <div className={styles.widget}>
+    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
       <div className={styles.header}>
         <h3 className={styles.title}>{title}</h3>
         <a href="#" className={styles.link}>
           {linkLabel}
         </a>
       </div>
-      <div className={styles.grid}>
-        {DEFAULT_MEMBERS.map((person) => (
-          <div key={person.initials} className={styles.card}>
-            <div
-              className={styles.avatar}
-              style={{ backgroundColor: person.bgColor }}
-            >
-              <span>{person.initials}</span>
-              <div className={styles.onlineBadge}>●</div>
-            </div>
-            <div className={styles.name}>{person.name}</div>
-            <div className={styles.role}>{person.role}</div>
-            <div className={styles.date}>{person.date}</div>
+      <div ref={gridRef} className={styles.grid}>
+        <div className={styles.clip} style={{ width: pageWidth }}>
+          <div
+            className={styles.track}
+            style={{ transform: `translateX(-${offset}px)` }}
+          >
+            {DEFAULT_MEMBERS.map((person) => (
+              <MemberCard key={person.initials} person={person} />
+            ))}
           </div>
-        ))}
+        </div>
       </div>
+      <PagerControls
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        variant="dark"
+      />
     </div>
   )
 }
