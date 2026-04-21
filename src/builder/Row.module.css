@@ -2,53 +2,63 @@
   display: flex;
   align-items: stretch;
   gap: 0;
-  padding: 12px;
+  padding: 8px;
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  min-height: 96px;
+  border-radius: 10px;
+  min-height: 72px;
   position: relative;
+  transition: all 0.15s;
+}
+
+.row:hover {
+  border-color: #d0cfd4;
 }
 
 .rowEmpty {
   border-style: dashed;
+  border-color: #d0cfd4;
   background: #fafafb;
   align-items: center;
   justify-content: center;
-  color: #6b6375;
-  font-size: 13px;
-  padding: 20px;
+  color: #a09cab;
+  font-size: 12px;
+  padding: 16px;
 }
 
 .rowDraggingOver {
-  border-color: #08060d;
-  background: #f5f5f7;
+  border-color: #3b82f6;
+  border-style: dashed;
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .rowSortableDragging {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .handle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  margin-right: 8px;
-  color: #b0aeb5;
+  width: 20px;
+  margin-right: 4px;
+  color: #d0cfd4;
   cursor: grab;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1;
   user-select: none;
   touch-action: none;
+  transition: color 0.15s;
+  flex-shrink: 0;
 }
 
 .handle:active {
   cursor: grabbing;
 }
 
-.handle:hover {
-  color: #08060d;
+.row:hover .handle {
+  color: #8a8793;
 }
 
 .cellsContainer {
@@ -62,27 +72,27 @@
   min-width: 0;
   display: flex;
   align-items: stretch;
+  container-type: inline-size;
 }
 
 .deleteRow {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: #6b6375;
-  font-size: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #a09cab;
+  font-size: 13px;
   line-height: 1;
   display: grid;
   place-items: center;
   cursor: pointer;
   opacity: 0;
-  transition:
-    opacity 0.15s,
-    background 0.15s;
+  transition: all 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .row:hover .deleteRow {
@@ -90,6 +100,7 @@
 }
 
 .deleteRow:hover {
-  background: #f0eff3;
-  color: #08060d;
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }

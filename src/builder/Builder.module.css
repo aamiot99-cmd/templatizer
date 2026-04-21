@@ -1,7 +1,7 @@
 .builder {
   display: grid;
-  grid-template-columns: 260px 1fr 300px;
-  gap: 20px;
+  grid-template-columns: 240px 1fr 280px;
+  gap: 16px;
   min-height: 600px;
 }
 
@@ -11,6 +11,7 @@
   align-self: start;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .canvasColumn {
@@ -21,18 +22,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .canvasTitle {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: -0.3px;
 }
 
 .canvasActions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .button {
@@ -40,20 +44,18 @@
   border: 1px solid var(--border);
   background: #fff;
   color: #08060d;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition:
-    background 0.15s,
-    border-color 0.15s;
+  transition: all 0.15s;
 }
 
 .button:hover {
   background: #f5f5f7;
-  border-color: #d0cfd4;
+  border-color: #c0bfc4;
 }
 
 .buttonPrimary {

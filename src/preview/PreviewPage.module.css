@@ -28,18 +28,33 @@
 .widgetRows {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+}
+
+.sectionEven {
+  background: #ffffff;
+  padding: 24px 0;
+}
+
+.sectionOdd {
+  background: #f3f2f1;
+  padding: 24px 0;
 }
 
 .widgetRow {
   display: flex;
   gap: 16px;
   align-items: stretch;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .widgetCell {
   min-width: 0;
   display: flex;
+  container-type: inline-size;
 }
 
 .widgetCellInner {

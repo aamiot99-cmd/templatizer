@@ -4,11 +4,13 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  pointerWithin,
   closestCenter,
+  rectIntersection,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
+import type { CollisionDetection, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import type { Platform } from '../types'
 import { useProjectStore } from '../store/projectStore'
@@ -42,9 +44,15 @@ export function Builder({ platform }: BuilderProps) {
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
+
+  const collisionDetection: CollisionDetection = (args) => {
+    const pointerCollisions = pointerWithin(args)
+    if (pointerCollisions.length > 0) return pointerCollisions
+    return closestCenter(args)
+  }
 
   function handleDragStart(event: DragStartEvent) {
     const data = event.active.data.current as
@@ -147,7 +155,7 @@ export function Builder({ platform }: BuilderProps) {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={collisionDetection}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveDrag(null)}
@@ -196,7 +204,10 @@ export function Builder({ platform }: BuilderProps) {
         </div>
         <ConfigPanel platform={platform} selectedCellId={selectedCellId} />
       </div>
-      <DragOverlay className={styles.dragOverlay}>
+      <DragOverlay
+        className={styles.dragOverlay}
+        dropAnimation={null}
+      >
         {activeDrag?.type === 'pool' ? (
           <PoolDragPreview widgetId={activeDrag.widgetId} platform={platform} />
         ) : null}
