@@ -10,6 +10,7 @@ interface AppItem {
 
 const TILE_SIZE = 100
 const TILE_GAP = 10
+const COMPACT_PER_PAGE = 9
 
 const DEFAULT_APPS: AppItem[] = [
   { label: 'Outlook', icon: '/app-icons/outlook.png' },
@@ -25,11 +26,19 @@ const DEFAULT_APPS: AppItem[] = [
   { label: 'Slack', icon: '/app-icons/slack.png' },
 ]
 
+function chunk<T>(items: T[], size: number): T[][] {
+  const pages: T[][] = []
+  for (let i = 0; i < items.length; i += size) {
+    pages.push(items.slice(i, i + size))
+  }
+  return pages
+}
+
 export function JintApps({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Mes applications'
-  const tileCount = Number(config.tileCount ?? 6)
+  const tileCount = Number(config.tileCount ?? 11)
   const isCompact = size === 'one-third'
-  const apps = DEFAULT_APPS.slice(0, isCompact ? Math.min(tileCount, 9) : tileCount)
+  const apps = DEFAULT_APPS.slice(0, tileCount)
 
   const gridRef = useRef<HTMLDivElement>(null)
   const [perPage, setPerPage] = useState(apps.length)
@@ -47,31 +56,72 @@ export function JintApps({ config, size }: WidgetRendererProps) {
     return () => observer.disconnect()
   }, [isCompact, apps.length])
 
-  const totalPages = isCompact ? 1 : Math.ceil(apps.length / perPage)
+  // Clamp page if apps count changes and we're past the last page
+  useEffect(() => {
+    setPage(0)
+  }, [isCompact, apps.length])
+
+  if (isCompact) {
+    const pages = chunk(apps, COMPACT_PER_PAGE)
+    const totalPages = pages.length
+    return (
+      <div className={styles.widget}>
+        <div className={styles.header}>{title}</div>
+        <div className={`${styles.grid} ${styles.gridCompact}`}>
+          <div className={styles.clipCompact}>
+            <div
+              className={styles.trackCompact}
+              style={{
+                width: `${totalPages * 100}%`,
+                transform: `translateX(-${(page * 100) / totalPages}%)`,
+              }}
+            >
+              {pages.map((pageApps, idx) => (
+                <div
+                  key={idx}
+                  className={styles.pageCompact}
+                  style={{ width: `${100 / totalPages}%` }}
+                >
+                  {pageApps.map((app) => (
+                    <div key={app.label} className={styles.tile}>
+                      <img src={app.icon} alt={app.label} className={styles.icon} />
+                      <div className={styles.label}>{app.label}</div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <PagerControls
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+          variant="light"
+        />
+      </div>
+    )
+  }
+
+  const totalPages = Math.ceil(apps.length / perPage)
   const pageWidth = perPage * TILE_SIZE + (perPage - 1) * TILE_GAP
-  const offset = isCompact ? 0 : page * (pageWidth + TILE_GAP)
+  const offset = page * (pageWidth + TILE_GAP)
 
   return (
     <div className={styles.widget}>
       <div className={styles.header}>{title}</div>
-      <div
-        ref={gridRef}
-        className={`${styles.grid} ${isCompact ? styles.gridCompact : ''}`}
-      >
-        <div
-          className={isCompact ? undefined : styles.clip}
-          style={isCompact ? undefined : { width: pageWidth }}
-        >
+      <div ref={gridRef} className={styles.grid}>
+        <div className={styles.clip} style={{ width: pageWidth }}>
           <div
             className={styles.track}
-            style={isCompact ? undefined : { transform: `translateX(-${offset}px)` }}
+            style={{ transform: `translateX(-${offset}px)` }}
           >
-          {apps.map((app) => (
-            <div key={app.label} className={styles.tile}>
-              <img src={app.icon} alt={app.label} className={styles.icon} />
-              <div className={styles.label}>{app.label}</div>
-            </div>
-          ))}
+            {apps.map((app) => (
+              <div key={app.label} className={styles.tile}>
+                <img src={app.icon} alt={app.label} className={styles.icon} />
+                <div className={styles.label}>{app.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
