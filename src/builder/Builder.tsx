@@ -109,7 +109,7 @@ export function Builder({ platform }: BuilderProps) {
       const config = Object.fromEntries(
         widget.configSchema.map((f) => [f.key, f.default]),
       )
-      addCell(targetRowId, widget.id, config, 'large', targetIndex)
+      addCell(targetRowId, widget.id, config, 'full', targetIndex)
       return
     }
 
