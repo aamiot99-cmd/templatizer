@@ -131,15 +131,17 @@ function ListLayout({ secondary, size }: { featured: Article; secondary: Article
     )
   }
 
+  const isHalf = size === 'half'
+
   return (
     <div className={styles.listLayout}>
       {secondary.map((item) => (
-        <div key={item.title} className={styles.listItem}>
-          <div className={styles.listImage}>
+        <div key={item.title} className={isHalf ? styles.listItemHalf : styles.listItem}>
+          <div className={isHalf ? styles.listImageHalf : styles.listImage}>
             <img src={item.image} alt={item.title} />
           </div>
           <div className={styles.listBody}>
-            <div className={styles.listTitle}>{item.title}</div>
+            <div className={isHalf ? styles.listTitleHalf : styles.listTitle}>{item.title}</div>
             <div className={styles.listExcerpt}>{item.excerpt}</div>
             <div className={styles.meta}>
               <div className={styles.avatar}>{initialsOf(item.author)}</div>
@@ -172,12 +174,25 @@ function CarouselLayout({ featured, secondary, size }: { featured: Article; seco
   const prev = () => setIndex((i) => (i - 1 + all.length) % all.length)
   const next = () => setIndex((i) => (i + 1) % all.length)
 
+  const slideClass = [
+    styles.carouselSlide,
+    size === 'two-thirds' && styles.carouselSlideTwoThirds,
+    size === 'half' && styles.carouselSlideHalf,
+    size === 'one-third' && styles.carouselSlideCompact,
+  ].filter(Boolean).join(' ')
+
+  const titleClass = [
+    styles.carouselTitle,
+    size === 'half' && styles.carouselTitleHalf,
+    size === 'one-third' && styles.carouselTitleCompact,
+  ].filter(Boolean).join(' ')
+
   return (
     <div className={styles.carousel}>
-      <div className={`${styles.carouselSlide} ${size === 'one-third' ? styles.carouselSlideCompact : ''}`}>
+      <div className={slideClass}>
         <img src={current.image} alt={current.title} className={styles.carouselImg} />
         <div className={styles.carouselGradient} />
-        <div className={styles.carouselTitle}>{current.title}</div>
+        <div className={titleClass}>{current.title}</div>
       </div>
       <div className={styles.carouselNav}>
         <button className={styles.carouselArrow} onClick={prev} aria-label="Précédent">
