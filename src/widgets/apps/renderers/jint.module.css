@@ -52,20 +52,32 @@
   transition: transform 0.15s;
 }
 
-/* Compact mode (1/3) — waffle grid 3x3 */
+/* Compact mode (1/3) — paged waffle grid 3x3 with slide animation */
 .gridCompact {
-  overflow: visible;
+  overflow: hidden;
 }
 
-.gridCompact .track {
+.clipCompact {
+  overflow: hidden;
+  width: 100%;
+}
+
+.trackCompact {
+  display: flex;
+  transition: transform 0.35s ease;
+}
+
+.pageCompact {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: 10px;
-  width: 100%;
-  transition: none;
+  box-sizing: border-box;
+  padding: 0 2px;
 }
 
-.gridCompact .tile {
+.pageCompact .tile {
   width: 100%;
 }
 
