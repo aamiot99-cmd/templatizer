@@ -12,6 +12,7 @@ const TILE_SIZE = 100
 const TILE_GAP = 10
 const COMPACT_COLS = 3
 const COMPACT_ROWS = 3
+const NON_COMPACT_ROWS = 1
 
 const DEFAULT_APPS: AppItem[] = [
   { label: 'Outlook', icon: '/app-icons/outlook.png' },
