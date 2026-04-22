@@ -81,12 +81,12 @@ export function JintApps({ config, size }: WidgetRendererProps) {
   const pages = chunk(apps, perPage)
   const totalPages = pages.length
 
-  // Page grid template: compact uses 1fr cells (fills container), non-compact
-  // uses fixed TILE_SIZE cells so the waffle stays a consistent 100px tile.
+  // Page grid template: compact uses 1fr columns with auto rows so each tile
+  // stays square (aspect-ratio 1 in CSS); non-compact uses fixed TILE_SIZE
+  // cells so the waffle keeps consistent 100px tiles.
   const pageGridStyle = isCompact
     ? {
         gridTemplateColumns: `repeat(${COMPACT_COLS}, 1fr)`,
-        gridTemplateRows: `repeat(${COMPACT_ROWS}, 1fr)`,
       }
     : {
         gridTemplateColumns: `repeat(${cols}, ${TILE_SIZE}px)`,
@@ -94,7 +94,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
       }
 
   return (
-    <div className={styles.widget}>
+    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
       <div className={styles.header}>{title}</div>
       <div
         ref={gridRef}
