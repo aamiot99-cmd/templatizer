@@ -50,15 +50,22 @@
   justify-content: start;
 }
 
-/* Compact (1/3) — tiles fill their grid cells; page takes full clip area */
+/* Compact (1/3) — tiles are square (aspect-ratio 1), sized from column width.
+   The .widgetCompact min-height ensures the widget itself is tall enough to
+   fit a 3×3 grid of square tiles plus chrome, driving the flex row to grow. */
 .gridCompact .page {
   justify-content: stretch;
-  align-content: stretch;
+  align-content: start;
 }
 
 .gridCompact .tile {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.widgetCompact {
+  min-height: calc(100cqw + 50px);
 }
 
 .tile {
