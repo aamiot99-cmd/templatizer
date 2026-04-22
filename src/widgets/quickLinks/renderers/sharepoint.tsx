@@ -15,13 +15,6 @@ const DEFAULT_LINKS: LinkItem[] = [
   { label: 'Plan du site', url: '#', icon: 'map' },
 ]
 
-function parseLinks(raw: string): LinkItem[] {
-  try {
-    const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed)) return parsed as LinkItem[]
-  } catch { /* ignore */ }
-  return DEFAULT_LINKS
-}
 
 function IconUsers({ size }: { size: number }) {
   return (
@@ -141,8 +134,7 @@ export function SharepointQuickLinks({ config, size }: WidgetRendererProps) {
   const layout = (config.layout as string) || 'compact'
   const title = (config.title as string) || 'Liens utiles'
   const showTitle = (config.showTitle as boolean) ?? true
-  const rawLinks = (config.links as string) || JSON.stringify(DEFAULT_LINKS)
-  const links = parseLinks(rawLinks)
+  const links = DEFAULT_LINKS
   const cols = COLS_BY_SIZE[size] ?? 4
 
   const gridStyle = { gridTemplateColumns: `repeat(${cols}, 1fr)` }

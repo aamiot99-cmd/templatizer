@@ -1,9 +1,6 @@
 import type { WidgetDefinition } from '../../types'
 import { SharepointQuickLinks } from './renderers/sharepoint'
 
-const DEFAULT_LINKS_STR =
-  '[{"label":"Trombinoscope","url":"#","icon":"users"},{"label":"Politique de télétravail","url":"#","icon":"document"},{"label":"Charte graphique","url":"#","icon":"palette"},{"label":"Plan du site","url":"#","icon":"map"}]'
-
 export const quickLinksWidget: WidgetDefinition = {
   id: 'quickLinks',
   purpose: {
@@ -21,22 +18,8 @@ export const quickLinksWidget: WidgetDefinition = {
   },
   configSchema: [
     {
-      key: 'layout',
-      label: 'Affichage',
-      type: 'select',
-      default: 'compact',
-      options: [
-        { value: 'compact', label: 'Compact' },
-        { value: 'pellicule', label: 'Pellicule' },
-        { value: 'grille', label: 'Grille' },
-        { value: 'bouton', label: 'Bouton' },
-        { value: 'liste', label: 'Liste' },
-        { value: 'vignettes', label: 'Vignettes' },
-      ],
-    },
-    {
       key: 'title',
-      label: 'Titre',
+      label: 'Titre du widget',
       type: 'text',
       default: 'Liens utiles',
       placeholder: 'Ex. : Liens utiles',
@@ -48,12 +31,18 @@ export const quickLinksWidget: WidgetDefinition = {
       default: true,
     },
     {
-      key: 'links',
-      label: 'Liens (JSON)',
-      type: 'text',
-      default: DEFAULT_LINKS_STR,
-      description:
-        'Tableau JSON : [{"label":"...", "url":"...", "icon":"users|document|palette|map"}]',
+      key: 'layout',
+      label: 'Disposition',
+      type: 'select',
+      default: 'compact',
+      options: [
+        { value: 'compact', label: 'Compact' },
+        { value: 'pellicule', label: 'Pellicule' },
+        { value: 'grille', label: 'Grille' },
+        { value: 'bouton', label: 'Bouton' },
+        { value: 'liste', label: 'Liste' },
+        { value: 'vignettes', label: 'Vignettes' },
+      ],
     },
   ],
   renderers: {
