@@ -10,7 +10,8 @@ interface AppItem {
 
 const TILE_SIZE = 100
 const TILE_GAP = 10
-const COMPACT_PER_PAGE = 9
+const COMPACT_COLS = 3
+const COMPACT_ROWS = 3
 
 const DEFAULT_APPS: AppItem[] = [
   { label: 'Outlook', icon: '/app-icons/outlook.png' },
@@ -27,6 +28,7 @@ const DEFAULT_APPS: AppItem[] = [
 ]
 
 function chunk<T>(items: T[], size: number): T[][] {
+  if (size <= 0) return [items]
   const pages: T[][] = []
   for (let i = 0; i < items.length; i += size) {
     pages.push(items.slice(i, i + size))
@@ -41,85 +43,86 @@ export function JintApps({ config, size }: WidgetRendererProps) {
   const apps = DEFAULT_APPS.slice(0, tileCount)
 
   const gridRef = useRef<HTMLDivElement>(null)
-  const [perPage, setPerPage] = useState(apps.length)
+  const [cols, setCols] = useState(isCompact ? COMPACT_COLS : 1)
+  const [rows, setRows] = useState(isCompact ? COMPACT_ROWS : 1)
   const [page, setPage] = useState(0)
 
   useEffect(() => {
-    if (isCompact || !gridRef.current) return
-    const observer = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width
-      const count = Math.max(1, Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)))
-      setPerPage(count)
+    if (isCompact) {
+      setCols(COMPACT_COLS)
+      setRows(COMPACT_ROWS)
       setPage(0)
-    })
-    observer.observe(gridRef.current)
+      return
+    }
+    if (!gridRef.current) return
+    const el = gridRef.current
+    const update = () => {
+      const width = el.clientWidth
+      const height = el.clientHeight
+      const c = Math.max(
+        1,
+        Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
+      )
+      const r = Math.max(
+        1,
+        Math.floor((height + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
+      )
+      setCols(c)
+      setRows(r)
+      setPage(0)
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
     return () => observer.disconnect()
-  }, [isCompact, apps.length])
+  }, [isCompact])
 
-  // Clamp page if apps count changes and we're past the last page
-  useEffect(() => {
-    setPage(0)
-  }, [isCompact, apps.length])
+  const perPage = Math.max(1, cols * rows)
+  const pages = chunk(apps, perPage)
+  const totalPages = pages.length
 
-  if (isCompact) {
-    const pages = chunk(apps, COMPACT_PER_PAGE)
-    const totalPages = pages.length
-    return (
-      <div className={styles.widget}>
-        <div className={styles.header}>{title}</div>
-        <div className={`${styles.grid} ${styles.gridCompact}`}>
-          <div className={styles.clipCompact}>
-            <div
-              className={styles.trackCompact}
-              style={{
-                width: `${totalPages * 100}%`,
-                transform: `translateX(-${(page * 100) / totalPages}%)`,
-              }}
-            >
-              {pages.map((pageApps, idx) => (
-                <div
-                  key={idx}
-                  className={styles.pageCompact}
-                  style={{ width: `${100 / totalPages}%` }}
-                >
-                  {pageApps.map((app) => (
-                    <div key={app.label} className={styles.tile}>
-                      <img src={app.icon} alt={app.label} className={styles.icon} />
-                      <div className={styles.label}>{app.label}</div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <PagerControls
-          page={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-          variant="light"
-        />
-      </div>
-    )
-  }
-
-  const totalPages = Math.ceil(apps.length / perPage)
-  const pageWidth = perPage * TILE_SIZE + (perPage - 1) * TILE_GAP
-  const offset = page * (pageWidth + TILE_GAP)
+  // Page grid template: compact uses 1fr cells (fills container), non-compact
+  // uses fixed TILE_SIZE cells so the waffle stays a consistent 100px tile.
+  const pageGridStyle = isCompact
+    ? {
+        gridTemplateColumns: `repeat(${COMPACT_COLS}, 1fr)`,
+        gridTemplateRows: `repeat(${COMPACT_ROWS}, 1fr)`,
+      }
+    : {
+        gridTemplateColumns: `repeat(${cols}, ${TILE_SIZE}px)`,
+        gridTemplateRows: `repeat(${rows}, ${TILE_SIZE}px)`,
+      }
 
   return (
     <div className={styles.widget}>
       <div className={styles.header}>{title}</div>
-      <div ref={gridRef} className={styles.grid}>
-        <div className={styles.clip} style={{ width: pageWidth }}>
+      <div
+        ref={gridRef}
+        className={`${styles.grid} ${isCompact ? styles.gridCompact : ''}`}
+      >
+        <div className={styles.clip}>
           <div
             className={styles.track}
-            style={{ transform: `translateX(-${offset}px)` }}
+            style={{
+              width: `${totalPages * 100}%`,
+              transform: `translateX(-${(page * 100) / totalPages}%)`,
+            }}
           >
-            {apps.map((app) => (
-              <div key={app.label} className={styles.tile}>
-                <img src={app.icon} alt={app.label} className={styles.icon} />
-                <div className={styles.label}>{app.label}</div>
+            {pages.map((pageApps, idx) => (
+              <div
+                key={idx}
+                className={styles.page}
+                style={{
+                  width: `${100 / totalPages}%`,
+                  ...pageGridStyle,
+                }}
+              >
+                {pageApps.map((app) => (
+                  <div key={app.label} className={styles.tile}>
+                    <img src={app.icon} alt={app.label} className={styles.icon} />
+                    <div className={styles.label}>{app.label}</div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
