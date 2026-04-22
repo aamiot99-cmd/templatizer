@@ -1,5 +1,6 @@
 import type { WidgetDefinition } from '../../types'
 import { JintEvents } from './renderers/jint'
+import { SharepointEvents } from './renderers/sharepoint'
 
 export const eventsWidget: WidgetDefinition = {
   id: 'events',
@@ -12,7 +13,7 @@ export const eventsWidget: WidgetDefinition = {
   },
   platformLabels: {
     lumapps: 'Events',
-    sharepoint: 'Events',
+    sharepoint: 'Évènements',
     jalios: 'Agenda',
     jint: 'Événements',
   },
@@ -21,8 +22,26 @@ export const eventsWidget: WidgetDefinition = {
       key: 'title',
       label: 'Titre du widget',
       type: 'text',
-      default: 'Événements à venir',
+      default: 'Évènements',
       placeholder: 'Ex. : Agenda',
+    },
+    {
+      key: 'showTitle',
+      label: 'Afficher le titre',
+      type: 'boolean',
+      default: true,
+      platforms: ['sharepoint'],
+    },
+    {
+      key: 'layout',
+      label: 'Disposition',
+      type: 'select',
+      default: 'compact',
+      platforms: ['sharepoint'],
+      options: [
+        { value: 'compact', label: 'Compacte' },
+        { value: 'filmstrip', label: 'Pellicule', sizes: ['full', 'two-thirds', 'half'] },
+      ],
     },
     {
       key: 'maxEvents',
@@ -31,15 +50,18 @@ export const eventsWidget: WidgetDefinition = {
       default: 3,
       min: 1,
       max: 10,
+      platforms: ['jint'],
     },
     {
       key: 'showLocation',
       label: 'Afficher le lieu',
       type: 'boolean',
       default: true,
+      platforms: ['jint'],
     },
   ],
   renderers: {
+    sharepoint: SharepointEvents,
     jint: JintEvents,
   },
 }
