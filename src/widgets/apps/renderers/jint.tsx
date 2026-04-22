@@ -45,13 +45,11 @@ export function JintApps({ config, size }: WidgetRendererProps) {
 
   const gridRef = useRef<HTMLDivElement>(null)
   const [cols, setCols] = useState(isCompact ? COMPACT_COLS : 1)
-  const [rows, setRows] = useState(isCompact ? COMPACT_ROWS : 1)
   const [page, setPage] = useState(0)
 
   useEffect(() => {
     if (isCompact) {
       setCols(COMPACT_COLS)
-      setRows(COMPACT_ROWS)
       setPage(0)
       return
     }
@@ -59,17 +57,11 @@ export function JintApps({ config, size }: WidgetRendererProps) {
     const el = gridRef.current
     const update = () => {
       const width = el.clientWidth
-      const height = el.clientHeight
       const c = Math.max(
         1,
         Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
       )
-      const r = Math.max(
-        1,
-        Math.floor((height + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
-      )
       setCols(c)
-      setRows(r)
       setPage(0)
     }
     update()
@@ -78,13 +70,14 @@ export function JintApps({ config, size }: WidgetRendererProps) {
     return () => observer.disconnect()
   }, [isCompact])
 
+  const rows = isCompact ? COMPACT_ROWS : NON_COMPACT_ROWS
   const perPage = Math.max(1, cols * rows)
   const pages = chunk(apps, perPage)
   const totalPages = pages.length
 
-  // Page grid template: compact uses 1fr columns with auto rows so each tile
-  // stays square (aspect-ratio 1 in CSS); non-compact uses fixed TILE_SIZE
-  // cells so the waffle keeps consistent 100px tiles.
+  // Page grid template: compact uses 1fr columns (tiles are aspect-ratio 1 in
+  // CSS and stay square); non-compact uses fixed TILE_SIZE cells so tiles are
+  // a consistent 100px.
   const pageGridStyle = isCompact
     ? {
         gridTemplateColumns: `repeat(${COMPACT_COLS}, 1fr)`,
@@ -95,7 +88,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
       }
 
   return (
-    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
+    <div className={styles.widget}>
       <div className={styles.header}>{title}</div>
       <div
         ref={gridRef}
