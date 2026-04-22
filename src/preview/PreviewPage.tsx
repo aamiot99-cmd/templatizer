@@ -19,10 +19,11 @@ export function PreviewPage() {
   }, [branding.name, platform])
 
   const Chrome = getChrome(platform)
+  const pageClass = platform === 'sharepoint' ? styles.pageWhite : styles.page
 
   if (rows.length === 0) {
     return (
-      <div className={styles.page}>
+      <div className={pageClass}>
         <div className={styles.emptyState}>
           <h2>Aucun widget placé</h2>
           <p>
@@ -44,7 +45,7 @@ export function PreviewPage() {
 
   if (!Chrome) {
     return (
-      <div className={styles.page}>
+      <div className={pageClass}>
         <ThemeProvider platform={platform} branding={branding}>
           <div className={styles.fallback}>
             La plateforme {PLATFORM_LABELS[platform]} n'a pas encore de chrome
@@ -78,7 +79,14 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
-  const sectionClass = index % 2 === 0 ? styles.sectionEven : styles.sectionOdd
+  const sectionClass =
+    platform === 'jint'
+      ? index % 2 === 0
+        ? styles.sectionEven
+        : styles.sectionOdd
+      : platform === 'sharepoint'
+        ? styles.sectionWhite
+        : undefined
 
   return (
     <div className={sectionClass}>

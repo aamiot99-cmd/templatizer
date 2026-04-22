@@ -10,6 +10,7 @@ import { meetingsWidget } from './meetings'
 import { focusWidget } from './focus'
 import { callToActionWidget } from './callToAction'
 import { editorialCardWidget } from './editorialCard'
+import { quickLinksWidget } from './quickLinks'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [newsWidget.id]: newsWidget,
@@ -17,6 +18,7 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [focusWidget.id]: focusWidget,
   [callToActionWidget.id]: callToActionWidget,
   [editorialCardWidget.id]: editorialCardWidget,
+  [quickLinksWidget.id]: quickLinksWidget,
   [appsWidget.id]: appsWidget,
   [directoryWidget.id]: directoryWidget,
   [contactsWidget.id]: contactsWidget,

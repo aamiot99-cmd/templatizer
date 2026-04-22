@@ -1,7 +1,7 @@
 .chrome {
   display: flex;
   flex-direction: column;
-  background: #f3f2f1;
+  background: #ffffff;
   border-radius: 8px;
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, sans-serif;
@@ -180,7 +180,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  background: #f3f2f1;
+  background: #ffffff;
 }
 
 /* ── Site header bar ── */
@@ -381,7 +381,7 @@
 /* ── Content area ── */
 .content {
   flex: 1;
-  background: #f3f2f1;
+  background: #ffffff;
   min-width: 0;
   padding: 24px 0;
 }
