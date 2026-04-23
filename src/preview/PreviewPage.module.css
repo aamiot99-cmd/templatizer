@@ -50,6 +50,21 @@
   padding: 24px 0;
 }
 
+/* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
+.sectionFullBleed {
+  background: #ffffff;
+  padding: 0;
+}
+
+/* SharePoint-style section inner: constrains rows to 1200px centered with 48px
+   horizontal padding (mirrors the native SharePoint "section" chrome). */
+.spSectionInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+  box-sizing: border-box;
+}
+
 .widgetRow {
   display: flex;
   gap: 16px;
@@ -59,6 +74,20 @@
   padding: 0 16px;
   box-sizing: border-box;
   width: 100%;
+}
+
+/* Inside an spSectionInner (SharePoint), widgetRow no longer needs its own
+   max-width/padding — the wrapper provides it. */
+.spSectionInner .widgetRow {
+  max-width: none;
+  padding: 0;
+}
+
+/* Full-bleed row: widget spans the full width of the parent section */
+.widgetRowFullBleed {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .widgetCell {
