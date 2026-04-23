@@ -315,7 +315,7 @@
 
 .siteAction {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #323130;
   padding: 4px 10px;
   border-radius: 2px;
   cursor: pointer;
@@ -326,8 +326,8 @@
 }
 
 .siteAction:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: #f3f2f1;
+  color: #201f1e;
 }
 
 /* ── Page action bar ── */
