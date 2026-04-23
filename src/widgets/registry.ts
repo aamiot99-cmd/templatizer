@@ -8,11 +8,19 @@ import { socialWidget } from './social'
 import { imageMapWidget } from './imageMap'
 import { meetingsWidget } from './meetings'
 import { focusWidget } from './focus'
+import { callToActionWidget } from './callToAction'
+import { editorialCardWidget } from './editorialCard'
+import { quickLinksWidget } from './quickLinks'
+import { documentLibraryWidget } from './documentLibrary'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [newsWidget.id]: newsWidget,
   [socialWidget.id]: socialWidget,
   [focusWidget.id]: focusWidget,
+  [callToActionWidget.id]: callToActionWidget,
+  [editorialCardWidget.id]: editorialCardWidget,
+  [quickLinksWidget.id]: quickLinksWidget,
+  [documentLibraryWidget.id]: documentLibraryWidget,
   [appsWidget.id]: appsWidget,
   [directoryWidget.id]: directoryWidget,
   [contactsWidget.id]: contactsWidget,

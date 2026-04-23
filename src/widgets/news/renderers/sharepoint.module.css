@@ -254,6 +254,46 @@
   line-height: 1.5;
 }
 
+/* ── List layout half ── */
+.listItemHalf {
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+  align-items: flex-start;
+}
+
+.listItemHalf:first-child {
+  padding-top: 0;
+}
+
+.listItemHalf:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.listImageHalf {
+  width: 160px;
+  height: 100px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #e1e1e1;
+}
+
+.listImageHalf img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listTitleHalf {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
 /* ── List layout compact (one-third) ── */
 .listItemCompact {
   display: flex;
@@ -274,8 +314,8 @@
 }
 
 .listImageCompact {
-  width: 72px;
-  height: 72px;
+  width: 96px;
+  height: 76px;
   flex-shrink: 0;
   overflow: hidden;
   background: #e1e1e1;
@@ -350,8 +390,19 @@
   background: #e1e1e1;
 }
 
+.carouselSlideTwoThirds {
+  aspect-ratio: unset;
+  height: 300px;
+}
+
+.carouselSlideHalf {
+  aspect-ratio: unset;
+  height: 300px;
+}
+
 .carouselSlideCompact {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: unset;
+  height: 300px;
 }
 
 .carouselImg {
@@ -371,11 +422,24 @@
   position: absolute;
   bottom: 18px;
   left: 20px;
+  right: 16px;
   color: #fff;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.carouselTitleHalf {
+  font-size: 16px;
+  bottom: 14px;
+  left: 14px;
+}
+
+.carouselTitleCompact {
+  font-size: 13px;
+  bottom: 10px;
+  left: 12px;
 }
 
 .carouselNav {

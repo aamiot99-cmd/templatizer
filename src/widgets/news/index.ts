@@ -15,7 +15,7 @@ export const newsWidget: WidgetDefinition = {
   },
   platformLabels: {
     lumapps: 'News',
-    sharepoint: 'News',
+    sharepoint: 'Actualités',
     jalios: 'Flash Info',
     jint: 'Actualités',
   },

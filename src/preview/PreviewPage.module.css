@@ -3,6 +3,11 @@
   background: #f3f2f1;
 }
 
+.pageWhite {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
 .emptyState {
   padding: 80px 20px;
   text-align: center;
@@ -40,10 +45,15 @@
   padding: 24px 0;
 }
 
+.sectionWhite {
+  background: #ffffff;
+  padding: 24px 0;
+}
+
 .widgetRow {
   display: flex;
   gap: 16px;
-  align-items: stretch;
+  align-items: flex-start;
   max-width: 1300px;
   margin: 0 auto;
   padding: 0 16px;
@@ -65,7 +75,6 @@
 }
 
 .widgetCellInner > * {
-  flex: 1;
   min-width: 0;
   width: 100%;
 }
