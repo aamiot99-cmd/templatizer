@@ -28,7 +28,7 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
         author: 'Marie Dupont',
         time: 'il y a environ une heure',
         views: '2 vues',
-        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=85',
+        image: '/news/pexels-sevenstormphotography-934351.jpg',
       },
       {
         title: `Nouveaux avantages collaborateurs chez ${company}`,
