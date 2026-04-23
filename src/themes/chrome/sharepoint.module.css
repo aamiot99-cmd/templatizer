@@ -40,21 +40,44 @@
 .m365AppName {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-primary);
+  color: #ffffff;
   padding: 0 16px 0 4px;
   white-space: nowrap;
+}
+
+.m365Logo {
+  height: 22px;
+  max-width: 80px;
+  object-fit: contain;
+  /* Force the logo to render in white regardless of its source colors */
+  filter: brightness(0) invert(1);
+  margin-left: 4px;
+}
+
+.m365LogoInitials {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 4px;
+  flex-shrink: 0;
 }
 
 .m365Search {
   flex: 1;
   max-width: 460px;
   margin: 0 auto;
-  height: 30px;
+  height: 32px;
   background: #fff;
-  border-radius: 2px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 12px;
   gap: 8px;
   color: #605e5c;
 }
