@@ -152,6 +152,11 @@ export function SharepointChrome({ branding, navEntries, children }: SharepointC
           <div className={styles.m365Waffle}>
             <Waffle />
           </div>
+          {branding.logo ? (
+            <img src={branding.logo} alt="" className={styles.m365Logo} />
+          ) : (
+            <div className={styles.m365LogoInitials}>{siteInitials}</div>
+          )}
           <span className={styles.m365AppName}>SharePoint</span>
         </div>
         <div className={styles.m365Search}>
