@@ -46,8 +46,8 @@
 }
 
 .m365Logo {
-  height: 32px;
-  max-width: 120px;
+  height: 28px;
+  max-width: 100px;
   object-fit: contain;
   /* Force the logo to render in white regardless of its source colors */
   filter: brightness(0) invert(1);
@@ -55,14 +55,14 @@
 }
 
 .m365LogoInitials {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
   color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   margin-left: 8px;
   flex-shrink: 0;
