@@ -208,7 +208,6 @@
 .siteHeader {
   background: #ffffff;
   flex-shrink: 0;
-  border-bottom: 1px solid #edebe9;
 }
 
 .siteHeaderInner {
