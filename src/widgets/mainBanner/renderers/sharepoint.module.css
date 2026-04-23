@@ -103,6 +103,23 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.tile:hover .tileImg {
+  transform: scale(1.06);
+}
+
+/* Solid tile: no image to zoom — subtle lift on the title instead */
+.tileSolid .tileTitle {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.tileSolid:hover .tileTitle {
+  transform: scale(1.03);
 }
 
 .tileOverlay {
