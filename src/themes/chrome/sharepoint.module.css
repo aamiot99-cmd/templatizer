@@ -384,8 +384,9 @@
   padding: 24px 0;
 }
 
+/* .contentInner is a pass-through. Per-row max-width/padding is applied by
+   PreviewPage via .spSectionInner so that full-bleed widgets (like the
+   Bannière principale) can skip it and span the full .content width. */
 .contentInner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 48px;
+  width: 100%;
 }
