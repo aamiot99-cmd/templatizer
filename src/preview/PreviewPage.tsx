@@ -79,8 +79,17 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
-  const sectionClass =
-    platform === 'jint'
+  // A row is "full-bleed" when it contains a widget that opts into it
+  // (e.g. SharePoint "Bannière principale"). Such a row spans the full width of
+  // the content area, skipping the normal section padding/max-width.
+  const isFullBleed = row.cells.some((cell) => {
+    const widget = getWidget(cell.widgetId)
+    return Boolean(widget?.isFullBleed)
+  })
+
+  const sectionClass = isFullBleed
+    ? styles.sectionFullBleed
+    : platform === 'jint'
       ? index % 2 === 0
         ? styles.sectionEven
         : styles.sectionOdd
@@ -88,9 +97,8 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         ? styles.sectionWhite
         : undefined
 
-  return (
-    <div className={sectionClass}>
-      <div className={styles.widgetRow}>
+  const rowContent = (
+    <div className={isFullBleed ? styles.widgetRowFullBleed : styles.widgetRow}>
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
@@ -114,7 +122,20 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
           </div>
         )
       })}
-      </div>
+    </div>
+  )
+
+  // For SharePoint, non-full-bleed rows are centered in a 1200px inner wrapper
+  // (mirroring native SharePoint section chrome). Full-bleed rows skip it.
+  const needsSpInner = platform === 'sharepoint' && !isFullBleed
+
+  return (
+    <div className={sectionClass}>
+      {needsSpInner ? (
+        <div className={styles.spSectionInner}>{rowContent}</div>
+      ) : (
+        rowContent
+      )}
     </div>
   )
 }
