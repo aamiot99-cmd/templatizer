@@ -1,31 +1,31 @@
-import { useEffect, useRef, useState } from 'react'
-import type { WidgetRendererProps } from '../../../types'
+import type { WidgetRendererProps, WidgetSize } from '../../../types'
 import styles from './jint.module.css'
 
-const DEFAULTS_BY_SIZE = {
-  // Full-width (1/1) override — kept separate so it can be differentiated
-  // from 2/3, which also maps to the "large" size bucket.
+const DEFAULTS_BY_SIZE: Record<
+  WidgetSize,
+  { tag: string; image: string; imagePosition: string }
+> = {
   full: {
     tag: 'Ressources Humaines',
     image: '/focus/teambuilding.jpg',
     imagePosition: '50% 50%',
   },
-  large: {
+  'two-thirds': {
     tag: 'Ressources Humaines',
     image: '/focus/pro-meeting.jpg',
     imagePosition: '50% 50%',
   },
-  medium: {
+  half: {
     tag: 'Événement',
     image: '/focus/handshake.jpg',
     imagePosition: '50% 22%',
   },
-  compact: {
+  'one-third': {
     tag: 'Formation',
     image: '/focus/teambuilding.jpg',
     imagePosition: '50% 50%',
   },
-} as const
+}
 
 // Any value that matches a known default (current or legacy) is treated as
 // "unset" so the renderer can always substitute the layout-appropriate image.
@@ -44,33 +44,7 @@ const DEFAULT_IMAGES = new Set([
 const DEFAULT_TAGS = new Set(Object.values(DEFAULTS_BY_SIZE).map((d) => d.tag))
 
 export function JintFocus({ config, size }: WidgetRendererProps) {
-  const widgetRef = useRef<HTMLDivElement>(null)
-  const [isFullWidth, setIsFullWidth] = useState(false)
-
-  // Detect "full width" (1/1) vs "2/3" at runtime — both map to size="large"
-  // in our 3-bucket system. We compare the widget width to its enclosing row
-  // width: if it takes ≥85% of the row, treat it as full-width.
-  useEffect(() => {
-    if (size !== 'large' || !widgetRef.current) return
-    const el = widgetRef.current
-    const rowEl = el.parentElement?.parentElement?.parentElement
-    if (!rowEl) return
-    const update = () => {
-      const widgetW = el.getBoundingClientRect().width
-      const rowW = rowEl.getBoundingClientRect().width
-      if (rowW <= 0) return
-      setIsFullWidth(widgetW / rowW >= 0.85)
-    }
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(rowEl)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [size])
-
-  const defaultsKey =
-    size === 'large' && isFullWidth ? 'full' : size
-  const defaults = DEFAULTS_BY_SIZE[defaultsKey] ?? DEFAULTS_BY_SIZE.large
+  const defaults = DEFAULTS_BY_SIZE[size] ?? DEFAULTS_BY_SIZE.full
 
   const rawTag = (config.tag as string) || ''
   const tag = rawTag && !DEFAULT_TAGS.has(rawTag) ? rawTag : defaults.tag
@@ -88,13 +62,10 @@ export function JintFocus({ config, size }: WidgetRendererProps) {
   // so default to center. Otherwise use the tuned position for the default.
   const imagePosition = isCustomImage ? '50% 50%' : defaults.imagePosition
   const showImage = ((config.showImage as boolean) ?? true) && Boolean(imageUrl)
-  const isCompact = size === 'compact'
+  const isCompact = size === 'one-third'
 
   return (
-    <div
-      ref={widgetRef}
-      className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}
-    >
+    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
       <div className={styles.background} aria-hidden="true" />
 
       <div className={styles.content}>

@@ -1,5 +1,5 @@
 import { ratioToSize } from '../types'
-import type { Platform, SelectField } from '../types'
+import type { ConfigSchemaField, Platform, SelectField } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
@@ -39,12 +39,12 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
     )
   }
 
-  function filterField(field: (typeof widget.configSchema)[number]) {
+  function filterField(field: ConfigSchemaField) {
     if (field.platforms && !field.platforms.includes(platform)) return false
     return true
   }
 
-  function applySelectSizeFilter(field: (typeof widget.configSchema)[number]) {
+  function applySelectSizeFilter(field: ConfigSchemaField) {
     if (field.type !== 'select') return field
     const filtered = (field as SelectField).options.filter(
       (opt) => !opt.sizes || opt.sizes.includes(size),
