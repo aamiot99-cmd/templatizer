@@ -19,7 +19,7 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
       author: 'Théo Dumont',
       time: 'il y a 6 minutes',
       views: '2 vues',
-      image: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=600&q=80',
+      image: '/news/pexels-brunogobofoto-3861712.jpg',
     },
     secondary: [
       {
