@@ -222,7 +222,8 @@
 .siteLogoWrap {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 30px;
+  padding-left: 20px;
   padding-right: 28px;
   flex-shrink: 0;
 }
