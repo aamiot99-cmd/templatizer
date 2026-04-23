@@ -38,7 +38,7 @@
 }
 
 .m365AppName {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: #ffffff;
   padding: 0 16px 0 24px;
@@ -46,8 +46,8 @@
 }
 
 .m365Logo {
-  height: 28px;
-  max-width: 100px;
+  height: 32px;
+  max-width: 120px;
   object-fit: contain;
   /* Force the logo to render in white regardless of its source colors */
   filter: brightness(0) invert(1);
@@ -55,14 +55,14 @@
 }
 
 .m365LogoInitials {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   margin-left: 8px;
   flex-shrink: 0;
