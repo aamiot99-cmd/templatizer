@@ -263,7 +263,7 @@
 .navItemActive::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: calc(50% + 0.8em);
   left: 14px;
   right: 14px;
   height: 2px;
