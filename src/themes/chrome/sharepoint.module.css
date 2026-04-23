@@ -405,7 +405,7 @@
   flex: 1;
   background: #ffffff;
   min-width: 0;
-  padding: 24px 0;
+  padding: 0 0 24px;
 }
 
 /* .contentInner is a pass-through. Per-row max-width/padding is applied by
