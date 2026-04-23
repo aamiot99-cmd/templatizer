@@ -228,23 +228,23 @@
 }
 
 .siteLogoInitials {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   background: var(--color-primary);
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   display: grid;
   place-items: center;
-  border-radius: 2px;
+  border-radius: 3px;
   flex-shrink: 0;
 }
 
 .siteLogoImg {
-  height: 32px;
-  max-width: 120px;
+  height: 44px;
+  max-width: 160px;
   object-fit: contain;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .siteName {
