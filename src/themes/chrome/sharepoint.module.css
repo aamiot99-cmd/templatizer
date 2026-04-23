@@ -227,7 +227,7 @@
 .siteName {
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: #323130;
   white-space: nowrap;
 }
 
@@ -243,7 +243,7 @@
   align-items: center;
   padding: 0 14px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #323130;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -251,12 +251,12 @@
 }
 
 .navItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: #f3f2f1;
+  color: #201f1e;
 }
 
 .navItemActive {
-  color: #fff;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -267,7 +267,7 @@
   left: 14px;
   right: 14px;
   height: 2px;
-  background: #fff;
+  background: var(--color-primary);
 }
 
 .navChevron {
