@@ -183,14 +183,15 @@
 
 /* ── Site header bar ── */
 .siteHeader {
-  background: #3b3a39;
+  background: #ffffff;
   flex-shrink: 0;
+  border-bottom: 1px solid #edebe9;
 }
 
 .siteHeaderInner {
   display: flex;
   align-items: stretch;
-  height: 48px;
+  height: 96px;
   padding: 0 12px;
   gap: 0;
 }
