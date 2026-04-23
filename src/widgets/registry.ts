@@ -12,8 +12,10 @@ import { callToActionWidget } from './callToAction'
 import { editorialCardWidget } from './editorialCard'
 import { quickLinksWidget } from './quickLinks'
 import { documentLibraryWidget } from './documentLibrary'
+import { mainBannerWidget } from './mainBanner'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
+  [mainBannerWidget.id]: mainBannerWidget,
   [newsWidget.id]: newsWidget,
   [socialWidget.id]: socialWidget,
   [focusWidget.id]: focusWidget,
