@@ -12,8 +12,15 @@ import { callToActionWidget } from './callToAction'
 import { editorialCardWidget } from './editorialCard'
 import { quickLinksWidget } from './quickLinks'
 import { documentLibraryWidget } from './documentLibrary'
+import { mainBannerWidget } from './mainBanner'
+import { highlightedContentWidget } from './highlightedContent'
+import { textWidget } from './text'
+import { miscWidget } from './misc'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
+  [textWidget.id]: textWidget,
+  [miscWidget.id]: miscWidget,
+  [mainBannerWidget.id]: mainBannerWidget,
   [newsWidget.id]: newsWidget,
   [socialWidget.id]: socialWidget,
   [focusWidget.id]: focusWidget,
@@ -27,6 +34,7 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [eventsWidget.id]: eventsWidget,
   [meetingsWidget.id]: meetingsWidget,
   [imageMapWidget.id]: imageMapWidget,
+  [highlightedContentWidget.id]: highlightedContentWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {
