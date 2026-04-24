@@ -1,0 +1,346 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #c8c6c4;
+  border-radius: 3px;
+  background: #fff;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border-bottom: 1px solid #e1dfdd;
+  background: #f3f2f1;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.sep {
+  width: 1px;
+  height: 20px;
+  background: #c8c6c4;
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #323130;
+  padding: 0;
+  line-height: 1;
+}
+
+.iconBtn:hover {
+  background: #e1dfdd;
+}
+
+.wideBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #323130;
+  white-space: nowrap;
+  min-width: 90px;
+}
+
+.wideBtn:hover {
+  background: #e1dfdd;
+}
+
+.sizeBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #323130;
+  min-width: 44px;
+}
+
+.sizeBtn:hover {
+  background: #e1dfdd;
+}
+
+.caret {
+  font-size: 9px;
+  opacity: 0.6;
+  margin-left: auto;
+}
+
+/* ── Popups ── */
+.popupAnchor {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #c8c6c4;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  min-width: 150px;
+  padding: 4px 0;
+}
+
+.dropdownSize {
+  min-width: 70px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 5px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #323130;
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  background: #f3f2f1;
+}
+
+/* ── Color palette ── */
+.colorPalette {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #c8c6c4;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 6px;
+  display: grid;
+  grid-template-columns: repeat(8, 20px);
+  gap: 2px;
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatch:hover {
+  transform: scale(1.2);
+  z-index: 1;
+  position: relative;
+}
+
+.swatchNone {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #c8c6c4;
+  border-radius: 2px;
+  cursor: pointer;
+  background: #fff;
+  font-size: 11px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.swatchNone:hover {
+  background: #f3f2f1;
+}
+
+/* ── Color button icons ── */
+.colorIconA {
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-color: #e74c3c;
+  text-decoration-thickness: 2px;
+}
+
+.highlightIcon {
+  font-size: 16px;
+  color: #f1c40f;
+  line-height: 1;
+}
+
+/* ── Table picker ── */
+.tablePicker {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #c8c6c4;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 8px;
+}
+
+.tablePickerLabel {
+  font-size: 11px;
+  color: #605e5c;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.tableGrid {
+  display: grid;
+  grid-template-columns: repeat(9, 18px);
+  grid-template-rows: repeat(4, 18px);
+  gap: 2px;
+}
+
+.tableCell {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #c8c6c4;
+  cursor: pointer;
+  border-radius: 1px;
+}
+
+.tableCellActive {
+  background: #c7e0f4;
+  border-color: #2b88d8;
+}
+
+/* ── Editor area ── */
+.editor {
+  min-height: 250px;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #323130;
+  outline: none;
+  overflow-y: auto;
+}
+
+.editor:empty::before {
+  content: attr(data-placeholder);
+  color: #a19f9d;
+  pointer-events: none;
+}
+
+.editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.editor td, .editor th {
+  border: 1px solid #c8c6c4;
+  padding: 6px 8px;
+  min-width: 40px;
+}
+
+/* ── Overlay / Expand ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overscroll-behavior: contain;
+}
+
+.overlayPanel {
+  width: 720px;
+  max-width: calc(100vw - 48px);
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.overlayHeader {
+  background: #fff;
+  padding: 8px 14px 0;
+  border-bottom: 1px solid #e1dfdd;
+}
+
+.overlayTitle {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #605e5c;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  padding-bottom: 6px;
+}
+
+.overlayPanel .wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.editorExpanded {
+  flex: 1;
+  min-height: 200px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #323130;
+  outline: none;
+}
+
+.editorExpanded:empty::before {
+  content: attr(data-placeholder);
+  color: #a19f9d;
+  pointer-events: none;
+}
+
+.editorExpanded table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.editorExpanded td,
+.editorExpanded th {
+  border: 1px solid #c8c6c4;
+  padding: 6px 8px;
+  min-width: 40px;
+}

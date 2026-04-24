@@ -23,6 +23,7 @@ export type ConfigFieldType =
   | 'color'
   | 'select'
   | 'icon'
+  | 'richtext'
 
 interface BaseField {
   key: string
@@ -72,6 +73,12 @@ export interface IconField extends BaseField {
   default: string
 }
 
+export interface RichTextField extends BaseField {
+  type: 'richtext'
+  default: string
+  placeholder?: string
+}
+
 export type ConfigSchemaField =
   | TextField
   | NumberField
@@ -79,6 +86,7 @@ export type ConfigSchemaField =
   | ColorField
   | SelectField
   | IconField
+  | RichTextField
 
 export type ConfigValues = Record<string, string | number | boolean>
 

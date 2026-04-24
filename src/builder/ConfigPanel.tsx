@@ -67,7 +67,7 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
           .map(applySelectSizeFilter)
           .map((field) => (
             <ConfigField
-              key={field.key}
+              key={`${selectedCellId}-${field.key}`}
               field={field}
               value={cell.config[field.key]}
               onChange={(value) =>

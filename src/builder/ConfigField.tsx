@@ -1,5 +1,6 @@
 import type { ConfigSchemaField } from '../types'
 import styles from './ConfigPanel.module.css'
+import { RichTextEditor } from './RichTextEditor'
 
 interface ConfigFieldProps {
   field: ConfigSchemaField
@@ -88,6 +89,14 @@ function renderInput(
             </option>
           ))}
         </select>
+      )
+    case 'richtext':
+      return (
+        <RichTextEditor
+          value={String(value)}
+          onChange={onChange}
+          placeholder={field.placeholder}
+        />
       )
   }
 }
