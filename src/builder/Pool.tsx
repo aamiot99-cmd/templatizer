@@ -23,8 +23,9 @@ export function Pool({ platform }: PoolProps) {
     <aside className={styles.pool}>
       <h3 className={styles.poolTitle}>Widgets disponibles</h3>
       {CATEGORY_ORDER.filter((c) => byCategory[c]?.length).map((category) => (
-        <div key={category} className={styles.category}>
+        <div key={category} className={styles.category} data-category={category}>
           <div className={styles.categoryLabel}>
+            <span className={styles.categoryDot} />
             {USAGE_CATEGORY_LABELS[category]}
           </div>
           <div className={styles.items}>

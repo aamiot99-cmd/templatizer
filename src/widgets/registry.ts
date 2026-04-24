@@ -5,14 +5,30 @@ import { eventsWidget } from './events'
 import { directoryWidget } from './directory'
 import { contactsWidget } from './contacts'
 import { socialWidget } from './social'
+import { imageMapWidget } from './imageMap'
+import { meetingsWidget } from './meetings'
+import { focusWidget } from './focus'
+import { callToActionWidget } from './callToAction'
+import { editorialCardWidget } from './editorialCard'
+import { quickLinksWidget } from './quickLinks'
+import { documentLibraryWidget } from './documentLibrary'
+import { mainBannerWidget } from './mainBanner'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
+  [mainBannerWidget.id]: mainBannerWidget,
   [newsWidget.id]: newsWidget,
   [socialWidget.id]: socialWidget,
+  [focusWidget.id]: focusWidget,
+  [callToActionWidget.id]: callToActionWidget,
+  [editorialCardWidget.id]: editorialCardWidget,
+  [quickLinksWidget.id]: quickLinksWidget,
+  [documentLibraryWidget.id]: documentLibraryWidget,
   [appsWidget.id]: appsWidget,
   [directoryWidget.id]: directoryWidget,
   [contactsWidget.id]: contactsWidget,
   [eventsWidget.id]: eventsWidget,
+  [meetingsWidget.id]: meetingsWidget,
+  [imageMapWidget.id]: imageMapWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {

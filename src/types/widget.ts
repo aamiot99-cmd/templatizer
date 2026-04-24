@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import type { Branding, Platform } from './platform'
 
-export type WidgetSize = 'large' | 'compact'
+export type WidgetSize = 'full' | 'two-thirds' | 'half' | 'one-third'
 
 export type UsageCategory =
   | 'communicate'
@@ -28,6 +28,7 @@ interface BaseField {
   key: string
   label: string
   description?: string
+  platforms?: Platform[]
 }
 
 export interface TextField extends BaseField {
@@ -56,7 +57,14 @@ export interface ColorField extends BaseField {
 export interface SelectField extends BaseField {
   type: 'select'
   default: string
-  options: Array<{ value: string; label: string }>
+  options: Array<{ value: string; label: string; sizes?: WidgetSize[] }>
+}
+
+export function ratioToSize(ratio: number): WidgetSize {
+  if (ratio >= 0.9) return 'full'
+  if (ratio >= 0.6) return 'two-thirds'
+  if (ratio >= 0.4) return 'half'
+  return 'one-third'
 }
 
 export interface IconField extends BaseField {
@@ -93,5 +101,8 @@ export interface WidgetDefinition {
   platformLabels: Record<Platform, string>
   configSchema: ConfigSchemaField[]
   supportedSizes?: Partial<Record<Platform, WidgetSize[]>>
+  /** If true, the widget breaks out of the section's horizontal padding/max-width
+   *  to span the full width of the content area (e.g. SharePoint "Bannière principale"). */
+  isFullBleed?: boolean
   renderers: Partial<Record<Platform, ComponentType<WidgetRendererProps>>>
 }

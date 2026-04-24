@@ -1,0 +1,68 @@
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 6px 0;
+  margin-top: auto;
+  flex-shrink: 0;
+  color: #5a5a5a;
+}
+
+.pagerLight {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.arrow {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+
+.arrow:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.pagerLight .arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  transition: width 0.2s ease, background-color 0.2s ease, border-radius 0.2s ease;
+}
+
+.pagerLight .dot {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.dotActive {
+  width: 22px;
+  border-radius: 4px;
+  background: #1a1a1a;
+}
+
+.pagerLight .dotActive {
+  background: rgba(255, 255, 255, 0.95);
+}

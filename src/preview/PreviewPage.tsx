@@ -4,6 +4,7 @@ import { getChrome } from '../themes/chrome'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
+import { ratioToSize } from '../types'
 import type { WireframeRow } from '../types'
 import styles from './PreviewPage.module.css'
 
@@ -18,10 +19,11 @@ export function PreviewPage() {
   }, [branding.name, platform])
 
   const Chrome = getChrome(platform)
+  const pageClass = platform === 'sharepoint' ? styles.pageWhite : styles.page
 
   if (rows.length === 0) {
     return (
-      <div className={styles.page}>
+      <div className={pageClass}>
         <div className={styles.emptyState}>
           <h2>Aucun widget placé</h2>
           <p>
@@ -35,15 +37,15 @@ export function PreviewPage() {
 
   const widgetContent = (
     <div className={styles.widgetRows}>
-      {rows.map((row) => (
-        <RenderedRow key={row.id} row={row} />
+      {rows.map((row, idx) => (
+        <RenderedRow key={row.id} row={row} index={idx} />
       ))}
     </div>
   )
 
   if (!Chrome) {
     return (
-      <div className={styles.page}>
+      <div className={pageClass}>
         <ThemeProvider platform={platform} branding={branding}>
           <div className={styles.fallback}>
             La plateforme {PLATFORM_LABELS[platform]} n'a pas encore de chrome
@@ -66,7 +68,7 @@ export function PreviewPage() {
   )
 }
 
-function RenderedRow({ row }: { row: WireframeRow }) {
+function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
@@ -77,14 +79,33 @@ function RenderedRow({ row }: { row: WireframeRow }) {
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
-  return (
-    <div className={styles.widgetRow}>
+  // A row is "full-bleed" when it contains a widget that opts into it
+  // (e.g. SharePoint "Bannière principale"). Such a row spans the full width of
+  // the content area, skipping the normal section padding/max-width.
+  const isFullBleed = row.cells.some((cell) => {
+    const widget = getWidget(cell.widgetId)
+    return Boolean(widget?.isFullBleed)
+  })
+
+  const sectionClass = isFullBleed
+    ? styles.sectionFullBleed
+    : platform === 'jint'
+      ? index % 2 === 0
+        ? styles.sectionEven
+        : styles.sectionOdd
+      : platform === 'sharepoint'
+        ? styles.sectionWhite
+        : undefined
+
+  const rowContent = (
+    <div className={isFullBleed ? styles.widgetRowFullBleed : styles.widgetRow}>
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
         const Renderer = widget.renderers[platform]
         if (!Renderer) return null
         const flex = ratios[idx] ?? 1 / row.cells.length
+        const size = ratioToSize(flex)
         return (
           <div
             key={cell.id}
@@ -94,13 +115,27 @@ function RenderedRow({ row }: { row: WireframeRow }) {
             <div className={styles.widgetCellInner}>
               <Renderer
                 config={cell.config}
-                size={cell.size}
+                size={size}
                 branding={branding}
               />
             </div>
           </div>
         )
       })}
+    </div>
+  )
+
+  // For SharePoint, non-full-bleed rows are centered in a 1200px inner wrapper
+  // (mirroring native SharePoint section chrome). Full-bleed rows skip it.
+  const needsSpInner = platform === 'sharepoint' && !isFullBleed
+
+  return (
+    <div className={sectionClass}>
+      {needsSpInner ? (
+        <div className={styles.spSectionInner}>{rowContent}</div>
+      ) : (
+        rowContent
+      )}
     </div>
   )
 }

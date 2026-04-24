@@ -15,7 +15,7 @@ export const newsWidget: WidgetDefinition = {
   },
   platformLabels: {
     lumapps: 'News',
-    sharepoint: 'News',
+    sharepoint: 'Actualités',
     jalios: 'Flash Info',
     jint: 'Actualités',
   },
@@ -28,10 +28,24 @@ export const newsWidget: WidgetDefinition = {
       placeholder: 'Ex. : Actualités',
     },
     {
+      key: 'layout',
+      label: 'Disposition',
+      type: 'select',
+      default: 'featured',
+      platforms: ['sharepoint'],
+      options: [
+        { value: 'featured', label: 'Articles à la une', sizes: ['full'] },
+        { value: 'list', label: 'Liste' },
+        { value: 'sidebyside', label: 'Côte à côte', sizes: ['full'] },
+        { value: 'carousel', label: 'Carrousel' },
+      ],
+    },
+    {
       key: 'showMetrics',
       label: 'Afficher les réactions (likes, commentaires)',
       type: 'boolean',
       default: true,
+      platforms: ['lumapps', 'jalios', 'jint'],
     },
   ],
   renderers: {

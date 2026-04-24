@@ -1,17 +1,17 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .legend {
   display: grid;
-  grid-template-columns: 260px 1fr 300px;
-  gap: 20px;
-  padding: 16px 18px;
-  background: linear-gradient(180deg, #fff, var(--bg-subtle));
+  grid-template-columns: 240px 1fr 280px;
+  gap: 16px;
+  padding: 12px 14px;
+  background: #fafafb;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 @media (max-width: 1100px) {
@@ -22,21 +22,21 @@
 
 .zone {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: flex-start;
   min-width: 0;
 }
 
 .zoneBadge {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   background: var(--wizard-accent-soft);
   color: var(--wizard-accent);
   display: grid;
   place-items: center;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   font-family: var(--heading);
   border: 1px solid var(--wizard-accent-border);
@@ -48,15 +48,15 @@
 }
 
 .zoneTitle {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text);
-  margin: 0 0 2px;
+  margin: 0 0 1px;
   letter-spacing: -0.2px;
 }
 
 .zoneDescription {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   margin: 0;
   line-height: 1.4;

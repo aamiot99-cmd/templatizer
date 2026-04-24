@@ -1,4 +1,5 @@
-import type { Platform } from '../types'
+import { ratioToSize } from '../types'
+import type { ConfigSchemaField, Platform, SelectField } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
@@ -26,7 +27,8 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
     )
   }
 
-  const { rowId, cell } = found
+  const { rowId, cell, ratio } = found
+  const size = ratioToSize(ratio)
   const widget = getWidget(cell.widgetId)
 
   if (!widget) {
@@ -37,21 +39,42 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
     )
   }
 
+  function filterField(field: ConfigSchemaField) {
+    if (field.platforms && !field.platforms.includes(platform)) return false
+    return true
+  }
+
+  function applySelectSizeFilter(field: ConfigSchemaField) {
+    if (field.type !== 'select') return field
+    const filtered = (field as SelectField).options.filter(
+      (opt) => !opt.sizes || opt.sizes.includes(size),
+    )
+    return { ...field, options: filtered } as SelectField
+  }
+
   return (
     <aside className={styles.panel}>
-      <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
-      <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
+      <div className={styles.panelHeader} data-category={widget.purpose.category}>
+        <span className={styles.panelBadge}>{widget.purpose.category === 'communicate' ? 'COM' : widget.purpose.category === 'access' ? 'ACC' : widget.purpose.category === 'collaborate' ? 'COL' : 'VIE'}</span>
+        <div>
+          <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
+          <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
+        </div>
+      </div>
       <div className={styles.fields}>
-        {widget.configSchema.map((field) => (
-          <ConfigField
-            key={field.key}
-            field={field}
-            value={cell.config[field.key]}
-            onChange={(value) =>
-              updateCellConfig(rowId, cell.id, { [field.key]: value })
-            }
-          />
-        ))}
+        {widget.configSchema
+          .filter(filterField)
+          .map(applySelectSizeFilter)
+          .map((field) => (
+            <ConfigField
+              key={field.key}
+              field={field}
+              value={cell.config[field.key]}
+              onChange={(value) =>
+                updateCellConfig(rowId, cell.id, { [field.key]: value })
+              }
+            />
+          ))}
       </div>
     </aside>
   )
@@ -63,8 +86,14 @@ function findCell(
 ) {
   if (!cellId) return null
   for (const row of rows) {
-    const cell = row.cells.find((c) => c.id === cellId)
-    if (cell) return { rowId: row.id, cell }
+    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
+    if (cellIdx === -1) continue
+    const cell = row.cells[cellIdx]
+    const ratios = row.columnRatios?.length === row.cells.length
+      ? row.columnRatios
+      : new Array(row.cells.length).fill(1 / row.cells.length)
+    const ratio = ratios[cellIdx]
+    return { rowId: row.id, cell, ratio }
   }
   return null
 }

@@ -1,27 +1,27 @@
 .wireframe {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .addRow {
   appearance: none;
   width: 100%;
-  padding: 14px;
-  border: 1px dashed var(--border);
-  border-radius: 12px;
+  padding: 12px;
+  border: 1.5px dashed #d0cfd4;
+  border-radius: 10px;
   background: transparent;
-  color: #6b6375;
+  color: #a09cab;
   font: inherit;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
 }
 
 .addRow:hover {
   border-color: #08060d;
   color: #08060d;
+  background: #fafafb;
 }

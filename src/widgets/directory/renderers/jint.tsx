@@ -30,15 +30,22 @@ function AvatarIcon() {
   )
 }
 
-export function JintDirectory({ config }: WidgetRendererProps) {
+export function JintDirectory({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Annuaire'
   const searchPlaceholder =
     (config.searchPlaceholder as string) ?? 'Rechercher une personne...'
   const showSearch = (config.showSearch as boolean) ?? true
   const showChips = (config.showChips as boolean) ?? true
+  const isCompact = size === 'one-third'
+  const isMedium = size === 'half'
+  const people = isCompact
+    ? DEFAULT_PEOPLE.slice(0, 1)
+    : isMedium
+      ? DEFAULT_PEOPLE.slice(0, 3)
+      : DEFAULT_PEOPLE
 
   return (
-    <div className={styles.widget}>
+    <div className={`${styles.widget} ${isCompact ? styles.widgetCompact : ''}`}>
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
         <button type="button" className={styles.viewAll}>
@@ -48,7 +55,6 @@ export function JintDirectory({ config }: WidgetRendererProps) {
 
       {showSearch && (
         <div className={styles.search}>
-          🔍
           <input
             type="text"
             placeholder={searchPlaceholder}
@@ -69,11 +75,11 @@ export function JintDirectory({ config }: WidgetRendererProps) {
       )}
 
       <div className={styles.count}>
-        {DEFAULT_PEOPLE.length} personnes trouvées
+        {people.length} personnes trouvées
       </div>
 
-      <div className={styles.grid}>
-        {DEFAULT_PEOPLE.map((person) => (
+      <div className={`${styles.grid} ${isCompact ? styles.gridCompact : isMedium ? styles.gridMedium : ''}`}>
+        {people.map((person) => (
           <div key={person.name} className={styles.card}>
             <div className={styles.avatar}>
               <AvatarIcon />
