@@ -154,7 +154,10 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding: 0 24px;
+  /* appBar (48px) + shNav inner padding (8px) — first hub entry aligns
+     with first site nav entry. */
+  padding-left: 56px;
+  padding-right: 24px;
   height: 36px;
   gap: 4px;
   font-size: 12.5px;
