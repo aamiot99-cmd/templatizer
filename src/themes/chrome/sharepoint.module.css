@@ -142,12 +142,38 @@
   background: #ffffff;
   border-bottom: 1px solid #edebe9;
   display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 36px;
+  font-size: 12.5px;
+}
+
+/* Invisible spacer that exactly mirrors the sidebar (40px) + siteHeaderInner
+   left padding (12px) + siteLogoWrap geometry, so hub entries line up with
+   the site nav below regardless of brand-name length. */
+.hubMenuLeftPad {
+  visibility: hidden;
+  display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding: 0 24px;
-  height: 36px;
+  padding-left: 52px;
+}
+
+.hubMenuLogoMirror {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding-left: 20px;
+  padding-right: 28px;
+  flex-shrink: 0;
+}
+
+.hubMenuNav {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
   gap: 4px;
-  font-size: 12.5px;
 }
 
 .hubMenuItem {
