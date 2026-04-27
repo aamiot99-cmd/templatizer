@@ -71,7 +71,7 @@ function PoolItem({ widget, platform }: PoolItemProps) {
   return (
     <div
       ref={setNodeRef}
-      className={`${styles.item} ${isDragging ? styles.itemDragging : ''}`}
+      className={`${styles.item} ${isDragging ? styles.itemDragging : ''} ${isNativeJint ? styles.itemWithPill : ''}`}
       {...listeners}
       {...attributes}
     >
