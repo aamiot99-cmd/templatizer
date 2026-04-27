@@ -356,6 +356,12 @@ export const useProjectStore = create<ProjectStore>()(
 
       setNavEntries: (entries) => set({ navEntries: entries }),
 
+      setHubMenuEnabled: (enabled) =>
+        set((state) => ({ hubMenu: { ...state.hubMenu, enabled } })),
+
+      setHubMenuEntries: (entries) =>
+        set((state) => ({ hubMenu: { ...state.hubMenu, entries } })),
+
       resetProject: () => set(initialProjectState()),
     }),
     {
