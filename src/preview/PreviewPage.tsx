@@ -6,8 +6,10 @@ import { useProjectStore } from '../store/projectStore'
 import { getWidget, resolveRenderer } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
 import { ratioToSize } from '../types'
-import type { WireframeRow } from '../types'
+import type { Branding, Platform, WireframeRow } from '../types'
 import styles from './PreviewPage.module.css'
+
+type ExportMode = 'rendered' | 'wireframe'
 
 export function PreviewPage() {
   const platform = useProjectStore((s) => s.platform)
@@ -15,18 +17,32 @@ export function PreviewPage() {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const navEntries = useProjectStore((s) => s.navEntries)
   const hubMenu = useProjectStore((s) => s.hubMenu)
-  const captureRef = useRef<HTMLDivElement>(null)
+  const renderedRef = useRef<HTMLDivElement>(null)
+  const wireframeRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
   const [exporting, setExporting] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     document.title = `${branding.name} — ${PLATFORM_LABELS[platform]}`
   }, [branding.name, platform])
 
-  async function handleExport() {
-    if (!captureRef.current || exporting) return
+  useEffect(() => {
+    if (!menuOpen) return
+    function onDocClick(e: MouseEvent) {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    return () => document.removeEventListener('mousedown', onDocClick)
+  }, [menuOpen])
+
+  async function handleExport(mode: ExportMode) {
+    setMenuOpen(false)
+    const target = mode === 'wireframe' ? wireframeRef.current : renderedRef.current
+    if (!target || exporting) return
     setExporting(true)
     try {
-      const canvas = await html2canvas(captureRef.current, {
+      const canvas = await html2canvas(target, {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
@@ -35,7 +51,8 @@ export function PreviewPage() {
       const link = document.createElement('a')
       const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
       const stamp = new Date().toISOString().slice(0, 10)
-      link.download = `${slug}-${platform}-${stamp}.png`
+      const suffix = mode === 'wireframe' ? '-wireframe' : ''
+      link.download = `${slug}-${platform}${suffix}-${stamp}.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
@@ -86,34 +103,125 @@ export function PreviewPage() {
 
   return (
     <div className={styles.page}>
-      <button
-        type="button"
-        className={styles.exportButton}
-        onClick={handleExport}
-        disabled={exporting}
-      >
-        <span>{exporting ? 'Export en cours…' : 'Exporter en PNG'}</span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
+      <div className={styles.exportControls} ref={menuRef}>
+        {menuOpen && !exporting && (
+          <div className={styles.exportMenu}>
+            <button
+              type="button"
+              className={styles.exportMenuItem}
+              onClick={() => handleExport('rendered')}
+            >
+              <span className={styles.exportMenuTitle}>Rendu</span>
+              <span className={styles.exportMenuDesc}>
+                Capture stylée de la page
+              </span>
+            </button>
+            <button
+              type="button"
+              className={styles.exportMenuItem}
+              onClick={() => handleExport('wireframe')}
+            >
+              <span className={styles.exportMenuTitle}>Wireframe</span>
+              <span className={styles.exportMenuDesc}>
+                Blocs vides à annoter en atelier
+              </span>
+            </button>
+          </div>
+        )}
+        <button
+          type="button"
+          className={styles.exportButton}
+          onClick={() => setMenuOpen((v) => !v)}
+          disabled={exporting}
         >
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <polyline points="6 13 12 19 18 13" />
-        </svg>
-      </button>
-      <div ref={captureRef}>
+          <span>{exporting ? 'Export en cours…' : 'Exporter en PNG'}</span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <polyline points="6 13 12 19 18 13" />
+          </svg>
+        </button>
+      </div>
+      <div ref={renderedRef}>
         <ThemeProvider platform={platform} branding={branding}>
           <Chrome branding={branding} navEntries={navEntries} hubMenu={hubMenu}>
             {widgetContent}
           </Chrome>
         </ThemeProvider>
+      </div>
+      <div className={styles.offscreen} aria-hidden="true">
+        <WireframeCapture
+          ref={wireframeRef}
+          rows={rows}
+          branding={branding}
+          platform={platform}
+        />
+      </div>
+    </div>
+  )
+}
+
+interface WireframeCaptureProps {
+  rows: WireframeRow[]
+  branding: Branding
+  platform: Platform
+}
+
+function WireframeCapture({
+  ref,
+  rows,
+  branding,
+  platform,
+}: WireframeCaptureProps & { ref: React.Ref<HTMLDivElement> }) {
+  return (
+    <div ref={ref} className={styles.wfPage}>
+      <header className={styles.wfHeader}>
+        <div className={styles.wfBrand}>{branding.name}</div>
+        <div className={styles.wfMeta}>
+          {PLATFORM_LABELS[platform]} · Wireframe atelier
+        </div>
+      </header>
+      <div className={styles.wfRows}>
+        {rows.map((row, rowIdx) => {
+          if (row.cells.length === 0) return null
+          const ratios =
+            row.columnRatios && row.columnRatios.length === row.cells.length
+              ? row.columnRatios
+              : new Array(row.cells.length).fill(1 / row.cells.length)
+          return (
+            <div key={row.id} className={styles.wfRow}>
+              {row.cells.map((cell, idx) => {
+                const widget = getWidget(cell.widgetId)
+                const label =
+                  widget?.platformLabels[platform] ??
+                  widget?.purpose.label ??
+                  cell.widgetId
+                const flex = ratios[idx] ?? 1 / row.cells.length
+                return (
+                  <div
+                    key={cell.id}
+                    className={styles.wfCell}
+                    style={{ flex: `${flex} 1 0` }}
+                  >
+                    <div className={styles.wfCellIndex}>
+                      {rowIdx + 1}.{idx + 1}
+                    </div>
+                    <div className={styles.wfCellLabel}>{label}</div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
