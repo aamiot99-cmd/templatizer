@@ -8,9 +8,15 @@ export interface NavEntry {
   children?: NavEntry[]
 }
 
+export interface HubMenu {
+  enabled: boolean
+  entries: NavEntry[]
+}
+
 export interface ProjectState {
   platform: Platform
   branding: Branding
   wireframe: Wireframe
   navEntries: NavEntry[]
+  hubMenu: HubMenu
 }
