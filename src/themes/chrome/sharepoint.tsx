@@ -175,25 +175,39 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
 
       {showHubMenu && (
         <div className={styles.hubMenu}>
-          {hubMenu!.entries.map((entry) => {
-            const hasChildren = Boolean(entry.children && entry.children.length > 0)
-            return (
-              <div
-                key={entry.id}
-                className={`${styles.hubMenuItem} ${hasChildren ? styles.hubMenuItemHasChildren : ''}`}
-              >
-                <span>{entry.label}</span>
-                {hasChildren && <span className={styles.hubMenuChevron}><ChevronDown /></span>}
-                {hasChildren && (
-                  <div className={styles.hubMenuDropdown}>
-                    {entry.children!.map((child) => (
-                      <div key={child.id} className={styles.hubMenuDropdownItem}>{child.label}</div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {/* Invisible spacer mirroring sidebar + site logo wrap so the first
+              hub entry aligns with the first site nav entry below. */}
+          <div className={styles.hubMenuLeftPad} aria-hidden="true">
+            <div className={styles.hubMenuLogoMirror}>
+              {branding.logo ? (
+                <img src={branding.logo} alt="" className={styles.siteLogoImg} />
+              ) : (
+                <div className={styles.siteLogoInitials}>{siteInitials}</div>
+              )}
+              <span className={styles.siteName}>{branding.name}</span>
+            </div>
+          </div>
+          <nav className={styles.hubMenuNav}>
+            {hubMenu!.entries.map((entry) => {
+              const hasChildren = Boolean(entry.children && entry.children.length > 0)
+              return (
+                <div
+                  key={entry.id}
+                  className={`${styles.hubMenuItem} ${hasChildren ? styles.hubMenuItemHasChildren : ''}`}
+                >
+                  <span>{entry.label}</span>
+                  {hasChildren && <span className={styles.hubMenuChevron}><ChevronDown /></span>}
+                  {hasChildren && (
+                    <div className={styles.hubMenuDropdown}>
+                      {entry.children!.map((child) => (
+                        <div key={child.id} className={styles.hubMenuDropdownItem}>{child.label}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </nav>
         </div>
       )}
 
