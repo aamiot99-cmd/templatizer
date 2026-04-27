@@ -372,6 +372,7 @@ export const useProjectStore = create<ProjectStore>()(
         branding: state.branding,
         wireframe: state.wireframe,
         navEntries: state.navEntries,
+        hubMenu: state.hubMenu,
       }),
     },
   ),
