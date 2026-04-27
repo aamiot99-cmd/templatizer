@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { toPng } from 'html-to-image'
+import html2canvas from 'html2canvas-pro'
 import { ThemeProvider } from '../themes'
 import { getChrome } from '../themes/chrome'
 import { useProjectStore } from '../store/projectStore'
