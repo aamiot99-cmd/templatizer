@@ -115,6 +115,10 @@
   flex: 1;
 }
 
+.itemWithPill {
+  padding-right: 48px;
+}
+
 .platformPill {
   position: absolute;
   bottom: 4px;
