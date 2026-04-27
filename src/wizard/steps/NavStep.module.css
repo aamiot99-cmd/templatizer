@@ -5,6 +5,42 @@
   max-width: 820px;
 }
 
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 14px;
+}
+
+.toggleRow:hover {
+  border-color: var(--wizard-accent-border);
+}
+
+.toggleCheckbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--wizard-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggleLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hubMenuEditor {
+  display: flex;
+  flex-direction: column;
+}
+
 .actionsRow {
   display: flex;
   justify-content: space-between;
