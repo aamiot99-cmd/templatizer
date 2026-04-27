@@ -66,6 +66,8 @@ function PoolItem({ widget, platform }: PoolItemProps) {
     data: { type: 'pool', widgetId: widget.id },
   })
 
+  const isNativeJint = platform === 'jint' && Boolean(widget.renderers.jint)
+
   return (
     <div
       ref={setNodeRef}
@@ -77,6 +79,7 @@ function PoolItem({ widget, platform }: PoolItemProps) {
         <div className={styles.itemLabel}>{widget.platformLabels[platform]}</div>
         <div className={styles.itemDescription}>{widget.purpose.label}</div>
       </div>
+      {isNativeJint && <span className={styles.platformPill}>Jint</span>}
     </div>
   )
 }
