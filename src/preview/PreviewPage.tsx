@@ -102,7 +102,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
-        const Renderer = widget.renderers[platform]
+        const Renderer = resolveRenderer(widget, platform)
         if (!Renderer) return null
         const flex = ratios[idx] ?? 1 / row.cells.length
         const size = ratioToSize(flex)
