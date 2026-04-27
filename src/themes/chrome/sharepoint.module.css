@@ -137,6 +137,74 @@
   flex-shrink: 0;
 }
 
+/* ── Hub menu (sits below the M365 black bar) ── */
+.hubMenu {
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 24px;
+  height: 36px;
+  gap: 4px;
+  font-size: 12.5px;
+}
+
+.hubMenuItem {
+  position: relative;
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #242424;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hubMenuItem:hover {
+  background: #f5f5f5;
+}
+
+.hubMenuItemHasChildren {
+  padding-right: 8px;
+}
+
+.hubMenuChevron {
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+}
+
+.hubMenuDropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #edebe9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+  z-index: 50;
+}
+
+.hubMenuItem:hover .hubMenuDropdown {
+  display: block;
+}
+
+.hubMenuDropdownItem {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+}
+
+.hubMenuDropdownItem:hover {
+  background: #f3f2f1;
+}
+
 /* ── Body layout ── */
 .body {
   display: flex;
