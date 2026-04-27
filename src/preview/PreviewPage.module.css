@@ -3,11 +3,18 @@
   background: #f3f2f1;
 }
 
-.exportButton {
+.exportControls {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.exportButton {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -22,6 +29,143 @@
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
   transition: background 0.15s, transform 0.1s;
+}
+
+.exportMenu {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  min-width: 240px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: menuFadeIn 0.12s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.exportMenuItem {
+  appearance: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font: inherit;
+  color: #08060d;
+  transition: background 0.12s;
+}
+
+.exportMenuItem:hover {
+  background: #f5f5f7;
+}
+
+.exportMenuTitle {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.exportMenuDesc {
+  font-size: 11.5px;
+  color: #6b6375;
+}
+
+.offscreen {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  pointer-events: none;
+}
+
+/* ── Wireframe export canvas ── */
+.wfPage {
+  width: 1200px;
+  padding: 48px 56px;
+  background: #ffffff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #08060d;
+  box-sizing: border-box;
+}
+
+.wfHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid #08060d;
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+}
+
+.wfBrand {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.wfMeta {
+  font-size: 13px;
+  color: #6b6375;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.wfRows {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wfRow {
+  display: flex;
+  gap: 16px;
+}
+
+.wfCell {
+  position: relative;
+  border: 2px dashed #b0b0b8;
+  border-radius: 12px;
+  background: #fafafb;
+  padding: 28px 20px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.wfCellIndex {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a0a0a8;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.wfCellLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3a3744;
+  line-height: 1.35;
 }
 
 .exportButton:hover:not(:disabled) {
