@@ -173,6 +173,30 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
         </div>
       </div>
 
+      {showHubMenu && (
+        <div className={styles.hubMenu}>
+          {hubMenu!.entries.map((entry) => {
+            const hasChildren = Boolean(entry.children && entry.children.length > 0)
+            return (
+              <div
+                key={entry.id}
+                className={`${styles.hubMenuItem} ${hasChildren ? styles.hubMenuItemHasChildren : ''}`}
+              >
+                <span>{entry.label}</span>
+                {hasChildren && <span className={styles.hubMenuChevron}><ChevronDown /></span>}
+                {hasChildren && (
+                  <div className={styles.hubMenuDropdown}>
+                    {entry.children!.map((child) => (
+                      <div key={child.id} className={styles.hubMenuDropdownItem}>{child.label}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       <div className={styles.body}>
         {/* Left sidebar */}
         <div className={styles.sidebar}>
