@@ -44,7 +44,12 @@ export function JintImageMap({ config }: WidgetRendererProps) {
       <div className={styles.header}>{title}</div>
       <div className={styles.mapContainer}>
         <div className={styles.mapWrapper}>
-          <div className={styles.map} role="img" aria-label="Carte de France" />
+          <div
+            className={styles.map}
+            role="img"
+            aria-label="Carte de France"
+            dangerouslySetInnerHTML={{ __html: FRANCE_MAP_INLINE }}
+          />
           {DEFAULT_LOCATIONS.map((loc) => (
             <div
               key={loc.id}
