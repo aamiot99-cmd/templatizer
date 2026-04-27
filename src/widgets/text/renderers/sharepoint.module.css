@@ -28,11 +28,14 @@
 }
 
 .content blockquote {
-  border-left: 2px solid #aaa;
-  padding-left: 12px;
-  margin: 0.6em 0;
+  border-top: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  border-left: none;
+  padding: 40px 16px;
+  margin: 1em 0;
   font-style: italic;
-  color: #605e5c;
+  text-align: center;
+  color: inherit;
 }
 
 .content pre {
