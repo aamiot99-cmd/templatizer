@@ -26,16 +26,17 @@ export function PreviewPage() {
     if (!captureRef.current || exporting) return
     setExporting(true)
     try {
-      const dataUrl = await toPng(captureRef.current, {
-        pixelRatio: 2,
+      const canvas = await html2canvas(captureRef.current, {
+        scale: 2,
         backgroundColor: '#ffffff',
-        skipFonts: true,
+        useCORS: true,
+        logging: false,
       })
       const link = document.createElement('a')
       const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
       const stamp = new Date().toISOString().slice(0, 10)
       link.download = `${slug}-${platform}-${stamp}.png`
-      link.href = dataUrl
+      link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('[export] failed:', err)
