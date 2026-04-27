@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import type { Branding, NavEntry } from '../../types'
+import type { Branding, HubMenu, NavEntry } from '../../types'
 import styles from './jint.module.css'
 
 interface JintChromeProps {
   branding: Branding
   navEntries: NavEntry[]
+  hubMenu?: HubMenu
   children: ReactNode
 }
 
