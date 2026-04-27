@@ -139,11 +139,12 @@ function HelpIcon() {
   )
 }
 
-export function SharepointChrome({ branding, navEntries, children }: SharepointChromeProps) {
+export function SharepointChrome({ branding, navEntries, hubMenu, children }: SharepointChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const userName = 'Alex Dupont'
   const userInitials = initials(userName)
   const siteInitials = initials(branding.name)
+  const showHubMenu = Boolean(hubMenu?.enabled && hubMenu.entries.length > 0)
 
   return (
     <div className={styles.chrome}>
