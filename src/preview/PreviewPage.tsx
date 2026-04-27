@@ -61,7 +61,7 @@ export function PreviewPage() {
   return (
     <div className={styles.page}>
       <ThemeProvider platform={platform} branding={branding}>
-        <Chrome branding={branding} navEntries={navEntries}>
+        <Chrome branding={branding} navEntries={navEntries} hubMenu={hubMenu}>
           {widgetContent}
         </Chrome>
       </ThemeProvider>
