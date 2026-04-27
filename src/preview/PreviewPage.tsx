@@ -26,11 +26,14 @@ export function PreviewPage() {
     if (!captureRef.current || exporting) return
     setExporting(true)
     try {
+      console.log('[export] starting toPng')
+      const t0 = performance.now()
       const dataUrl = await toPng(captureRef.current, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 1,
         backgroundColor: '#ffffff',
       })
+      console.log('[export] toPng done in', Math.round(performance.now() - t0), 'ms, len =', dataUrl.length)
       const link = document.createElement('a')
       const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
       const stamp = new Date().toISOString().slice(0, 10)
@@ -38,8 +41,7 @@ export function PreviewPage() {
       link.href = dataUrl
       link.click()
     } catch (err) {
-      console.error('Export failed:', err)
-      alert("L'export a échoué. Voir la console pour le détail.")
+      console.error('[export] failed:', err)
     } finally {
       setExporting(false)
     }
