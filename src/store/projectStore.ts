@@ -128,6 +128,9 @@ interface ProjectActions {
 
   setNavEntries: (entries: NavEntry[]) => void
 
+  setHubMenuEnabled: (enabled: boolean) => void
+  setHubMenuEntries: (entries: NavEntry[]) => void
+
   resetProject: () => void
 }
 
