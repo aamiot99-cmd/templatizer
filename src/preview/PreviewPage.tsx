@@ -13,6 +13,7 @@ export function PreviewPage() {
   const branding = useProjectStore((s) => s.branding)
   const rows = useProjectStore((s) => s.wireframe.rows)
   const navEntries = useProjectStore((s) => s.navEntries)
+  const hubMenu = useProjectStore((s) => s.hubMenu)
 
   useEffect(() => {
     document.title = `${branding.name} — ${PLATFORM_LABELS[platform]}`
