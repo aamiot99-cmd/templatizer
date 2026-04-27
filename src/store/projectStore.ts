@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type {
   Branding,
   ConfigValues,
+  HubMenu,
   NavEntry,
   Platform,
   ProjectState,
