@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import type { WidgetRendererProps } from '../../../types'
+import franceMapSvg from '/france-map.svg?raw'
 import styles from './jint.module.css'
+
+const FRANCE_MAP_INLINE = franceMapSvg
+  .replace(/<\?xml[^?]*\?>/, '')
+  .replace(/<!DOCTYPE[^>]*>/, '')
+  .replace(/fill="#000000"/g, 'fill="currentColor"')
 
 interface Location {
   id: string
