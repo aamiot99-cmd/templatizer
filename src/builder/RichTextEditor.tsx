@@ -16,7 +16,7 @@ const STYLE_OPTIONS = [
   { value: 'h4',         label: 'Titre 4',          style: { fontSize: '1.05em', fontWeight: '700' } },
   { value: 'p',          label: 'Normal',            style: { fontSize: '1em' } },
   { value: 'div',        label: 'Aucun interligne',  style: { fontSize: '1em', lineHeight: '1' } },
-  { value: 'blockquote', label: 'Citation extraite', style: { fontSize: '1em', fontStyle: 'italic', borderLeft: '2px solid #aaa', paddingLeft: '8px' } },
+  { value: 'blockquote', label: 'Citation extraite', style: { fontSize: '1em', fontStyle: 'italic', borderTop: '2px solid #888', borderBottom: '2px solid #888', textAlign: 'center', padding: '4px 0' } },
   { value: 'pre',        label: 'Monospace',         style: { fontFamily: 'monospace', fontSize: '0.9em', background: '#f3f2f1', padding: '0 4px' } },
 ] as const
 
@@ -47,6 +47,9 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   const [currentStyle, setCurrentStyle] = useState('Normal')
   const [currentSize, setCurrentSize] = useState('18')
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isBold, setIsBold] = useState(false)
+  const [isItalic, setIsItalic] = useState(false)
+  const [isUnderline, setIsUnderline] = useState(false)
 
   useLayoutEffect(() => {
     if (editorRef.current) {
@@ -59,6 +62,12 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   const emitChange = useCallback(() => {
     if (editorRef.current) onChange(editorRef.current.innerHTML)
   }, [onChange])
+
+  const updateFormatState = useCallback(() => {
+    setIsBold(document.queryCommandState('bold'))
+    setIsItalic(document.queryCommandState('italic'))
+    setIsUnderline(document.queryCommandState('underline'))
+  }, [])
 
   function saveSelection() {
     const sel = window.getSelection()
@@ -78,6 +87,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     editorRef.current?.focus()
     document.execCommand(cmd, false, val)
     emitChange()
+    updateFormatState()
   }
 
   function execRestored(cmd: string, val?: string) {
@@ -95,6 +105,13 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   function applyStyle(tag: string) {
     restoreSelection()
     document.execCommand('formatBlock', false, tag)
+    if (tag === 'blockquote') {
+      document.execCommand('bold', false)
+      document.execCommand('italic', false)
+      document.execCommand('fontSize', false, '5') // ~20px
+      document.execCommand('justifyCenter', false)
+      setCurrentSize('20')
+    }
     emitChange()
     const opt = STYLE_OPTIONS.find(o => o.value === tag)
     if (opt) setCurrentStyle(opt.label)
@@ -133,6 +150,12 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     }
     setIsExpanded(prev => !prev)
   }
+
+  // Sync bold/italic/underline when cursor moves
+  useEffect(() => {
+    document.addEventListener('selectionchange', updateFormatState)
+    return () => document.removeEventListener('selectionchange', updateFormatState)
+  }, [updateFormatState])
 
   // Close popup on outside click
   useEffect(() => {
@@ -226,15 +249,15 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
         {/* Bold / Italic / Underline */}
         <div className={styles.group}>
-          <button className={styles.iconBtn} title="Gras (Ctrl+B)"
+          <button className={[styles.iconBtn, isBold ? styles.iconBtnActive : ''].filter(Boolean).join(' ')} title="Gras (Ctrl+B)"
             onMouseDown={e => { e.preventDefault(); exec('bold') }}>
             <b>B</b>
           </button>
-          <button className={styles.iconBtn} title="Italique (Ctrl+I)"
+          <button className={[styles.iconBtn, isItalic ? styles.iconBtnActive : ''].filter(Boolean).join(' ')} title="Italique (Ctrl+I)"
             onMouseDown={e => { e.preventDefault(); exec('italic') }}>
             <i>I</i>
           </button>
-          <button className={styles.iconBtn} title="Souligné (Ctrl+U)"
+          <button className={[styles.iconBtn, isUnderline ? styles.iconBtnActive : ''].filter(Boolean).join(' ')} title="Souligné (Ctrl+U)"
             onMouseDown={e => { e.preventDefault(); exec('underline') }}>
             <u>U</u>
           </button>

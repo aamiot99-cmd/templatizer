@@ -51,6 +51,15 @@
   background: #e1dfdd;
 }
 
+.iconBtnActive {
+  background: #ddeeff;
+  color: #0078d4;
+}
+
+.iconBtnActive:hover {
+  background: #c7ddf4;
+}
+
 .wideBtn {
   display: flex;
   align-items: center;
@@ -240,6 +249,19 @@
 .tableCellActive {
   background: #c7e0f4;
   border-color: #2b88d8;
+}
+
+/* ── Blockquote (Citation extraite) ── */
+.editor blockquote,
+.editorExpanded blockquote {
+  border-top: 2px solid var(--color-primary, #888);
+  border-bottom: 2px solid var(--color-primary, #888);
+  border-left: none;
+  padding: 14px 8px;
+  margin: 0.6em 0;
+  font-style: italic;
+  text-align: center;
+  color: inherit;
 }
 
 /* ── Editor area ── */
