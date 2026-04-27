@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { toPng } from 'html-to-image'
 import { ThemeProvider } from '../themes'
 import { getChrome } from '../themes/chrome'
 import { useProjectStore } from '../store/projectStore'
@@ -14,10 +15,35 @@ export function PreviewPage() {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const navEntries = useProjectStore((s) => s.navEntries)
   const hubMenu = useProjectStore((s) => s.hubMenu)
+  const captureRef = useRef<HTMLDivElement>(null)
+  const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
     document.title = `${branding.name} — ${PLATFORM_LABELS[platform]}`
   }, [branding.name, platform])
+
+  async function handleExport() {
+    if (!captureRef.current || exporting) return
+    setExporting(true)
+    try {
+      const dataUrl = await toPng(captureRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+      })
+      const link = document.createElement('a')
+      const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
+      const stamp = new Date().toISOString().slice(0, 10)
+      link.download = `${slug}-${platform}-${stamp}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (err) {
+      console.error('Export failed:', err)
+      alert("L'export a échoué. Voir la console pour le détail.")
+    } finally {
+      setExporting(false)
+    }
+  }
 
   const Chrome = getChrome(platform)
   const pageClass = platform === 'sharepoint' ? styles.pageWhite : styles.page
