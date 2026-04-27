@@ -141,12 +141,12 @@
   border: 2px dashed #b0b0b8;
   border-radius: 12px;
   background: #fafafb;
-  padding: 28px 20px;
-  min-height: 140px;
+  padding: 32px 20px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   min-width: 0;
 }
