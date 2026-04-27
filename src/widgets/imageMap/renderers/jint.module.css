@@ -33,15 +33,16 @@
 .map {
   width: 100%;
   aspect-ratio: 1280 / 1110;
-  background: var(--color-primary);
-  -webkit-mask-image: url('/france-map.svg');
-  mask-image: url('/france-map.svg');
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .pin {
