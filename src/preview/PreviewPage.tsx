@@ -86,11 +86,21 @@ export function PreviewPage() {
 
   return (
     <div className={styles.page}>
-      <ThemeProvider platform={platform} branding={branding}>
-        <Chrome branding={branding} navEntries={navEntries} hubMenu={hubMenu}>
-          {widgetContent}
-        </Chrome>
-      </ThemeProvider>
+      <button
+        type="button"
+        className={styles.exportButton}
+        onClick={handleExport}
+        disabled={exporting}
+      >
+        {exporting ? 'Export en cours…' : 'Exporter en PNG'}
+      </button>
+      <div ref={captureRef}>
+        <ThemeProvider platform={platform} branding={branding}>
+          <Chrome branding={branding} navEntries={navEntries} hubMenu={hubMenu}>
+            {widgetContent}
+          </Chrome>
+        </ThemeProvider>
+      </div>
     </div>
   )
 }
