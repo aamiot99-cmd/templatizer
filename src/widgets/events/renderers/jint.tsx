@@ -43,9 +43,9 @@ export function JintEvents({ config }: WidgetRendererProps) {
     <div className={styles.widget}>
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
-        <button type="button" className={styles.viewAll}>
+        <a href="#" className={styles.viewAll}>
           Voir tout →
-        </button>
+        </a>
       </div>
       <div className={styles.list}>
         {events.map((event) => (
