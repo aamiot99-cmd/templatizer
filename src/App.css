@@ -8,6 +8,53 @@
   margin-bottom: 40px;
 }
 
+.app-userbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.app-user-email {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.app-signout {
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.app-signout:hover {
+  background: var(--bg-muted);
+  color: var(--text);
+  border-color: var(--wizard-accent-border);
+}
+
+.app-logo {
+  display: block;
+  height: 120px;
+  width: auto;
+  margin: 0 0 8px -12px;
+}
+
+.app-header h1 {
+  margin-top: 0;
+}
+
 .app-back {
   display: inline-flex;
   align-items: center;

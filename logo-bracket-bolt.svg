@@ -1,0 +1,36 @@
+<svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Templatizer logo — bracket bolt">
+  <defs>
+    <linearGradient id="bolt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wireframe canvas: dashed frame + faint placeholder content -->
+  <g transform="translate(28,28)">
+    <rect x="0" y="0" width="124" height="124" rx="14" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4 5"/>
+    <!-- ghost UI elements inside the frame -->
+    <rect x="18" y="22" width="40" height="6"  rx="2" fill="#CBD5E1" opacity="0.55"/>
+    <rect x="18" y="36" width="62" height="6"  rx="2" fill="#CBD5E1" opacity="0.35"/>
+    <rect x="18" y="86" width="28" height="22" rx="4" fill="#CBD5E1" opacity="0.35"/>
+    <rect x="54" y="86" width="52" height="22" rx="4" fill="#CBD5E1" opacity="0.25"/>
+  </g>
+
+  <!-- Top-left corner bracket (solid, defines the frame) -->
+  <path d="M 36 64 L 36 38 Q 36 32 42 32 L 68 32"
+        stroke="#0F172A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Bottom-right corner bracket -->
+  <path d="M 112 120 L 138 120 Q 144 120 144 114 L 144 88"
+        stroke="#0F172A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Lightning bolt cutting diagonally through the canvas -->
+  <path d="M 102 42 L 64 92 L 84 92 L 78 132 L 116 82 L 96 82 Z"
+        fill="url(#bolt)" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Wordmark -->
+  <g>
+    <text x="186" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="44" font-weight="700" fill="#0F172A" letter-spacing="-1.4">Templatizer</text>
+    <text x="188" y="128" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#475569" letter-spacing="-0.2">Build intranets, fast</text>
+  </g>
+</svg>

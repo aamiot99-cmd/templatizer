@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useProjectsRegistry } from '../store/projectsRegistry'
+import { useAuthSession } from '../auth/useAuthSession'
 import { PLATFORM_LABELS } from '../types'
+import type { ProjectLock } from './types'
 import styles from './AdminView.module.css'
 
 function formatRelativeDate(timestamp: number): string {
@@ -19,38 +21,91 @@ function formatRelativeDate(timestamp: number): string {
   })
 }
 
+function formatLockMessage(lock: ProjectLock): string {
+  const who = lock.lockedByEmail ?? 'un autre administrateur'
+  return `En cours d'édition par ${who} (${formatRelativeDate(lock.lockedAt)})`
+}
+
 export function AdminView() {
+  const { session } = useAuthSession()
+  const currentUserId = session?.user.id ?? null
+
   const projects = useProjectsRegistry((s) => s.projects)
+  const status = useProjectsRegistry((s) => s.status)
+  const error = useProjectsRegistry((s) => s.error)
   const createProject = useProjectsRegistry((s) => s.createProject)
-  const openProject = useProjectsRegistry((s) => s.openProject)
+  const tryOpenProject = useProjectsRegistry((s) => s.tryOpenProject)
   const deleteProject = useProjectsRegistry((s) => s.deleteProject)
   const renameProject = useProjectsRegistry((s) => s.renameProject)
 
   const [draftName, setDraftName] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [openingId, setOpeningId] = useState<string | null>(null)
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     const name = draftName.trim()
-    if (!name) return
-    const id = createProject(name)
-    setDraftName('')
-    openProject(id)
+    if (!name || busy) return
+    setBusy(true)
+    try {
+      const id = await createProject(name)
+      setDraftName('')
+      const result = await tryOpenProject(id)
+      if (!result.acquired && result.lock) {
+        window.alert(formatLockMessage(result.lock))
+      }
+    } catch (err) {
+      window.alert(
+        `Création impossible : ${err instanceof Error ? err.message : String(err)}`,
+      )
+    } finally {
+      setBusy(false)
+    }
   }
 
-  const handleRename = (id: string, currentName: string) => {
+  const handleOpen = async (id: string) => {
+    if (openingId) return
+    setOpeningId(id)
+    try {
+      const result = await tryOpenProject(id)
+      if (!result.acquired && result.lock) {
+        window.alert(formatLockMessage(result.lock))
+      }
+    } catch (err) {
+      window.alert(
+        `Ouverture impossible : ${err instanceof Error ? err.message : String(err)}`,
+      )
+    } finally {
+      setOpeningId(null)
+    }
+  }
+
+  const handleRename = async (id: string, currentName: string) => {
     const next = window.prompt('Nouveau nom du projet :', currentName)
     if (next === null) return
     const trimmed = next.trim()
     if (!trimmed || trimmed === currentName) return
-    renameProject(id, trimmed)
+    try {
+      await renameProject(id, trimmed)
+    } catch (err) {
+      window.alert(
+        `Renommage impossible : ${err instanceof Error ? err.message : String(err)}`,
+      )
+    }
   }
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     const confirmed = window.confirm(
       `Supprimer définitivement le projet "${name}" ? Cette action est irréversible.`,
     )
     if (!confirmed) return
-    deleteProject(id)
+    try {
+      await deleteProject(id)
+    } catch (err) {
+      window.alert(
+        `Suppression impossible : ${err instanceof Error ? err.message : String(err)}`,
+      )
+    }
   }
 
   return (
@@ -59,7 +114,8 @@ export function AdminView() {
         <div>
           <h2 className={styles.heading}>Mes projets</h2>
           <p className={styles.subheading}>
-            Créez et gérez plusieurs projets d'intranet en parallèle.
+            Espace partagé : tous les administrateurs accèdent aux mêmes
+            projets.
           </p>
         </div>
         <form className={styles.createForm} onSubmit={handleCreate}>
@@ -69,18 +125,29 @@ export function AdminView() {
             placeholder="Nom du nouveau projet"
             value={draftName}
             onChange={(e) => setDraftName(e.target.value)}
+            disabled={busy}
           />
           <button
             type="submit"
             className={styles.primaryButton}
-            disabled={!draftName.trim()}
+            disabled={!draftName.trim() || busy}
           >
-            + Nouveau projet
+            {busy ? 'Création…' : '+ Nouveau projet'}
           </button>
         </form>
       </div>
 
-      {projects.length === 0 ? (
+      {status === 'error' && error && (
+        <div className={styles.errorBanner}>
+          Erreur lors du chargement des projets : {error}
+        </div>
+      )}
+
+      {status === 'loading' ? (
+        <div className={styles.empty}>
+          <p>Chargement des projets…</p>
+        </div>
+      ) : projects.length === 0 ? (
         <div className={styles.empty}>
           <p>
             Aucun projet pour le moment. Créez votre premier projet pour
@@ -91,23 +158,42 @@ export function AdminView() {
         <div className={styles.grid}>
           {projects.map((project) => {
             const platformLabel =
-              PLATFORM_LABELS[project.snapshot.platform] ?? project.snapshot.platform
+              PLATFORM_LABELS[project.snapshot.platform] ??
+              project.snapshot.platform
+            const lockedByOther =
+              project.lock !== null && project.lock.lockedBy !== currentUserId
             return (
-              <article key={project.id} className={styles.card}>
+              <article
+                key={project.id}
+                className={`${styles.card} ${lockedByOther ? styles.cardLocked : ''}`}
+              >
                 <header className={styles.cardHeader}>
                   <span className={styles.cardName}>{project.name}</span>
                   <div className={styles.cardMeta}>
-                    <span className={styles.platformBadge}>{platformLabel}</span>
+                    <span className={styles.platformBadge}>
+                      {platformLabel}
+                    </span>
                     <span>Modifié {formatRelativeDate(project.updatedAt)}</span>
                   </div>
+                  {lockedByOther && (
+                    <div className={styles.lockBadge}>
+                      <span aria-hidden="true">🔒</span>
+                      <span>{formatLockMessage(project.lock!)}</span>
+                    </div>
+                  )}
                 </header>
                 <div className={styles.cardActions}>
                   <button
                     type="button"
                     className={`${styles.cardButton} ${styles.cardButtonPrimary}`}
-                    onClick={() => openProject(project.id)}
+                    onClick={() => handleOpen(project.id)}
+                    disabled={lockedByOther || openingId === project.id}
                   >
-                    Ouvrir
+                    {openingId === project.id
+                      ? 'Ouverture…'
+                      : lockedByOther
+                        ? 'Verrouillé'
+                        : 'Ouvrir'}
                   </button>
                   <button
                     type="button"
@@ -120,6 +206,7 @@ export function AdminView() {
                     type="button"
                     className={`${styles.cardButton} ${styles.cardButtonDanger}`}
                     onClick={() => handleDelete(project.id, project.name)}
+                    disabled={lockedByOther}
                   >
                     Suppr.
                   </button>
