@@ -6,13 +6,34 @@ interface LinkItem {
   label: string
   url: string
   icon: string
+  image: string
 }
 
 const DEFAULT_LINKS: LinkItem[] = [
-  { label: 'Trombinoscope', url: '#', icon: 'users' },
-  { label: 'Politique de télétravail', url: '#', icon: 'document' },
-  { label: 'Charte graphique', url: '#', icon: 'palette' },
-  { label: 'Plan du site', url: '#', icon: 'map' },
+  {
+    label: 'Trombinoscope',
+    url: '#',
+    icon: 'users',
+    image: '/news/pexels-jibarofoto-2774556.jpg',
+  },
+  {
+    label: 'Politique de télétravail',
+    url: '#',
+    icon: 'document',
+    image: '/focus/pro-meeting.jpg',
+  },
+  {
+    label: 'Charte graphique',
+    url: '#',
+    icon: 'palette',
+    image: '/focus/teambuilding.jpg',
+  },
+  {
+    label: 'Plan du site',
+    url: '#',
+    icon: 'map',
+    image: '/focus/handshake.jpg',
+  },
 ]
 
 
