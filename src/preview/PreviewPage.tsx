@@ -141,7 +141,7 @@ export function PreviewPage() {
           onClick={() => setMenuOpen((v) => !v)}
           disabled={exporting}
         >
-          <span>{exporting ? 'Export en cours…' : 'Exporter en PNG'}</span>
+          <span>{exporting ? 'Export en cours…' : 'Exporter'}</span>
           <svg
             width="14"
             height="14"
