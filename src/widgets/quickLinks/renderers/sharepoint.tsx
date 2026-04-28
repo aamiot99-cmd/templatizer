@@ -99,8 +99,8 @@ function LinkIcon({ name, size }: { name: string; size: number }) {
 function CardItem({ link }: { link: LinkItem }) {
   return (
     <a href={link.url} className={styles.card}>
-      <span className={styles.cardIconArea}>
-        <span className={styles.cardIcon}><LinkIcon name={link.icon} size={40} /></span>
+      <span className={styles.cardImageArea}>
+        <img src={link.image} alt="" className={styles.cardImage} />
       </span>
       <span className={styles.cardLabelArea}>
         <span className={styles.cardLabel}>{link.label}</span>
