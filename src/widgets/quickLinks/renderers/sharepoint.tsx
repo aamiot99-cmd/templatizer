@@ -155,7 +155,10 @@ export function SharepointQuickLinks({ config, size }: WidgetRendererProps) {
   const layout = (config.layout as string) || 'compact'
   const title = (config.title as string) || 'Liens utiles'
   const showTitle = (config.showTitle as boolean) ?? true
-  const links = DEFAULT_LINKS
+  const links = DEFAULT_LINKS.map((link, idx) => {
+    const override = config[`linkLabel${idx + 1}`] as string | undefined
+    return override ? { ...link, label: override } : link
+  })
   const cols = COLS_BY_SIZE[size] ?? 4
 
   const gridStyle = { gridTemplateColumns: `repeat(${cols}, 1fr)` }
