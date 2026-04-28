@@ -57,7 +57,7 @@ export function PagerControls({
       </button>
 
       <div className={styles.dots}>
-        {Array.from({ length: totalPages }, (_, i) => (
+        {Array.from({ length: effectivePages }, (_, i) => (
           <span
             key={i}
             className={`${styles.dot} ${i === page ? styles.dotActive : ''}`}
