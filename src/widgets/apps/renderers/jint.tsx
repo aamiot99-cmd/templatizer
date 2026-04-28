@@ -127,6 +127,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
         totalPages={totalPages}
         onPageChange={setPage}
         variant="light"
+        alwaysShow
       />
     </div>
   )
