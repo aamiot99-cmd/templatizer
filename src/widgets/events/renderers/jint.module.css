@@ -24,7 +24,7 @@
 }
 
 .viewAll {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-primary);
   cursor: pointer;
@@ -32,6 +32,7 @@
   border: none;
   padding: 0;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .list {
