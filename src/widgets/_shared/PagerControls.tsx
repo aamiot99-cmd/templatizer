@@ -8,6 +8,9 @@ interface PagerControlsProps {
   onPageChange: (page: number) => void
   variant?: PagerVariant
   className?: string
+  /** Render the controls even when there is only one page (arrows disabled,
+   *  single dot). Default: hide when totalPages <= 1. */
+  alwaysShow?: boolean
 }
 
 export function PagerControls({
@@ -16,11 +19,13 @@ export function PagerControls({
   onPageChange,
   variant = 'dark',
   className,
+  alwaysShow = false,
 }: PagerControlsProps) {
-  if (totalPages <= 1) return null
+  if (totalPages <= 1 && !alwaysShow) return null
 
+  const effectivePages = Math.max(1, totalPages)
   const isFirst = page === 0
-  const isLast = page >= totalPages - 1
+  const isLast = page >= effectivePages - 1
 
   return (
     <div
