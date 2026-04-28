@@ -43,7 +43,7 @@ export function PreviewPage() {
     setExporting(true)
     try {
       const canvas = await html2canvas(target, {
-        scale: 2,
+        scale: 1,
         backgroundColor: '#ffffff',
         useCORS: true,
         logging: false,
@@ -52,8 +52,15 @@ export function PreviewPage() {
       const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
       const stamp = new Date().toISOString().slice(0, 10)
       const suffix = mode === 'wireframe' ? '-wireframe' : ''
-      link.download = `${slug}-${platform}${suffix}-${stamp}.png`
-      link.href = canvas.toDataURL('image/png')
+      // JPEG at 0.9 quality keeps the rendered photo-heavy preview compact;
+      // wireframe (mostly flat colors + text) stays as PNG for crisp lines.
+      const isJpeg = mode === 'rendered'
+      const ext = isJpeg ? 'jpg' : 'png'
+      link.download = `${slug}-${platform}${suffix}-${stamp}.${ext}`
+      link.href = canvas.toDataURL(
+        isJpeg ? 'image/jpeg' : 'image/png',
+        isJpeg ? 0.9 : undefined,
+      )
       link.click()
     } catch (err) {
       console.error('[export] failed:', err)
