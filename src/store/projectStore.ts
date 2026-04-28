@@ -95,6 +95,8 @@ function initialProjectState(): ProjectState {
 }
 
 interface ProjectActions {
+  loadSnapshot: (snapshot: ProjectState) => void
+
   setPlatform: (platform: Platform) => void
   updateBranding: (patch: Partial<Branding>) => void
   updateBrandingColors: (patch: Partial<Branding['colors']>) => void
@@ -185,6 +187,15 @@ export const useProjectStore = create<ProjectStore>()(
   persist(
     (set) => ({
       ...initialProjectState(),
+
+      loadSnapshot: (snapshot) =>
+        set({
+          platform: snapshot.platform,
+          branding: snapshot.branding,
+          wireframe: snapshot.wireframe,
+          navEntries: snapshot.navEntries,
+          hubMenu: snapshot.hubMenu,
+        }),
 
       setPlatform: (platform) =>
         set((state) => {

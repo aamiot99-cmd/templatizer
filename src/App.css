@@ -8,6 +8,31 @@
   margin-bottom: 40px;
 }
 
+.app-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.app-back:hover {
+  background: var(--bg-muted);
+  color: var(--text);
+  border-color: var(--wizard-accent-border);
+}
+
 .app-header h1 {
   font-size: 32px;
   margin: 0 0 8px;
