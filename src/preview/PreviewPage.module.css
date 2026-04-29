@@ -136,13 +136,21 @@
   gap: 16px;
 }
 
+/* Column container in wireframe export: stacks multiple widget boxes vertically */
+.wfColumnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
 .wfCell {
   position: relative;
   border: 2px dashed #b0b0b8;
   border-radius: 12px;
   background: #fafafb;
   padding: 32px 20px;
-  min-height: 280px;
+  min-height: 180px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -282,6 +290,19 @@
 }
 
 .widgetCellInner > * {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Wrapper for stacked widgets within the same column */
+.stackedWidgetWrapper {
+  min-width: 0;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 4px;
+}
+
+.stackedWidgetWrapper > * {
   min-width: 0;
   width: 100%;
 }

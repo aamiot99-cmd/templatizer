@@ -41,6 +41,11 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
 
   function filterField(field: ConfigSchemaField) {
     if (field.platforms && !field.platforms.includes(platform)) return false
+    if (field.visibleWhen) {
+      const depField = widget.configSchema.find((f) => f.key === field.visibleWhen!.key)
+      const currentVal = cell.config[field.visibleWhen.key] ?? depField?.default
+      if (currentVal !== field.visibleWhen.value) return false
+    }
     return true
   }
 
@@ -86,14 +91,33 @@ function findCell(
 ) {
   if (!cellId) return null
   for (const row of rows) {
-    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
-    if (cellIdx === -1) continue
-    const cell = row.cells[cellIdx]
     const ratios = row.columnRatios?.length === row.cells.length
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
-    const ratio = ratios[cellIdx]
-    return { rowId: row.id, cell, ratio }
+
+    // Search primary cells
+    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
+    if (cellIdx !== -1) {
+      const cell = row.cells[cellIdx]
+      return { rowId: row.id, cell, ratio: ratios[cellIdx] }
+    }
+
+    // Search stacked cells
+    for (let colIdx = 0; colIdx < row.cells.length; colIdx++) {
+      const primary = row.cells[colIdx]
+      const stackedIdx = primary.stackedCells?.findIndex((sc) => sc.id === cellId) ?? -1
+      if (stackedIdx !== -1) {
+        const sc = primary.stackedCells![stackedIdx]
+        const ratio = ratios[colIdx]
+        const cell = {
+          id: sc.id,
+          widgetId: sc.widgetId,
+          config: sc.config,
+          size: ratioToSize(ratio) as ReturnType<typeof ratioToSize>,
+        }
+        return { rowId: row.id, cell, ratio }
+      }
+    }
   }
   return null
 }

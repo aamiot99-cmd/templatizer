@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import html2canvas from 'html2canvas-pro'
 import { ThemeProvider } from '../themes'
 import { getChrome } from '../themes/chrome'
@@ -6,10 +6,74 @@ import { useProjectStore } from '../store/projectStore'
 import { getWidget, resolveRenderer } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
 import { ratioToSize } from '../types'
-import type { Branding, Platform, WireframeRow } from '../types'
+import type { Branding, ConfigValues, Platform, WidgetSize, WireframeRow } from '../types'
 import styles from './PreviewPage.module.css'
 
 type ExportMode = 'rendered' | 'wireframe'
+
+const NEWS_ITEM_H: Record<string, number> = {
+  'one-third': 100,
+  half: 128,
+  'two-thirds': 192,
+  full: 192,
+}
+const NEWS_HEADER_H: Record<string, number> = {
+  'one-third': 67,
+  half: 63,
+  'two-thirds': 59,
+  full: 59,
+}
+
+const HC_HEADER_H = 54
+const HC_GRID_CARD_H = 275
+const HC_LIST_ROW_H = 52
+const HC_COMPACT_ITEM_H = 72
+
+const SIZE_TO_COLS: Record<string, number> = {
+  full: 4,
+  'two-thirds': 3,
+  half: 2,
+  'one-third': 1,
+}
+
+function computeAdjustedItemCount(
+  widgetId: string,
+  config: ConfigValues,
+  size: WidgetSize,
+  targetH: number,
+): number | null {
+  if (widgetId === 'news') {
+    if ((config.countMode as string) === 'manual') return null
+    const rawLayout = (config.layout as string) ?? 'featured'
+    const FULL_ONLY = ['featured', 'sidebyside']
+    const layout = size !== 'full' && FULL_ONLY.includes(rawLayout) ? 'list' : rawLayout
+    if (layout !== 'list') return null
+    const itemH = NEWS_ITEM_H[size] ?? 128
+    const headerH = NEWS_HEADER_H[size] ?? 63
+    return Math.max(1, Math.min(8, Math.round((targetH - headerH) / itemH)))
+  }
+  if (widgetId === 'highlightedContent') {
+    if ((config.countMode as string) === 'manual') return null
+    const rawLayout = (config.layout as string) ?? 'grille'
+    if (rawLayout === 'carrousel') return null
+    const cols = SIZE_TO_COLS[size] ?? 4
+    const layout =
+      size === 'one-third' && (rawLayout === 'grille' || rawLayout === 'pellicule')
+        ? 'compact'
+        : rawLayout
+    if (layout === 'grille' || layout === 'pellicule') {
+      const rowCount = Math.max(1, Math.round((targetH - HC_HEADER_H) / HC_GRID_CARD_H))
+      return Math.min(8, rowCount * cols)
+    }
+    if (layout === 'liste') {
+      return Math.max(1, Math.min(8, Math.round((targetH - HC_HEADER_H) / HC_LIST_ROW_H)))
+    }
+    if (layout === 'compact') {
+      return Math.max(1, Math.min(8, Math.round((targetH - HC_HEADER_H) / HC_COMPACT_ITEM_H)))
+    }
+  }
+  return null
+}
 
 export function PreviewPage() {
   const platform = useProjectStore((s) => s.platform)
@@ -141,7 +205,7 @@ export function PreviewPage() {
           onClick={() => setMenuOpen((v) => !v)}
           disabled={exporting}
         >
-          <span>{exporting ? 'Export en cours…' : 'Exporter'}</span>
+          <span>{exporting ? 'Export en cours…' : 'Exporter en PNG'}</span>
           <svg
             width="14"
             height="14"
@@ -176,6 +240,8 @@ export function PreviewPage() {
     </div>
   )
 }
+
+// ── Wireframe export canvas ──────────────────────────────────────────────────
 
 interface WireframeCaptureProps {
   rows: WireframeRow[]
@@ -213,16 +279,34 @@ function WireframeCapture({
                   widget?.purpose.label ??
                   cell.widgetId
                 const flex = ratios[idx] ?? 1 / row.cells.length
+                const stackedCells = cell.stackedCells ?? []
                 return (
                   <div
                     key={cell.id}
-                    className={styles.wfCell}
+                    className={styles.wfColumnContainer}
                     style={{ flex: `${flex} 1 0` }}
                   >
-                    <div className={styles.wfCellIndex}>
-                      {rowIdx + 1}.{idx + 1}
+                    <div className={styles.wfCell}>
+                      <div className={styles.wfCellIndex}>
+                        {rowIdx + 1}.{idx + 1}
+                      </div>
+                      <div className={styles.wfCellLabel}>{label}</div>
                     </div>
-                    <div className={styles.wfCellLabel}>{label}</div>
+                    {stackedCells.map((sc, scIdx) => {
+                      const sw = getWidget(sc.widgetId)
+                      const scLabel =
+                        sw?.platformLabels[platform] ??
+                        sw?.purpose.label ??
+                        sc.widgetId
+                      return (
+                        <div key={sc.id} className={styles.wfCell}>
+                          <div className={styles.wfCellIndex}>
+                            {rowIdx + 1}.{idx + 1}.{scIdx + 1}
+                          </div>
+                          <div className={styles.wfCellLabel}>{scLabel}</div>
+                        </div>
+                      )
+                    })}
                   </div>
                 )
               })}
@@ -233,6 +317,8 @@ function WireframeCapture({
     </div>
   )
 }
+
+// ── Rendered row with ResizeObserver-based height adjustment ─────────────────
 
 function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
@@ -245,13 +331,64 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
-  // A row is "full-bleed" when it contains a widget that opts into it
-  // (e.g. SharePoint "Bannière principale"). Such a row spans the full width of
-  // the content area, skipping the normal section padding/max-width.
   const isFullBleed = row.cells.some((cell) => {
     const widget = getWidget(cell.widgetId)
     return Boolean(widget?.isFullBleed)
   })
+
+  const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
+
+  const [itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
+  const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  const measure = useCallback(() => {
+    if (!hasStacked) return
+
+    const currentRatios =
+      row.columnRatios && row.columnRatios.length === row.cells.length
+        ? row.columnRatios
+        : new Array(row.cells.length).fill(1 / row.cells.length)
+
+    let stackedMaxH = 0
+    for (const cell of row.cells) {
+      if (!cell.stackedCells?.length) continue
+      const el = cellRefs.current.get(cell.id)
+      if (el) stackedMaxH = Math.max(stackedMaxH, el.getBoundingClientRect().height)
+    }
+    if (stackedMaxH === 0) return
+
+    const newOverrides: Record<string, number> = {}
+    row.cells.forEach((cell, idx) => {
+      if (cell.stackedCells?.length) return
+      const s = ratioToSize(currentRatios[idx])
+      const adjusted = computeAdjustedItemCount(cell.widgetId, cell.config, s, stackedMaxH)
+      if (adjusted !== null) newOverrides[cell.id] = adjusted
+    })
+
+    setItemCountOverrides((prev) => {
+      const changed =
+        Object.keys(newOverrides).length !== Object.keys(prev).length ||
+        Object.keys(newOverrides).some((k) => prev[k] !== newOverrides[k])
+      return changed ? newOverrides : prev
+    })
+  }, [row, hasStacked])
+
+  useEffect(() => {
+    if (!hasStacked) {
+      setItemCountOverrides({})
+      return
+    }
+
+    const observer = new ResizeObserver(measure)
+    for (const cell of row.cells) {
+      if (!cell.stackedCells?.length) continue
+      const el = cellRefs.current.get(cell.id)
+      if (el) observer.observe(el)
+    }
+    measure()
+
+    return () => observer.disconnect()
+  }, [hasStacked, measure])
 
   const sectionClass = isFullBleed
     ? styles.sectionFullBleed
@@ -264,7 +401,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         : undefined
 
   const rowContent = (
-    <div className={isFullBleed ? styles.widgetRowFullBleed : styles.widgetRow}>
+    <div className={styles.widgetRow}>
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
@@ -272,18 +409,36 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         if (!Renderer) return null
         const flex = ratios[idx] ?? 1 / row.cells.length
         const size = ratioToSize(flex)
+
+        const override = itemCountOverrides[cell.id]
+        const config: ConfigValues =
+          override != null ? { ...cell.config, itemCount: override } : cell.config
+
+        const stackedCells = cell.stackedCells ?? []
+
         return (
           <div
             key={cell.id}
+            ref={(el) => {
+              if (el) cellRefs.current.set(cell.id, el)
+              else cellRefs.current.delete(cell.id)
+            }}
             className={styles.widgetCell}
             style={{ flex: `${flex} 1 0` }}
           >
             <div className={styles.widgetCellInner}>
-              <Renderer
-                config={cell.config}
-                size={size}
-                branding={branding}
-              />
+              <Renderer config={config} size={size} branding={branding} />
+              {stackedCells.map((sc) => {
+                const sw = getWidget(sc.widgetId)
+                if (!sw) return null
+                const SR = resolveRenderer(sw, platform)
+                if (!SR) return null
+                return (
+                  <div key={sc.id} className={styles.stackedWidgetWrapper}>
+                    <SR config={sc.config} size={size} branding={branding} />
+                  </div>
+                )
+              })}
             </div>
           </div>
         )
@@ -291,8 +446,6 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     </div>
   )
 
-  // For SharePoint, non-full-bleed rows are centered in a 1200px inner wrapper
-  // (mirroring native SharePoint section chrome). Full-bleed rows skip it.
   const needsSpInner = platform === 'sharepoint' && !isFullBleed
 
   return (

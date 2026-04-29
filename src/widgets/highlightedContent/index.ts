@@ -30,12 +30,23 @@ export const highlightedContentWidget: WidgetDefinition = {
       default: true,
     },
     {
+      key: 'countMode',
+      label: 'Remplissage',
+      type: 'toggle',
+      default: 'auto',
+      options: [
+        { value: 'auto', label: 'Automatique' },
+        { value: 'manual', label: 'Manuel' },
+      ],
+    },
+    {
       key: 'itemCount',
       label: "Nombre d'éléments",
       type: 'number',
       default: 4,
       min: 1,
-      max: 6,
+      max: 8,
+      visibleWhen: { key: 'countMode', value: 'manual' },
     },
     {
       key: 'contentType',

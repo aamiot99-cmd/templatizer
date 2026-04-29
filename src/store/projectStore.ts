@@ -7,6 +7,7 @@ import type {
   NavEntry,
   Platform,
   ProjectState,
+  StackedCell,
   WidgetSize,
   Wireframe,
   WireframeCell,
@@ -126,6 +127,18 @@ interface ProjectActions {
     toIndex: number,
   ) => void
 
+  addStackedCell: (
+    rowId: string,
+    cellId: string,
+    widgetId: string,
+    config: ConfigValues,
+  ) => string
+  removeStackedCell: (
+    rowId: string,
+    cellId: string,
+    stackedCellId: string,
+  ) => void
+
   setNavEntries: (entries: NavEntry[]) => void
 
   setHubMenuEnabled: (enabled: boolean) => void
@@ -140,7 +153,14 @@ function cloneWireframe(wireframe: Wireframe): Wireframe {
   return {
     rows: wireframe.rows.map((row) => ({
       ...row,
-      cells: row.cells.map((cell) => ({ ...cell, config: { ...cell.config } })),
+      cells: row.cells.map((cell) => ({
+        ...cell,
+        config: { ...cell.config },
+        stackedCells: cell.stackedCells?.map((sc) => ({
+          ...sc,
+          config: { ...sc.config },
+        })),
+      })),
     })),
   }
 }
@@ -305,18 +325,29 @@ export const useProjectStore = create<ProjectStore>()(
       updateCellConfig: (rowId, cellId, patch) =>
         set((state) => ({
           wireframe: {
-            rows: state.wireframe.rows.map((r) =>
-              r.id === rowId
-                ? {
-                    ...r,
-                    cells: r.cells.map((c) =>
-                      c.id === cellId
-                        ? { ...c, config: { ...c.config, ...patch } }
-                        : c,
-                    ),
+            rows: state.wireframe.rows.map((r) => {
+              if (r.id !== rowId) return r
+              return {
+                ...r,
+                cells: r.cells.map((c) => {
+                  if (c.id === cellId) {
+                    return { ...c, config: { ...c.config, ...patch } }
                   }
-                : r,
-            ),
+                  // Also search within stacked cells
+                  if (c.stackedCells?.some((sc) => sc.id === cellId)) {
+                    return {
+                      ...c,
+                      stackedCells: c.stackedCells!.map((sc) =>
+                        sc.id === cellId
+                          ? { ...sc, config: { ...sc.config, ...patch } }
+                          : sc,
+                      ),
+                    }
+                  }
+                  return c
+                }),
+              }
+            }),
           },
         })),
 
@@ -353,6 +384,49 @@ export const useProjectStore = create<ProjectStore>()(
           )
           return { wireframe }
         }),
+
+      addStackedCell: (rowId, cellId, widgetId, config) => {
+        const newStacked: StackedCell = { id: uid(), widgetId, config }
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) => {
+              if (r.id !== rowId) return r
+              return {
+                ...r,
+                cells: r.cells.map((c) => {
+                  if (c.id !== cellId) return c
+                  return {
+                    ...c,
+                    stackedCells: [...(c.stackedCells ?? []), newStacked],
+                  }
+                }),
+              }
+            }),
+          },
+        }))
+        return newStacked.id
+      },
+
+      removeStackedCell: (rowId, cellId, stackedCellId) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) => {
+              if (r.id !== rowId) return r
+              return {
+                ...r,
+                cells: r.cells.map((c) => {
+                  if (c.id !== cellId) return c
+                  return {
+                    ...c,
+                    stackedCells: c.stackedCells?.filter(
+                      (sc) => sc.id !== stackedCellId,
+                    ),
+                  }
+                }),
+              }
+            }),
+          },
+        })),
 
       setNavEntries: (entries) => set({ navEntries: entries }),
 
