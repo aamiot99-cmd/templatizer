@@ -10,9 +10,29 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.title {
   font-size: 18px;
   font-weight: 700;
   color: #1a1a1a;
+  margin: 0;
+}
+
+.viewAll {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .list {

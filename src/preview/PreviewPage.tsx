@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas-pro'
 import { ThemeProvider } from '../themes'
 import { getChrome } from '../themes/chrome'
 import { useProjectStore } from '../store/projectStore'
-import { getWidget } from '../widgets/registry'
+import { getWidget, resolveRenderer } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
 import { ratioToSize } from '../types'
 import type { Branding, ConfigValues, Platform, WidgetSize, WireframeRow } from '../types'
@@ -80,10 +80,58 @@ export function PreviewPage() {
   const branding = useProjectStore((s) => s.branding)
   const rows = useProjectStore((s) => s.wireframe.rows)
   const navEntries = useProjectStore((s) => s.navEntries)
+  const hubMenu = useProjectStore((s) => s.hubMenu)
+  const renderedRef = useRef<HTMLDivElement>(null)
+  const wireframeRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [exporting, setExporting] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     document.title = `${branding.name} — ${PLATFORM_LABELS[platform]}`
   }, [branding.name, platform])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function onDocClick(e: MouseEvent) {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    return () => document.removeEventListener('mousedown', onDocClick)
+  }, [menuOpen])
+
+  async function handleExport(mode: ExportMode) {
+    setMenuOpen(false)
+    const target = mode === 'wireframe' ? wireframeRef.current : renderedRef.current
+    if (!target || exporting) return
+    setExporting(true)
+    try {
+      const canvas = await html2canvas(target, {
+        scale: 1,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        logging: false,
+      })
+      const link = document.createElement('a')
+      const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
+      const stamp = new Date().toISOString().slice(0, 10)
+      const suffix = mode === 'wireframe' ? '-wireframe' : ''
+      // JPEG at 0.9 quality keeps the rendered photo-heavy preview compact;
+      // wireframe (mostly flat colors + text) stays as PNG for crisp lines.
+      const isJpeg = mode === 'rendered'
+      const ext = isJpeg ? 'jpg' : 'png'
+      link.download = `${slug}-${platform}${suffix}-${stamp}.${ext}`
+      link.href = canvas.toDataURL(
+        isJpeg ? 'image/jpeg' : 'image/png',
+        isJpeg ? 0.9 : undefined,
+      )
+      link.click()
+    } catch (err) {
+      console.error('[export] failed:', err)
+    } finally {
+      setExporting(false)
+    }
+  }
 
   const Chrome = getChrome(platform)
   const pageClass = platform === 'sharepoint' ? styles.pageWhite : styles.page
@@ -357,7 +405,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null
-        const Renderer = widget.renderers[platform]
+        const Renderer = resolveRenderer(widget, platform)
         if (!Renderer) return null
         const flex = ratios[idx] ?? 1 / row.cells.length
         const size = ratioToSize(flex)

@@ -118,5 +118,8 @@ export interface WidgetDefinition {
   platformLabels: Record<Platform, string>
   configSchema: ConfigSchemaField[]
   supportedSizes?: Partial<Record<Platform, WidgetSize[]>>
+  /** If true, the widget breaks out of the section's horizontal padding/max-width
+   *  to span the full width of the content area (e.g. SharePoint "Bannière principale"). */
+  isFullBleed?: boolean
   renderers: Partial<Record<Platform, ComponentType<WidgetRendererProps>>>
 }

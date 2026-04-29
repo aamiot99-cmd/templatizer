@@ -2,12 +2,10 @@
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  border-radius: 8px;
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: #323130;
   min-height: 100vh;
-  border: 1px solid #e0e0e0;
 }
 
 /* ── M365 top bar ── */
@@ -42,21 +40,44 @@
 .m365AppName {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-primary);
-  padding: 0 16px 0 4px;
+  color: #ffffff;
+  padding: 0 16px 0 24px;
   white-space: nowrap;
+}
+
+.m365Logo {
+  height: 32px;
+  max-width: 120px;
+  object-fit: contain;
+  /* Force the logo to render in white regardless of its source colors */
+  filter: brightness(0) invert(1);
+  margin-left: 8px;
+}
+
+.m365LogoInitials {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
 .m365Search {
   flex: 1;
   max-width: 460px;
   margin: 0 auto;
-  height: 30px;
+  height: 32px;
   background: #fff;
-  border-radius: 2px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 12px;
   gap: 8px;
   color: #605e5c;
 }
@@ -114,6 +135,99 @@
   place-items: center;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+/* ── Hub menu (sits below the M365 black bar) ── */
+.hubMenu {
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 36px;
+  font-size: 12.5px;
+}
+
+/* Invisible spacer that exactly mirrors the sidebar (40px) + siteHeaderInner
+   left padding (12px) + siteLogoWrap geometry, so hub entries line up with
+   the site nav below regardless of brand-name length. */
+.hubMenuLeftPad {
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-left: 52px;
+}
+
+.hubMenuLogoMirror {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding-left: 20px;
+  padding-right: 28px;
+  flex-shrink: 0;
+}
+
+.hubMenuNav {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+.hubMenuItem {
+  position: relative;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #242424;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hubMenuItem:hover {
+  background: #f5f5f5;
+}
+
+.hubMenuItemHasChildren {
+  padding-right: 8px;
+}
+
+.hubMenuChevron {
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+}
+
+.hubMenuDropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #edebe9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+  z-index: 50;
+}
+
+.hubMenuItem:hover .hubMenuDropdown {
+  display: block;
+}
+
+.hubMenuDropdownItem {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+}
+
+.hubMenuDropdownItem:hover {
+  background: #f3f2f1;
 }
 
 /* ── Body layout ── */
@@ -185,14 +299,14 @@
 
 /* ── Site header bar ── */
 .siteHeader {
-  background: #3b3a39;
+  background: #ffffff;
   flex-shrink: 0;
 }
 
 .siteHeaderInner {
   display: flex;
   align-items: stretch;
-  height: 48px;
+  height: 96px;
   padding: 0 12px;
   gap: 0;
 }
@@ -200,35 +314,36 @@
 .siteLogoWrap {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-right: 20px;
+  gap: 30px;
+  padding-left: 20px;
+  padding-right: 28px;
   flex-shrink: 0;
 }
 
 .siteLogoInitials {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   background: var(--color-primary);
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   display: grid;
   place-items: center;
-  border-radius: 2px;
+  border-radius: 3px;
   flex-shrink: 0;
 }
 
 .siteLogoImg {
-  height: 32px;
-  max-width: 120px;
+  height: 44px;
+  max-width: 160px;
   object-fit: contain;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .siteName {
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: #323130;
   white-space: nowrap;
 }
 
@@ -244,7 +359,7 @@
   align-items: center;
   padding: 0 14px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #323130;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -252,23 +367,23 @@
 }
 
 .navItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: #f3f2f1;
+  color: #201f1e;
 }
 
 .navItemActive {
-  color: #fff;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .navItemActive::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: calc(50% + 0.8em);
   left: 14px;
   right: 14px;
   height: 2px;
-  background: #fff;
+  background: var(--color-primary);
 }
 
 .navChevron {
@@ -316,7 +431,7 @@
 
 .siteAction {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #323130;
   padding: 4px 10px;
   border-radius: 2px;
   cursor: pointer;
@@ -327,8 +442,8 @@
 }
 
 .siteAction:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: #f3f2f1;
+  color: #201f1e;
 }
 
 /* ── Page action bar ── */
@@ -383,11 +498,12 @@
   flex: 1;
   background: #ffffff;
   min-width: 0;
-  padding: 24px 0;
+  padding: 0 0 24px;
 }
 
+/* .contentInner is a pass-through. Per-row max-width/padding is applied by
+   PreviewPage via .spSectionInner so that full-bleed widgets (like the
+   Bannière principale) can skip it and span the full .content width. */
 .contentInner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 48px;
+  width: 100%;
 }

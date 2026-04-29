@@ -10,6 +10,9 @@ interface AppItem {
 
 const TILE_SIZE = 100
 const TILE_GAP = 10
+const COMPACT_COLS = 3
+const COMPACT_ROWS = 3
+const NON_COMPACT_ROWS = 1
 
 const DEFAULT_APPS: AppItem[] = [
   { label: 'Outlook', icon: '/app-icons/outlook.png' },
@@ -25,31 +28,64 @@ const DEFAULT_APPS: AppItem[] = [
   { label: 'Slack', icon: '/app-icons/slack.png' },
 ]
 
+function chunk<T>(items: T[], size: number): T[][] {
+  if (size <= 0) return [items]
+  const pages: T[][] = []
+  for (let i = 0; i < items.length; i += size) {
+    pages.push(items.slice(i, i + size))
+  }
+  return pages
+}
+
 export function JintApps({ config, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Mes applications'
-  const tileCount = Number(config.tileCount ?? 6)
-  const isCompact = size === 'compact'
-  const apps = DEFAULT_APPS.slice(0, isCompact ? Math.min(tileCount, 9) : tileCount)
+  const tileCount = Number(config.tileCount ?? 11)
+  const isCompact = size === 'one-third'
+  const apps = DEFAULT_APPS.slice(0, tileCount)
 
   const gridRef = useRef<HTMLDivElement>(null)
-  const [perPage, setPerPage] = useState(apps.length)
+  const [cols, setCols] = useState(isCompact ? COMPACT_COLS : 1)
   const [page, setPage] = useState(0)
 
   useEffect(() => {
-    if (isCompact || !gridRef.current) return
-    const observer = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width
-      const count = Math.max(1, Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)))
-      setPerPage(count)
+    if (isCompact) {
+      setCols(COMPACT_COLS)
       setPage(0)
-    })
-    observer.observe(gridRef.current)
+      return
+    }
+    if (!gridRef.current) return
+    const el = gridRef.current
+    const update = () => {
+      const width = el.clientWidth
+      const c = Math.max(
+        1,
+        Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
+      )
+      setCols(c)
+      setPage(0)
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
     return () => observer.disconnect()
-  }, [isCompact, apps.length])
+  }, [isCompact])
 
-  const totalPages = isCompact ? 1 : Math.ceil(apps.length / perPage)
-  const pageWidth = perPage * TILE_SIZE + (perPage - 1) * TILE_GAP
-  const offset = isCompact ? 0 : page * (pageWidth + TILE_GAP)
+  const rows = isCompact ? COMPACT_ROWS : NON_COMPACT_ROWS
+  const perPage = Math.max(1, cols * rows)
+  const pages = chunk(apps, perPage)
+  const totalPages = pages.length
+
+  // Page grid template: compact uses 1fr columns (tiles are aspect-ratio 1 in
+  // CSS and stay square); non-compact uses fixed TILE_SIZE cells so tiles are
+  // a consistent 100px.
+  const pageGridStyle = isCompact
+    ? {
+        gridTemplateColumns: `repeat(${COMPACT_COLS}, 1fr)`,
+      }
+    : {
+        gridTemplateColumns: `repeat(${cols}, ${TILE_SIZE}px)`,
+        gridTemplateRows: `repeat(${rows}, ${TILE_SIZE}px)`,
+      }
 
   return (
     <div className={styles.widget}>
@@ -58,20 +94,31 @@ export function JintApps({ config, size }: WidgetRendererProps) {
         ref={gridRef}
         className={`${styles.grid} ${isCompact ? styles.gridCompact : ''}`}
       >
-        <div
-          className={isCompact ? undefined : styles.clip}
-          style={isCompact ? undefined : { width: pageWidth }}
-        >
+        <div className={styles.clip}>
           <div
             className={styles.track}
-            style={isCompact ? undefined : { transform: `translateX(-${offset}px)` }}
+            style={{
+              width: `${totalPages * 100}%`,
+              transform: `translateX(-${(page * 100) / totalPages}%)`,
+            }}
           >
-          {apps.map((app) => (
-            <div key={app.label} className={styles.tile}>
-              <img src={app.icon} alt={app.label} className={styles.icon} />
-              <div className={styles.label}>{app.label}</div>
-            </div>
-          ))}
+            {pages.map((pageApps, idx) => (
+              <div
+                key={idx}
+                className={styles.page}
+                style={{
+                  width: `${100 / totalPages}%`,
+                  ...pageGridStyle,
+                }}
+              >
+                {pageApps.map((app) => (
+                  <div key={app.label} className={styles.tile}>
+                    <img src={app.icon} alt={app.label} className={styles.icon} />
+                    <div className={styles.label}>{app.label}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -80,6 +127,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
         totalPages={totalPages}
         onPageChange={setPage}
         variant="light"
+        alwaysShow
       />
     </div>
   )

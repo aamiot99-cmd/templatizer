@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import type { WidgetRendererProps } from '../../../types'
+import franceMapSvg from '/france-map.svg?raw'
 import styles from './jint.module.css'
+
+const FRANCE_MAP_INLINE = franceMapSvg
+  .replace(/<\?xml[^?]*\?>/, '')
+  .replace(/<!DOCTYPE[^>]*>/, '')
+  .replace(/fill="#000000"/g, 'fill="currentColor"')
 
 interface Location {
   id: string
@@ -38,7 +44,12 @@ export function JintImageMap({ config }: WidgetRendererProps) {
       <div className={styles.header}>{title}</div>
       <div className={styles.mapContainer}>
         <div className={styles.mapWrapper}>
-          <div className={styles.map} role="img" aria-label="Carte de France" />
+          <div
+            className={styles.map}
+            role="img"
+            aria-label="Carte de France"
+            dangerouslySetInnerHTML={{ __html: FRANCE_MAP_INLINE }}
+          />
           {DEFAULT_LOCATIONS.map((loc) => (
             <div
               key={loc.id}

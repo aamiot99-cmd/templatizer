@@ -46,5 +46,16 @@ export function listWidgets(): WidgetDefinition[] {
 }
 
 export function listWidgetsForPlatform(platform: Platform): WidgetDefinition[] {
-  return listWidgets().filter((w) => Boolean(w.renderers[platform]))
+  return listWidgets().filter((w) => Boolean(resolveRenderer(w, platform)))
+}
+
+export function resolveRenderer(
+  widget: WidgetDefinition,
+  platform: Platform,
+) {
+  const direct = widget.renderers[platform]
+  if (direct) return direct
+  // Jint is a SharePoint overlay: SharePoint webparts are usable in Jint.
+  if (platform === 'jint') return widget.renderers.sharepoint
+  return undefined
 }

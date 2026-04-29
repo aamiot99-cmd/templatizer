@@ -6,13 +6,34 @@ interface LinkItem {
   label: string
   url: string
   icon: string
+  image: string
 }
 
 const DEFAULT_LINKS: LinkItem[] = [
-  { label: 'Trombinoscope', url: '#', icon: 'users' },
-  { label: 'Politique de télétravail', url: '#', icon: 'document' },
-  { label: 'Charte graphique', url: '#', icon: 'palette' },
-  { label: 'Plan du site', url: '#', icon: 'map' },
+  {
+    label: 'Trombinoscope',
+    url: '#',
+    icon: 'users',
+    image: '/news/pexels-jibarofoto-2774556.jpg',
+  },
+  {
+    label: 'Politique de télétravail',
+    url: '#',
+    icon: 'document',
+    image: '/focus/pro-meeting.jpg',
+  },
+  {
+    label: 'Charte graphique',
+    url: '#',
+    icon: 'palette',
+    image: '/focus/teambuilding.jpg',
+  },
+  {
+    label: 'Plan du site',
+    url: '#',
+    icon: 'map',
+    image: '/focus/handshake.jpg',
+  },
 ]
 
 
@@ -78,8 +99,8 @@ function LinkIcon({ name, size }: { name: string; size: number }) {
 function CardItem({ link }: { link: LinkItem }) {
   return (
     <a href={link.url} className={styles.card}>
-      <span className={styles.cardIconArea}>
-        <span className={styles.cardIcon}><LinkIcon name={link.icon} size={40} /></span>
+      <span className={styles.cardImageArea}>
+        <img src={link.image} alt="" className={styles.cardImage} />
       </span>
       <span className={styles.cardLabelArea}>
         <span className={styles.cardLabel}>{link.label}</span>
@@ -134,7 +155,10 @@ export function SharepointQuickLinks({ config, size }: WidgetRendererProps) {
   const layout = (config.layout as string) || 'compact'
   const title = (config.title as string) || 'Liens utiles'
   const showTitle = (config.showTitle as boolean) ?? true
-  const links = DEFAULT_LINKS
+  const links = DEFAULT_LINKS.map((link, idx) => {
+    const override = config[`linkLabel${idx + 1}`] as string | undefined
+    return override ? { ...link, label: override } : link
+  })
   const cols = COLS_BY_SIZE[size] ?? 4
 
   const gridStyle = { gridTemplateColumns: `repeat(${cols}, 1fr)` }

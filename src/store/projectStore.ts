@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type {
   Branding,
   ConfigValues,
+  HubMenu,
   NavEntry,
   Platform,
   ProjectState,
@@ -62,6 +63,27 @@ export function defaultNavEntries(): NavEntry[] {
   ]
 }
 
+export function defaultHubMenu(): HubMenu {
+  return {
+    enabled: false,
+    entries: [
+      { id: 'hub-1', label: 'GLE - Multisite de communication', url: '#' },
+      { id: 'hub-2', label: 'Espace RH', url: '#' },
+      { id: 'hub-3', label: 'Communication', url: '#' },
+      {
+        id: 'hub-4',
+        label: 'Associated child hubs',
+        url: '#',
+        children: [
+          { id: 'hub-4-1', label: 'Hub enfant 1', url: '#' },
+          { id: 'hub-4-2', label: 'Hub enfant 2', url: '#' },
+        ],
+      },
+      { id: 'hub-5', label: 'Associated hubs', url: '#' },
+    ],
+  }
+}
+
 function initialProjectState(): ProjectState {
   const platform: Platform = 'jint'
   return {
@@ -69,6 +91,7 @@ function initialProjectState(): ProjectState {
     branding: defaultBranding(platform),
     wireframe: { rows: [] },
     navEntries: defaultNavEntries(),
+    hubMenu: defaultHubMenu(),
   }
 }
 
@@ -117,6 +140,9 @@ interface ProjectActions {
   ) => void
 
   setNavEntries: (entries: NavEntry[]) => void
+
+  setHubMenuEnabled: (enabled: boolean) => void
+  setHubMenuEntries: (entries: NavEntry[]) => void
 
   resetProject: () => void
 }
@@ -404,6 +430,12 @@ export const useProjectStore = create<ProjectStore>()(
 
       setNavEntries: (entries) => set({ navEntries: entries }),
 
+      setHubMenuEnabled: (enabled) =>
+        set((state) => ({ hubMenu: { ...state.hubMenu, enabled } })),
+
+      setHubMenuEntries: (entries) =>
+        set((state) => ({ hubMenu: { ...state.hubMenu, entries } })),
+
       resetProject: () => set(initialProjectState()),
     }),
     {
@@ -414,6 +446,7 @@ export const useProjectStore = create<ProjectStore>()(
         branding: state.branding,
         wireframe: state.wireframe,
         navEntries: state.navEntries,
+        hubMenu: state.hubMenu,
       }),
     },
   ),

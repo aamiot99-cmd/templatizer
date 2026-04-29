@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import type { Branding, NavEntry } from '../../types'
+import type { Branding, HubMenu, NavEntry } from '../../types'
 import styles from './sharepoint.module.css'
 
 interface SharepointChromeProps {
   branding: Branding
   navEntries: NavEntry[]
+  hubMenu?: HubMenu
   children: ReactNode
 }
 
@@ -138,11 +139,12 @@ function HelpIcon() {
   )
 }
 
-export function SharepointChrome({ branding, navEntries, children }: SharepointChromeProps) {
+export function SharepointChrome({ branding, navEntries, hubMenu, children }: SharepointChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const userName = 'Alex Dupont'
   const userInitials = initials(userName)
   const siteInitials = initials(branding.name)
+  const showHubMenu = Boolean(hubMenu?.enabled && hubMenu.entries.length > 0)
 
   return (
     <div className={styles.chrome}>
@@ -152,6 +154,11 @@ export function SharepointChrome({ branding, navEntries, children }: SharepointC
           <div className={styles.m365Waffle}>
             <Waffle />
           </div>
+          {branding.logo ? (
+            <img src={branding.logo} alt="" className={styles.m365Logo} />
+          ) : (
+            <div className={styles.m365LogoInitials}>{siteInitials}</div>
+          )}
           <span className={styles.m365AppName}>SharePoint</span>
         </div>
         <div className={styles.m365Search}>
@@ -165,6 +172,44 @@ export function SharepointChrome({ branding, navEntries, children }: SharepointC
           <div className={styles.m365Av}>{userInitials}</div>
         </div>
       </div>
+
+      {showHubMenu && (
+        <div className={styles.hubMenu}>
+          {/* Invisible spacer mirroring sidebar + site logo wrap so the first
+              hub entry aligns with the first site nav entry below. */}
+          <div className={styles.hubMenuLeftPad} aria-hidden="true">
+            <div className={styles.hubMenuLogoMirror}>
+              {branding.logo ? (
+                <img src={branding.logo} alt="" className={styles.siteLogoImg} />
+              ) : (
+                <div className={styles.siteLogoInitials}>{siteInitials}</div>
+              )}
+              <span className={styles.siteName}>{branding.name}</span>
+            </div>
+          </div>
+          <nav className={styles.hubMenuNav}>
+            {hubMenu!.entries.map((entry) => {
+              const hasChildren = Boolean(entry.children && entry.children.length > 0)
+              return (
+                <div
+                  key={entry.id}
+                  className={`${styles.hubMenuItem} ${hasChildren ? styles.hubMenuItemHasChildren : ''}`}
+                >
+                  <span>{entry.label}</span>
+                  {hasChildren && <span className={styles.hubMenuChevron}><ChevronDown /></span>}
+                  {hasChildren && (
+                    <div className={styles.hubMenuDropdown}>
+                      {entry.children!.map((child) => (
+                        <div key={child.id} className={styles.hubMenuDropdownItem}>{child.label}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </nav>
+        </div>
+      )}
 
       <div className={styles.body}>
         {/* Left sidebar */}

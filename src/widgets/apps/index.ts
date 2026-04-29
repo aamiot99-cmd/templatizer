@@ -28,7 +28,7 @@ export const appsWidget: WidgetDefinition = {
       key: 'tileCount',
       label: 'Nombre de tuiles affichées',
       type: 'number',
-      default: 6,
+      default: 11,
       min: 1,
       max: 12,
     },

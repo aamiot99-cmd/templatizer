@@ -9,7 +9,10 @@
   position: sticky;
   top: 24px;
   align-self: start;
-  max-height: calc(100vh - 48px);
+  /* Match wireframe area height with 6 rows:
+     header (~61px) + wireframe gap (12px) + 6 × row min-height (72px)
+     + 5 × wireframe gap (8px) + add-row gap (8px) + add-row button (~44px) */
+  max-height: calc(61px + 12px + 6 * 72px + 5 * 8px + 8px + 44px);
   overflow-y: auto;
   scrollbar-width: thin;
 }

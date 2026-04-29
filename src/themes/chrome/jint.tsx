@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import type { Branding, NavEntry } from '../../types'
+import type { Branding, HubMenu, NavEntry } from '../../types'
 import styles from './jint.module.css'
 
 interface JintChromeProps {
   branding: Branding
   navEntries: NavEntry[]
+  hubMenu?: HubMenu
   children: ReactNode
 }
 
@@ -97,17 +98,6 @@ function PlusIcon() {
   )
 }
 
-function PeopleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  )
-}
-
 function StarIcon() {
   return (
     <svg
@@ -162,10 +152,11 @@ function ChevronDown() {
   )
 }
 
-export function JintChrome({ branding, navEntries, children }: JintChromeProps) {
+export function JintChrome({ branding, navEntries, hubMenu, children }: JintChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const userName = 'Alex Dupont'
   const userInitials = initials(userName)
+  const showHubMenu = Boolean(hubMenu?.enabled && hubMenu.entries.length > 0)
 
   return (
     <div className={styles.chrome}>
@@ -207,6 +198,30 @@ export function JintChrome({ branding, navEntries, children }: JintChromeProps) 
           <div className={styles.m365Av}>{userInitials}</div>
         </div>
       </div>
+
+      {showHubMenu && (
+        <div className={styles.hubMenu}>
+          {hubMenu!.entries.map((entry) => {
+            const hasChildren = Boolean(entry.children && entry.children.length > 0)
+            return (
+              <div
+                key={entry.id}
+                className={`${styles.hubMenuItem} ${hasChildren ? styles.hubMenuItemHasChildren : ''}`}
+              >
+                <span>{entry.label}</span>
+                {hasChildren && <span className={styles.hubMenuChevron}><ChevronDown /></span>}
+                {hasChildren && (
+                  <div className={styles.hubMenuDropdown}>
+                    {entry.children!.map((child) => (
+                      <div key={child.id} className={styles.hubMenuDropdownItem}>{child.label}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       <div className={styles.body}>
         <div className={styles.appBar}>

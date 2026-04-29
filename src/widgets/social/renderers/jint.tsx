@@ -89,7 +89,7 @@ function Card({ post }: { post: SocialPost }) {
 export function JintSocial({ config, branding, size }: WidgetRendererProps) {
   const title = (config.title as string) ?? 'Fil des réseaux sociaux'
   const companyName = (config.companyName as string) || branding.name
-  const isCompact = size === 'compact'
+  const isCompact = size === 'one-third'
   const [col1, col2] = buildPosts(companyName)
   const allPosts = [...col1, ...col2]
 
