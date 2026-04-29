@@ -22,6 +22,7 @@ export type ConfigFieldType =
   | 'boolean'
   | 'color'
   | 'select'
+  | 'toggle'
   | 'icon'
   | 'richtext'
 
@@ -30,6 +31,7 @@ interface BaseField {
   label: string
   description?: string
   platforms?: Platform[]
+  visibleWhen?: { key: string; value: string | number | boolean }
 }
 
 export interface TextField extends BaseField {
@@ -61,6 +63,12 @@ export interface SelectField extends BaseField {
   options: Array<{ value: string; label: string; sizes?: WidgetSize[] }>
 }
 
+export interface ToggleField extends BaseField {
+  type: 'toggle'
+  default: string
+  options: Array<{ value: string; label: string }>
+}
+
 export function ratioToSize(ratio: number): WidgetSize {
   if (ratio >= 0.9) return 'full'
   if (ratio >= 0.6) return 'two-thirds'
@@ -85,6 +93,7 @@ export type ConfigSchemaField =
   | BooleanField
   | ColorField
   | SelectField
+  | ToggleField
   | IconField
   | RichTextField
 

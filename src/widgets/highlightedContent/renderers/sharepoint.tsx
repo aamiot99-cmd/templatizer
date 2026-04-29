@@ -32,6 +32,8 @@ const DOCUMENTS: ContentItem[] = [
   { id: 4, title: 'Rapport annuel 2024', source: 'Stratégie & Direction', author: 'Sophie Renard', date: '10 févr. 2026', itemType: 'document', fileType: 'pdf', previewText: 'Rapport annuel 2024' },
   { id: 5, title: "Charte graphique de l'entreprise", source: 'Communication & Marketing', author: 'Jean-Pierre Moreau', date: '4 févr. 2026', itemType: 'document', fileType: 'pdf' },
   { id: 6, title: 'Organigramme 2026', source: 'Ressources Humaines', author: 'Sophie Renard', date: '1 janv. 2026', itemType: 'document', fileType: 'xlsx' },
+  { id: 7, title: 'Bilan social 2025', source: 'Ressources Humaines', author: 'Marie Lambert', date: '15 déc. 2025', itemType: 'document', fileType: 'pdf' },
+  { id: 8, title: 'Procédure achat & fournisseurs', source: 'Direction Financière', author: 'Lucas Bernard', date: '10 déc. 2025', itemType: 'document', fileType: 'docx' },
 ]
 
 const PAGES: ContentItem[] = [
@@ -41,6 +43,8 @@ const PAGES: ContentItem[] = [
   { id: 4, title: "L'équipe Direction", source: 'SitePages', author: 'Jean-Pierre Moreau', date: '1 avr. 2026', itemType: 'page', image: '/news/pexels-runffwpu-2530124.jpg' },
   { id: 5, title: 'Procédures internes', source: 'SitePages', author: 'Lucas Bernard', date: '20 mars 2026', itemType: 'page', image: '/focus/teambuilding.jpg' },
   { id: 6, title: 'Nos valeurs', source: 'SitePages', author: 'Antoine Lefèvre', date: '15 mars 2026', itemType: 'page', image: '/focus/handshake.jpg' },
+  { id: 7, title: 'Bien-être au travail', source: 'SitePages', author: 'Sophie Renard', date: '10 mars 2026', itemType: 'page', image: '/news/pexels-jibarofoto-2774556.jpg' },
+  { id: 8, title: 'Espaces de travail', source: 'SitePages', author: 'Jean-Pierre Moreau', date: '5 mars 2026', itemType: 'page', image: '/news/pexels-brunogobofoto-3861712.jpg' },
 ]
 
 const ACTUALITES: ContentItem[] = [
@@ -50,6 +54,8 @@ const ACTUALITES: ContentItem[] = [
   { id: 4, title: 'Innovation & transformation digitale', source: 'SitePages', author: 'Sophie Renard', date: '2 avr. 2026', itemType: 'actualite', image: '/news/pexels-runffwpu-2530124.jpg' },
   { id: 5, title: 'Retour sur le séminaire des managers', source: 'SitePages', author: 'Jean-Pierre Moreau', date: '28 mars 2026', itemType: 'actualite', image: '/focus/pro-meeting.jpg' },
   { id: 6, title: 'Lancement du programme RSE 2026', source: 'SitePages', author: 'Sophie Renard', date: '20 mars 2026', itemType: 'actualite', image: '/focus/handshake.jpg' },
+  { id: 7, title: 'Ouverture du nouveau campus', source: 'SitePages', author: 'Antoine Lefèvre', date: '15 mars 2026', itemType: 'actualite', image: '/focus/teambuilding.jpg' },
+  { id: 8, title: 'Partenariat avec une ONG internationale', source: 'SitePages', author: 'Marie Lambert', date: '10 mars 2026', itemType: 'actualite', image: '/news/pexels-runffwpu-2530124.jpg' },
 ]
 
 const VIDEOS: ContentItem[] = [
@@ -59,6 +65,8 @@ const VIDEOS: ContentItem[] = [
   { id: 4, title: "Onboarding : Bienvenue dans l'équipe", source: 'Bibliothèque vidéos', author: 'Jean-Pierre Moreau', date: '28 févr. 2026', itemType: 'video', image: '/focus/teambuilding.jpg', duration: '6:17' },
   { id: 5, title: 'Tutoriel : Prise en main du nouvel intranet', source: 'Bibliothèque vidéos', author: 'Camille Leroy', date: '14 févr. 2026', itemType: 'video', image: '/news/pexels-runffwpu-2530124.jpg', duration: '4:52' },
   { id: 6, title: "Témoignage : 10 ans d'aventure collaborative", source: 'Bibliothèque vidéos', author: 'Marie Lambert', date: '3 févr. 2026', itemType: 'video', image: '/news/pexels-sevenstormphotography-934351.jpg', duration: '8:30' },
+  { id: 7, title: 'Interview : La transformation RH en 2026', source: 'Bibliothèque vidéos', author: 'Sophie Renard', date: '20 janv. 2026', itemType: 'video', image: '/focus/pro-meeting.jpg', duration: '11:15' },
+  { id: 8, title: 'Webinaire : Sécurité informatique', source: 'Bibliothèque vidéos', author: 'Lucas Bernard', date: '10 janv. 2026', itemType: 'video', image: '/news/pexels-brunogobofoto-3861712.jpg', duration: '45:00' },
 ]
 
 const IMAGES: ContentItem[] = [
@@ -68,6 +76,8 @@ const IMAGES: ContentItem[] = [
   { id: 4, title: 'Team building printemps 2026', source: 'Médiathèque', author: 'Sophie Renard', date: '28 mars 2026', itemType: 'image', image: '/focus/teambuilding.jpg' },
   { id: 5, title: 'Journée RSE', source: 'Médiathèque', author: 'Jean-Pierre Moreau', date: '20 mars 2026', itemType: 'image', image: '/news/pexels-sevenstormphotography-934351.jpg' },
   { id: 6, title: 'Rencontre clients 2026', source: 'Médiathèque', author: 'Camille Leroy', date: '15 mars 2026', itemType: 'image', image: '/news/pexels-runffwpu-2530124.jpg' },
+  { id: 7, title: 'Inauguration des nouveaux locaux', source: 'Médiathèque', author: 'Antoine Lefèvre', date: '10 mars 2026', itemType: 'image', image: '/focus/handshake.jpg' },
+  { id: 8, title: 'Prix innovation interne 2026', source: 'Médiathèque', author: 'Marie Lambert', date: '5 mars 2026', itemType: 'image', image: '/news/pexels-jibarofoto-2774556.jpg' },
 ]
 
 const EVENEMENTS: ContentItem[] = [
@@ -77,6 +87,8 @@ const EVENEMENTS: ContentItem[] = [
   { id: 4, title: 'Conférence RSE & Innovation', source: 'Événements', author: 'Sophie Bernard', date: '22 mai 2026', itemType: 'evenement', image: '/news/pexels-jibarofoto-2774556.jpg', day: '22', month: 'MAI', dateText: 'ven. 22 mai, 14:00' },
   { id: 5, title: 'Team building – Marketing', source: 'Événements', author: 'Camille Leroy', date: '11 juin 2026', itemType: 'evenement', image: '/focus/teambuilding.jpg', day: '11', month: 'JUIN', dateText: 'jeu. 11 juin – ven. 12 juin' },
   { id: 6, title: 'Assemblée générale', source: 'Événements', author: 'Jean-Pierre Moreau', date: '18 juin 2026', itemType: 'evenement', image: '/news/pexels-sevenstormphotography-934351.jpg', day: '18', month: 'JUIN', dateText: 'jeu. 18 juin, 14:00' },
+  { id: 7, title: 'Forum des métiers', source: 'Événements', author: 'Marie Lambert', date: '2 juil. 2026', itemType: 'evenement', image: '/focus/pro-meeting.jpg', day: '2', month: 'JUIL.', dateText: 'jeu. 2 juil., 09:00' },
+  { id: 8, title: 'Convention commerciale', source: 'Événements', author: 'Antoine Lefèvre', date: '10 sept. 2026', itemType: 'evenement', image: '/news/pexels-runffwpu-2530124.jpg', day: '10', month: 'SEPT.', dateText: 'jeu. 10 sept., Journée entière' },
 ]
 
 const CONTACTS: ContentItem[] = [
@@ -86,6 +98,8 @@ const CONTACTS: ContentItem[] = [
   { id: 4, title: 'Sophie Bernard', source: 'Contacts', author: 'Sophie Bernard', date: '10 avr. 2026', itemType: 'contact', initials: 'SB', role: 'Directrice Stratégie' },
   { id: 5, title: 'Jean-Pierre Moreau', source: 'Contacts', author: 'Jean-Pierre Moreau', date: '8 avr. 2026', itemType: 'contact', initials: 'JM', role: 'Responsable Marketing' },
   { id: 6, title: 'Camille Leroy', source: 'Contacts', author: 'Camille Leroy', date: '1 avr. 2026', itemType: 'contact', initials: 'CL', role: 'Chargée de mission RSE' },
+  { id: 7, title: 'Thomas Girard', source: 'Contacts', author: 'Thomas Girard', date: '28 mars 2026', itemType: 'contact', initials: 'TG', role: 'DSI' },
+  { id: 8, title: 'Isabelle Fontaine', source: 'Contacts', author: 'Isabelle Fontaine', date: '20 mars 2026', itemType: 'contact', initials: 'IF', role: 'Directrice Commerciale' },
 ]
 
 function getItems(type: ContentType): ContentItem[] {
@@ -615,16 +629,22 @@ export function SharepointHighlightedContent({ config, size }: WidgetRendererPro
   const contentType = (config.contentType as ContentType) || 'documents'
   const rawLayout = (config.layout as Layout) || 'grille'
   const showTitle = (config.showTitle as boolean) ?? true
-  const itemCount = Math.min(Math.max(1, (config.itemCount as number) || 4), 6)
   const title = (config.title as string) || defaultTitle(contentType)
 
-  const items = getItems(contentType).slice(0, itemCount)
   const cols = COLS[size] ?? 4
 
   const layout: Layout =
     size === 'one-third' && (rawLayout === 'grille' || rawLayout === 'pellicule')
       ? 'compact'
       : rawLayout
+
+  const countMode = (config.countMode as string) ?? 'auto'
+  const autoCount = (layout === 'grille' || layout === 'pellicule') ? cols : 4
+  const itemCount = countMode === 'manual'
+    ? Math.min(Math.max(1, (config.itemCount as number) ?? 4), 8)
+    : (config.itemCount as number) ?? autoCount
+
+  const items = getItems(contentType).slice(0, itemCount)
 
   return (
     <div className={styles.widget}>

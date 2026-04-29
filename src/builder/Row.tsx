@@ -117,6 +117,7 @@ export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
                     rowId={row.id}
                     platform={platform}
                     isSelected={cell.id === selectedCellId}
+                    selectedCellId={selectedCellId}
                     onSelect={onSelectCell}
                   />
                 </DividerAwareCell>

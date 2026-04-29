@@ -90,6 +90,21 @@ function renderInput(
           ))}
         </select>
       )
+    case 'toggle':
+      return (
+        <div className={styles.toggle}>
+          {field.options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              className={`${styles.toggleOption}${String(value) === opt.value ? ` ${styles.toggleOptionActive}` : ''}`}
+              onClick={() => onChange(opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )
     case 'richtext':
       return (
         <RichTextEditor

@@ -41,6 +41,27 @@ export const newsWidget: WidgetDefinition = {
       ],
     },
     {
+      key: 'countMode',
+      label: 'Remplissage',
+      type: 'toggle',
+      default: 'auto',
+      platforms: ['sharepoint'],
+      options: [
+        { value: 'auto', label: 'Automatique' },
+        { value: 'manual', label: 'Manuel' },
+      ],
+    },
+    {
+      key: 'itemCount',
+      label: "Nombre d'articles",
+      type: 'number',
+      default: 4,
+      min: 1,
+      max: 8,
+      platforms: ['sharepoint'],
+      visibleWhen: { key: 'countMode', value: 'manual' },
+    },
+    {
       key: 'showMetrics',
       label: 'Afficher les réactions (likes, commentaires)',
       type: 'boolean',

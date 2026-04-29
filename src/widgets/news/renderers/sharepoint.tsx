@@ -52,6 +52,34 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
         time: 'il y a 5 jours',
         image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=85',
       },
+      {
+        title: `Retour sur le séminaire des managers`,
+        excerpt: `${company} a réuni ses managers pour deux jours d'échanges et de partage autour de la stratégie…`,
+        author: 'Jean-Pierre Moreau',
+        time: 'il y a 1 semaine',
+        image: '/news/pexels-runffwpu-2530124.jpg',
+      },
+      {
+        title: `Lancement du programme RSE 2025`,
+        excerpt: `${company} s'engage dans une démarche RSE ambitieuse avec de nouveaux objectifs pour 2025…`,
+        author: 'Sophie Bernard',
+        time: 'il y a 10 jours',
+        image: '/news/pexels-brunogobofoto-3861712.jpg',
+      },
+      {
+        title: `${company} ouvre un nouveau site`,
+        excerpt: `Expansion des activités : ${company} inaugure de nouveaux locaux pour accompagner sa croissance…`,
+        author: 'Marie Dupont',
+        time: 'il y a 2 semaines',
+        image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=85',
+      },
+      {
+        title: `Partenariat stratégique avec ${company}`,
+        excerpt: `Un accord de partenariat majeur vient renforcer la position de ${company} sur son marché…`,
+        author: 'Lucas Martin',
+        time: 'il y a 3 semaines',
+        image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&q=85',
+      },
     ],
   }
 }
@@ -236,7 +264,9 @@ export function SharepointNews({ config, branding, size }: WidgetRendererProps) 
   const title = (config.title as string) || 'Actualités'
   const rawLayout = (config.layout as string) || 'featured'
   const layout = size !== 'full' && FULL_ONLY_LAYOUTS.includes(rawLayout) ? 'list' : rawLayout
+  const itemCount = Math.max(1, Math.min(8, (config.itemCount as number) || 4))
   const { featured, secondary } = getArticles(branding.name)
+  const visibleSecondary = secondary.slice(0, itemCount)
 
   return (
     <div className={styles.section}>
@@ -246,7 +276,7 @@ export function SharepointNews({ config, branding, size }: WidgetRendererProps) 
       </div>
 
       {layout === 'list' ? (
-        <ListLayout featured={featured} secondary={secondary} size={size} />
+        <ListLayout featured={featured} secondary={visibleSecondary} size={size} />
       ) : layout === 'sidebyside' ? (
         <SideBySideLayout secondary={secondary} />
       ) : layout === 'carousel' ? (
