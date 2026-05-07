@@ -14,4 +14,6 @@ export interface ProjectRecord {
   updatedAt: number
   snapshot: ProjectState
   lock: ProjectLock | null
+  lastEditedBy: string | null
+  lastEditedByEmail: string | null
 }

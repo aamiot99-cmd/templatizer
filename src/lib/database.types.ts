@@ -37,6 +37,7 @@ export interface Database {
           updated_at: string
           locked_by: string | null
           locked_at: string | null
+          last_edited_by: string | null
         }
         Insert: {
           id?: string
@@ -47,6 +48,7 @@ export interface Database {
           updated_at?: string
           locked_by?: string | null
           locked_at?: string | null
+          last_edited_by?: string | null
         }
         Update: {
           id?: string
@@ -57,6 +59,7 @@ export interface Database {
           updated_at?: string
           locked_by?: string | null
           locked_at?: string | null
+          last_edited_by?: string | null
         }
         Relationships: [
           {
@@ -68,6 +71,12 @@ export interface Database {
           {
             foreignKeyName: 'projects_locked_by_fkey'
             columns: ['locked_by']
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projects_last_edited_by_fkey'
+            columns: ['last_edited_by']
             referencedRelation: 'profiles'
             referencedColumns: ['id']
           },

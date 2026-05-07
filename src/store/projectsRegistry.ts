@@ -64,7 +64,9 @@ interface ProjectRow {
   updated_at: string
   locked_by: string | null
   locked_at: string | null
+  last_edited_by: string | null
   locker?: { email: string | null } | null
+  editor?: { email: string | null } | null
 }
 
 function rowToRecord(row: ProjectRow): ProjectRecord {
@@ -88,18 +90,22 @@ function rowToRecord(row: ProjectRow): ProjectRecord {
     updatedAt: new Date(row.updated_at).getTime(),
     snapshot: row.snapshot,
     lock,
+    lastEditedBy: row.last_edited_by,
+    lastEditedByEmail: row.editor?.email ?? null,
   }
 }
 
-const PROJECT_SELECT = '*, locker:profiles!projects_locked_by_fkey(email)'
+const PROJECT_SELECT =
+  '*, locker:profiles!projects_locked_by_fkey(email), editor:profiles!projects_last_edited_by_fkey(email)'
 
-async function getOwnerId(): Promise<string> {
+async function getCurrentUserId(): Promise<string> {
   const supabase = requireSupabase()
-  const { data, error } = await supabase.auth.getUser()
-  if (error) throw error
-  if (!data.user) throw new Error('Not authenticated')
-  return data.user.id
+  const { data } = await supabase.auth.getSession()
+  if (!data.session?.user) throw new Error('Not authenticated')
+  return data.session.user.id
 }
+
+let fetchInFlight = false
 
 export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
   projects: [],
@@ -108,7 +114,14 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
   error: null,
 
   fetchProjects: async () => {
-    set({ status: 'loading', error: null })
+    if (fetchInFlight) return
+    fetchInFlight = true
+    const hasData = get().projects.length > 0
+    if (!hasData) {
+      set({ status: 'loading', error: null })
+    } else {
+      set({ error: null })
+    }
     try {
       const supabase = requireSupabase()
       const { data, error } = await supabase
@@ -121,18 +134,26 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
       )
       set({ projects, status: 'ready', error: null })
     } catch (e) {
+      console.error('fetchProjects failed:', e)
       set({ status: 'error', error: errorMessage(e) })
+    } finally {
+      fetchInFlight = false
     }
   },
 
   createProject: async (name) => {
     const supabase = requireSupabase()
-    const ownerId = await getOwnerId()
+    const userId = await getCurrentUserId()
     const trimmed = name.trim() || 'Projet sans titre'
     const snapshot = blankProjectState()
     const { data, error } = await supabase
       .from('projects')
-      .insert({ owner_id: ownerId, name: trimmed, snapshot })
+      .insert({
+        owner_id: userId,
+        name: trimmed,
+        snapshot,
+        last_edited_by: userId,
+      })
       .select(PROJECT_SELECT)
       .single()
     if (error) throw error
@@ -156,9 +177,14 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
     const supabase = requireSupabase()
     const trimmed = name.trim()
     if (!trimmed) return
+    const userId = await getCurrentUserId()
     const { data, error } = await supabase
       .from('projects')
-      .update({ name: trimmed, updated_at: new Date().toISOString() })
+      .update({
+        name: trimmed,
+        updated_at: new Date().toISOString(),
+        last_edited_by: userId,
+      })
       .eq('id', id)
       .select(PROJECT_SELECT)
       .single()
@@ -171,9 +197,14 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
 
   saveSnapshot: async (id, snapshot) => {
     const supabase = requireSupabase()
+    const userId = await getCurrentUserId()
     const { data, error } = await supabase
       .from('projects')
-      .update({ snapshot, updated_at: new Date().toISOString() })
+      .update({
+        snapshot,
+        updated_at: new Date().toISOString(),
+        last_edited_by: userId,
+      })
       .eq('id', id)
       .select(PROJECT_SELECT)
       .single()
@@ -255,5 +286,20 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
 
 function errorMessage(e: unknown): string {
   if (e instanceof Error) return e.message
+  if (e && typeof e === 'object') {
+    const obj = e as Record<string, unknown>
+    if (typeof obj.message === 'string') {
+      const parts = [obj.message]
+      if (typeof obj.details === 'string') parts.push(obj.details)
+      if (typeof obj.hint === 'string') parts.push(`(${obj.hint})`)
+      if (typeof obj.code === 'string') parts.push(`[${obj.code}]`)
+      return parts.join(' — ')
+    }
+    try {
+      return JSON.stringify(e)
+    } catch {
+      return String(e)
+    }
+  }
   return String(e)
 }

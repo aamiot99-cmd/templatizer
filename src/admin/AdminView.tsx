@@ -173,7 +173,12 @@ export function AdminView() {
                     <span className={styles.platformBadge}>
                       {platformLabel}
                     </span>
-                    <span>Modifié {formatRelativeDate(project.updatedAt)}</span>
+                    <span>
+                      Modifié {formatRelativeDate(project.updatedAt)}
+                      {project.lastEditedByEmail
+                        ? ` par ${project.lastEditedByEmail}`
+                        : ''}
+                    </span>
                   </div>
                   {lockedByOther && (
                     <div className={styles.lockBadge}>

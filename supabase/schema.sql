@@ -32,6 +32,13 @@ alter table public.projects
 alter table public.projects
   add column if not exists locked_at timestamptz;
 
+-- Tracks the admin who most recently edited the project content
+-- (set explicitly by the client on insert/save/rename — the lock RPCs
+-- do NOT touch this field, since acquiring a lock is not an edit).
+alter table public.projects
+  add column if not exists last_edited_by uuid references public.profiles(id)
+    on delete set null;
+
 create index if not exists projects_updated_at_idx
   on public.projects (updated_at desc);
 
