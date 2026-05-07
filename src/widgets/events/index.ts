@@ -44,6 +44,27 @@ export const eventsWidget: WidgetDefinition = {
       ],
     },
     {
+      key: 'countMode',
+      label: 'Remplissage',
+      type: 'toggle',
+      default: 'auto',
+      platforms: ['sharepoint'],
+      options: [
+        { value: 'auto', label: 'Automatique' },
+        { value: 'manual', label: 'Manuel' },
+      ],
+    },
+    {
+      key: 'itemCount',
+      label: "Nombre d'événements",
+      type: 'number',
+      default: 3,
+      min: 1,
+      max: 8,
+      platforms: ['sharepoint'],
+      visibleWhen: { key: 'countMode', value: 'manual' },
+    },
+    {
       key: 'maxEvents',
       label: "Nombre d'événements à afficher",
       type: 'number',

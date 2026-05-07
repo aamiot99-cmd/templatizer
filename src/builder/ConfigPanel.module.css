@@ -164,3 +164,34 @@
   font-size: 11px;
   color: #8a8793;
 }
+
+.toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fafafb;
+}
+
+.toggleOption {
+  flex: 1;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 12px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  color: #8a8793;
+  transition: background 0.12s, color 0.12s;
+}
+
+.toggleOption:last-child {
+  border-right: none;
+}
+
+.toggleOptionActive {
+  background: #08060d;
+  color: #fff;
+  font-weight: 600;
+}

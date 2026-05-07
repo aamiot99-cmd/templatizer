@@ -146,6 +146,14 @@ export function SharepointEvents({ config, size }: WidgetRendererProps) {
   const filmCols = size === 'full' ? 4 : size === 'two-thirds' ? 3 : 2
   const compactCols = size === 'full' ? 4 : size === 'one-third' ? 1 : 2
 
+  const countMode = (config.countMode as string) || 'auto'
+  const configItemCount = (config.itemCount as number) || 3
+  const displayEvents = countMode === 'manual'
+    ? EVENTS.slice(0, configItemCount)
+    : effectiveLayout === 'filmstrip'
+      ? EVENTS
+      : EVENTS.slice(0, compactCols)
+
   return (
     <div className={styles.widget}>
       <div className={styles.header}>
@@ -154,13 +162,13 @@ export function SharepointEvents({ config, size }: WidgetRendererProps) {
       </div>
       <button className={styles.addEvent}>+ Ajouter un événement</button>
       {effectiveLayout === 'filmstrip' ? (
-        <FilmStrip events={EVENTS} visibleCount={filmCols} />
+        <FilmStrip events={displayEvents} visibleCount={filmCols} />
       ) : (
         <div
           className={styles.compactGrid}
           style={{ gridTemplateColumns: `repeat(${compactCols}, 1fr)` }}
         >
-          {EVENTS.map((event, i) => <CompactCard key={i} event={event} />)}
+          {displayEvents.map((event, i) => <CompactCard key={i} event={event} />)}
         </div>
       )}
     </div>

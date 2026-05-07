@@ -52,6 +52,34 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
         time: 'il y a 5 jours',
         image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=85',
       },
+      {
+        title: `Retour sur le séminaire des managers`,
+        excerpt: `${company} a réuni ses managers pour deux jours d'échanges et de partage autour de la stratégie…`,
+        author: 'Jean-Pierre Moreau',
+        time: 'il y a 1 semaine',
+        image: '/news/pexels-runffwpu-2530124.jpg',
+      },
+      {
+        title: `Lancement du programme RSE 2025`,
+        excerpt: `${company} s'engage dans une démarche RSE ambitieuse avec de nouveaux objectifs pour 2025…`,
+        author: 'Sophie Bernard',
+        time: 'il y a 10 jours',
+        image: '/news/pexels-brunogobofoto-3861712.jpg',
+      },
+      {
+        title: `${company} ouvre un nouveau site`,
+        excerpt: `Expansion des activités : ${company} inaugure de nouveaux locaux pour accompagner sa croissance…`,
+        author: 'Marie Dupont',
+        time: 'il y a 2 semaines',
+        image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=85',
+      },
+      {
+        title: `Partenariat stratégique avec ${company}`,
+        excerpt: `Un accord de partenariat majeur vient renforcer la position de ${company} sur son marché…`,
+        author: 'Lucas Martin',
+        time: 'il y a 3 semaines',
+        image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&q=85',
+      },
     ],
   }
 }
@@ -156,7 +184,30 @@ function ListLayout({ secondary, size }: { featured: Article; secondary: Article
   )
 }
 
-function SideBySideLayout({ secondary }: { secondary: Article[] }) {
+function SideBySideLayout({ secondary, size }: { secondary: Article[]; size?: string }) {
+  if (size === 'two-thirds') {
+    return (
+      <div className={styles.listLayout}>
+        {secondary.map((item) => (
+          <div key={item.title} className={styles.listItem}>
+            <div className={styles.sideBySideImageTwoThirds}>
+              <img src={item.image} alt={item.title} />
+            </div>
+            <div className={styles.listBody}>
+              <div className={styles.listTitle}>{item.title}</div>
+              <div className={styles.listExcerpt}>{item.excerpt}</div>
+              <div className={styles.meta}>
+                <span className={styles.authorName}>{item.author}</span>
+                <span className={styles.metaDivider}>{item.time}</span>
+              </div>
+              {item.views && <div className={styles.views}>{item.views}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className={styles.sideBySideGrid}>
       {secondary.map((item) => (
@@ -230,13 +281,81 @@ function ChevronRight() {
   )
 }
 
-const FULL_ONLY_LAYOUTS = ['featured', 'sidebyside']
+function VignetteCard({ item, className }: { item: Article; className?: string }) {
+  return (
+    <div className={`${styles.vignetteCard}${className ? ` ${className}` : ''}`}>
+      <img src={item.image} alt={item.title} className={styles.vignetteImg} />
+      <div className={styles.vignetteGradient} />
+      <span className={styles.vignetteTitle}>{item.title}</span>
+    </div>
+  )
+}
+
+function VignettesLayout({ articles }: { articles: Article[] }) {
+  const count = articles.length
+
+  if (count === 1) {
+    return (
+      <div className={styles.vignettes1}>
+        <VignetteCard item={articles[0]} />
+      </div>
+    )
+  }
+
+  if (count === 2) {
+    return (
+      <div className={styles.vignettes2}>
+        {articles.map((item) => <VignetteCard key={item.title} item={item} />)}
+      </div>
+    )
+  }
+
+  const [hero, ...rest] = articles
+
+  return (
+    <div className={styles.vignettesSplit}>
+      <VignetteCard item={hero} />
+      <div className={styles.vignettesRight}>
+        {count === 3 && rest.map((item) => (
+          <VignetteCard key={item.title} item={item} />
+        ))}
+        {count === 4 && (
+          <>
+            <VignetteCard item={rest[0]} />
+            <div className={styles.vignetteRow2}>
+              <VignetteCard item={rest[1]} />
+              <VignetteCard item={rest[2]} />
+            </div>
+          </>
+        )}
+        {count >= 5 && (
+          <div className={styles.vignette2x2}>
+            {rest.slice(0, 4).map((item) => <VignetteCard key={item.title} item={item} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export function SharepointNews({ config, branding, size }: WidgetRendererProps) {
   const title = (config.title as string) || 'Actualités'
   const rawLayout = (config.layout as string) || 'featured'
-  const layout = size !== 'full' && FULL_ONLY_LAYOUTS.includes(rawLayout) ? 'list' : rawLayout
+  // featured → full only; sidebyside/vignettes degrade on small sizes
+  const layout =
+    (rawLayout === 'featured' && size !== 'full') ||
+    (rawLayout === 'sidebyside' && size !== 'full' && size !== 'two-thirds') ||
+    (rawLayout === 'vignettes' && size !== 'full' && size !== 'two-thirds')
+      ? 'list'
+      : rawLayout
+  const rawItemCount = Math.max(1, Math.min(8, (config.itemCount as number) || 4))
+  const itemCount = rawLayout === 'sidebyside'
+    ? Math.max(2, Math.ceil(rawItemCount / 2) * 2)
+    : rawLayout === 'vignettes'
+      ? Math.min(5, rawItemCount)
+      : rawItemCount
   const { featured, secondary } = getArticles(branding.name)
+  const visibleSecondary = secondary.slice(0, itemCount)
 
   return (
     <div className={styles.section}>
@@ -245,10 +364,12 @@ export function SharepointNews({ config, branding, size }: WidgetRendererProps) 
         <span className={styles.viewAll}>Afficher tout</span>
       </div>
 
-      {layout === 'list' ? (
-        <ListLayout featured={featured} secondary={secondary} size={size} />
+      {layout === 'vignettes' ? (
+        <VignettesLayout articles={[featured, ...secondary].slice(0, itemCount)} />
+      ) : layout === 'list' ? (
+        <ListLayout featured={featured} secondary={visibleSecondary} size={size} />
       ) : layout === 'sidebyside' ? (
-        <SideBySideLayout secondary={secondary} />
+        <SideBySideLayout secondary={visibleSecondary} size={size} />
       ) : layout === 'carousel' ? (
         <CarouselLayout featured={featured} secondary={secondary} size={size} />
       ) : (

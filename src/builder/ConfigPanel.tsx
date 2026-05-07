@@ -41,6 +41,15 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
 
   function filterField(field: ConfigSchemaField) {
     if (field.platforms && !field.platforms.includes(platform)) return false
+    if (field.visibleWhen) {
+      const conditions = Array.isArray(field.visibleWhen) ? field.visibleWhen : [field.visibleWhen]
+      for (const cond of conditions) {
+        const depField = widget.configSchema.find((f) => f.key === cond.key)
+        const currentVal = cell.config[cond.key] ?? depField?.default
+        if (cond.notValue !== undefined && currentVal === cond.notValue) return false
+        if (cond.value !== undefined && currentVal !== cond.value) return false
+      }
+    }
     return true
   }
 
@@ -50,6 +59,15 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
       (opt) => !opt.sizes || opt.sizes.includes(size),
     )
     return { ...field, options: filtered } as SelectField
+  }
+
+  function applyNumberStep(field: ConfigSchemaField) {
+    if (field.type !== 'number' || field.key !== 'itemCount') return field
+    const layoutField = widget.configSchema.find((f) => f.key === 'layout')
+    const currentLayout = (cell.config.layout ?? layoutField?.default) as string
+    if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
+    if (currentLayout === 'vignettes') return { ...field, max: 5 }
+    return field
   }
 
   return (
@@ -65,6 +83,7 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
         {widget.configSchema
           .filter(filterField)
           .map(applySelectSizeFilter)
+          .map(applyNumberStep)
           .map((field) => (
             <ConfigField
               key={`${selectedCellId}-${field.key}`}
@@ -86,14 +105,33 @@ function findCell(
 ) {
   if (!cellId) return null
   for (const row of rows) {
-    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
-    if (cellIdx === -1) continue
-    const cell = row.cells[cellIdx]
     const ratios = row.columnRatios?.length === row.cells.length
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
-    const ratio = ratios[cellIdx]
-    return { rowId: row.id, cell, ratio }
+
+    // Search primary cells
+    const cellIdx = row.cells.findIndex((c) => c.id === cellId)
+    if (cellIdx !== -1) {
+      const cell = row.cells[cellIdx]
+      return { rowId: row.id, cell, ratio: ratios[cellIdx] }
+    }
+
+    // Search stacked cells
+    for (let colIdx = 0; colIdx < row.cells.length; colIdx++) {
+      const primary = row.cells[colIdx]
+      const stackedIdx = primary.stackedCells?.findIndex((sc) => sc.id === cellId) ?? -1
+      if (stackedIdx !== -1) {
+        const sc = primary.stackedCells![stackedIdx]
+        const ratio = ratios[colIdx]
+        const cell = {
+          id: sc.id,
+          widgetId: sc.widgetId,
+          config: sc.config,
+          size: ratioToSize(ratio) as ReturnType<typeof ratioToSize>,
+        }
+        return { rowId: row.id, cell, ratio }
+      }
+    }
   }
   return null
 }

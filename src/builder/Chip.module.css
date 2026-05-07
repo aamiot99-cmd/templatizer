@@ -1,3 +1,20 @@
+/* ── Column container: wraps primary chip + stacked chips + drop zone ── */
+
+.chipColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+.chipColumnDragging {
+  opacity: 0.35;
+}
+
+/* ── Chip card ── */
+
 .chip {
   position: relative;
   background: #fff;
@@ -41,6 +58,20 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   background: #eff6ff;
   transform: scale(1.02);
+}
+
+/* Stacked chips: no drag cursor, dashed border */
+.chipStacked {
+  cursor: default;
+  border-style: dashed;
+}
+
+.chipStacked:active {
+  cursor: default;
+  border-color: var(--border);
+  box-shadow: none;
+  background: #fff;
+  transform: none;
 }
 
 .chipDragging {
@@ -145,4 +176,42 @@
 
 .dropIndicator::after {
   bottom: -3px;
+}
+
+/* ── Stack drop zone ── */
+
+.stackZone {
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: height 0.15s ease, background 0.12s, border-color 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed transparent;
+  box-sizing: border-box;
+}
+
+.stackZoneVisible {
+  height: 32px;
+  border-color: #c0bfc8;
+  background: #fafafb;
+}
+
+.stackZoneOver {
+  height: 36px;
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.stackZoneLabel {
+  font-size: 11px;
+  color: #a09cab;
+  pointer-events: none;
+  transition: color 0.12s;
+}
+
+.stackZoneOver .stackZoneLabel {
+  color: #3b82f6;
 }

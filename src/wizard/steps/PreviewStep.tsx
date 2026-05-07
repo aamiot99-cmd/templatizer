@@ -19,7 +19,12 @@ export function PreviewStep() {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const navEntries = useProjectStore((s) => s.navEntries)
 
-  const totalCells = rows.reduce((sum, r) => sum + r.cells.length, 0)
+  const totalCells = rows.reduce(
+    (sum, r) =>
+      sum +
+      r.cells.reduce((s, c) => s + 1 + (c.stackedCells?.length ?? 0), 0),
+    0,
+  )
   const totalNavEntries = navEntries.length
   const totalNavChildren = navEntries.reduce(
     (sum, e) => sum + (e.children?.length ?? 0),
@@ -191,6 +196,7 @@ function SchemaRow({ row }: { row: WireframeRow }) {
         const category = widget
           ? USAGE_CATEGORY_LABELS[widget.purpose.category]
           : ''
+        const stackedCells = cell.stackedCells ?? []
         return (
           <div
             key={cell.id}
@@ -202,6 +208,14 @@ function SchemaRow({ row }: { row: WireframeRow }) {
                 <div className={styles.schemaCellCategory}>{category}</div>
               )}
               <div className={styles.schemaCellLabel}>{label}</div>
+              {stackedCells.map((sc) => {
+                const sw = getWidget(sc.widgetId)
+                return (
+                  <div key={sc.id} className={styles.schemaCellStacked}>
+                    {sw?.platformLabels[platform] ?? sc.widgetId}
+                  </div>
+                )
+              })}
             </div>
             <div className={styles.schemaCellRatio}>
               {ratioLabel(row.columnRatios, idx, row.cells.length)}

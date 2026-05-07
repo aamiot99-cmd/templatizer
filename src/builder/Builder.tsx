@@ -34,6 +34,7 @@ type ActiveDrag =
 export function Builder({ platform }: BuilderProps) {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const addCell = useProjectStore((s) => s.addCell)
+  const addStackedCell = useProjectStore((s) => s.addStackedCell)
   const moveCell = useProjectStore((s) => s.moveCell)
   const reorderRows = useProjectStore((s) => s.reorderRows)
   const addRow = useProjectStore((s) => s.addRow)
@@ -82,6 +83,19 @@ export function Builder({ platform }: BuilderProps) {
     if (!activeData) return
 
     if (activeData.type === 'pool') {
+      const widget = getWidget(activeData.widgetId)
+      if (!widget) return
+      const config = Object.fromEntries(
+        widget.configSchema.map((f) => [f.key, f.default]),
+      )
+
+      // Drop on a column's stack zone → stack the widget in that column
+      if (overData?.type === 'col-stack') {
+        addStackedCell(overData.rowId, overData.cellId, widget.id, config)
+        return
+      }
+
+      // Drop on a row or cell → add as a new column
       let targetRowId: string | null = null
       let targetIndex: number | undefined = undefined
       if (overData?.type === 'row-drop' || overData?.type === 'row') {
