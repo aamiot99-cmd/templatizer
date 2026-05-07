@@ -12,13 +12,13 @@
 }
 
 .title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--color-text);
 }
 
 .viewAll {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-primary);
   cursor: pointer;
 }
@@ -64,14 +64,14 @@
 }
 
 .featuredTitle {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--color-text);
 }
 
 .featuredExcerpt {
-  font-size: 13px;
-  color: var(--color-primary);
+  font-size: 14px;
+  color: #323130;
   line-height: 1.4;
 }
 
@@ -122,15 +122,15 @@
 }
 
 .secondaryTitle {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.3;
 }
 
 .secondaryExcerpt {
-  font-size: 12.5px;
-  color: var(--color-primary);
+  font-size: 13px;
+  color: #323130;
   line-height: 1.4;
 }
 
@@ -157,23 +157,23 @@
 }
 
 .authorName {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-text);
 }
 
 .metaDivider {
-  font-size: 12px;
+  font-size: 13px;
   color: #605e5c;
 }
 
 .views {
-  font-size: 12px;
-  color: var(--color-primary);
+  font-size: 13px;
+  color: #605e5c;
   margin-top: 2px;
 }
 
-/* ── Side by side layout ── */
+/* ── Side by side layout — full ── */
 .sideBySideGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -192,6 +192,7 @@
 .sideBySideItem:nth-last-child(-n+2) {
   border-bottom: none;
 }
+
 
 /* ── List layout ── */
 .listLayout {
@@ -226,6 +227,20 @@
   background: #e1e1e1;
 }
 
+.sideBySideImageTwoThirds {
+  width: 260px;
+  height: 130px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #e1e1e1;
+}
+
+.sideBySideImageTwoThirds img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .listImage img {
   width: 100%;
   height: 100%;
@@ -242,15 +257,15 @@
 }
 
 .listTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.3;
 }
 
 .listExcerpt {
-  font-size: 13px;
-  color: var(--color-primary);
+  font-size: 14px;
+  color: #323130;
   line-height: 1.5;
 }
 
@@ -288,7 +303,7 @@
 }
 
 .listTitleHalf {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.3;
@@ -336,7 +351,7 @@
 }
 
 .listTitleCompact {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.3;
@@ -477,4 +492,105 @@
 
 .carouselDotActive {
   background: #605e5c;
+}
+
+/* ── Vignettes layout ── */
+.vignetteCard {
+  position: relative;
+  overflow: hidden;
+  background: #e1e1e1;
+  flex-shrink: 0;
+}
+
+.vignetteImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vignetteGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.62) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.vignetteTitle {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.vignettes1 {
+  height: 340px;
+}
+
+.vignettes1 .vignetteCard {
+  height: 100%;
+}
+
+.vignettes2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  height: 340px;
+}
+
+.vignettes2 .vignetteCard {
+  height: 100%;
+}
+
+.vignettesSplit {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 4px;
+  height: 340px;
+}
+
+.vignettesSplit > .vignetteCard {
+  height: 100%;
+}
+
+.vignettesRight {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.vignettesRight > .vignetteCard {
+  flex: 1;
+  min-height: 0;
+}
+
+.vignetteRow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.vignetteRow2 .vignetteCard {
+  height: 100%;
+}
+
+.vignette2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.vignette2x2 .vignetteCard {
+  height: 100%;
 }

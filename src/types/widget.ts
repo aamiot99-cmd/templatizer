@@ -26,12 +26,18 @@ export type ConfigFieldType =
   | 'icon'
   | 'richtext'
 
+export interface VisibleWhenCondition {
+  key: string
+  value?: string | number | boolean
+  notValue?: string | number | boolean
+}
+
 interface BaseField {
   key: string
   label: string
   description?: string
   platforms?: Platform[]
-  visibleWhen?: { key: string; value: string | number | boolean }
+  visibleWhen?: VisibleWhenCondition | VisibleWhenCondition[]
 }
 
 export interface TextField extends BaseField {
@@ -45,6 +51,7 @@ export interface NumberField extends BaseField {
   default: number
   min?: number
   max?: number
+  step?: number
 }
 
 export interface BooleanField extends BaseField {
@@ -60,7 +67,7 @@ export interface ColorField extends BaseField {
 export interface SelectField extends BaseField {
   type: 'select'
   default: string
-  options: Array<{ value: string; label: string; sizes?: WidgetSize[] }>
+  options: Array<{ value: string; label: string; sizes?: WidgetSize[]; layoutIcon?: string }>
 }
 
 export interface ToggleField extends BaseField {

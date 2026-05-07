@@ -34,10 +34,11 @@ export const newsWidget: WidgetDefinition = {
       default: 'featured',
       platforms: ['sharepoint'],
       options: [
-        { value: 'featured', label: 'Articles à la une', sizes: ['full'] },
-        { value: 'list', label: 'Liste' },
-        { value: 'sidebyside', label: 'Côte à côte', sizes: ['full'] },
-        { value: 'carousel', label: 'Carrousel' },
+        { value: 'featured',   label: 'Articles à la une', sizes: ['full'], layoutIcon: 'featured' },
+        { value: 'list',       label: 'Liste',             layoutIcon: 'list' },
+        { value: 'sidebyside', label: 'Côte à côte',       layoutIcon: 'sidebyside' },
+        { value: 'carousel',   label: 'Carrousel',         layoutIcon: 'carousel' },
+        { value: 'vignettes',  label: 'Vignettes',         layoutIcon: 'vignettes', sizes: ['full', 'two-thirds'] },
       ],
     },
     {
@@ -46,6 +47,7 @@ export const newsWidget: WidgetDefinition = {
       type: 'toggle',
       default: 'auto',
       platforms: ['sharepoint'],
+      visibleWhen: { key: 'layout', notValue: 'featured' },
       options: [
         { value: 'auto', label: 'Automatique' },
         { value: 'manual', label: 'Manuel' },
@@ -59,7 +61,10 @@ export const newsWidget: WidgetDefinition = {
       min: 1,
       max: 8,
       platforms: ['sharepoint'],
-      visibleWhen: { key: 'countMode', value: 'manual' },
+      visibleWhen: [
+        { key: 'countMode', value: 'manual' },
+        { key: 'layout', notValue: 'featured' },
+      ],
     },
     {
       key: 'showMetrics',

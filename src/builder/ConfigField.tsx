@@ -1,6 +1,8 @@
 import type { ConfigSchemaField } from '../types'
 import styles from './ConfigPanel.module.css'
 import { RichTextEditor } from './RichTextEditor'
+import { BUTTON_ICONS, ButtonIcon } from '../widgets/_shared/buttonIcons'
+import { LAYOUT_ICONS, type LayoutIconEntry } from './layoutIcons'
 
 interface ConfigFieldProps {
   field: ConfigSchemaField
@@ -29,16 +31,41 @@ function renderInput(
 ) {
   switch (field.type) {
     case 'text':
-    case 'icon':
       return (
         <input
           type="text"
           className={styles.input}
           value={String(value)}
-          placeholder={field.type === 'text' ? field.placeholder : undefined}
+          placeholder={field.placeholder}
           onChange={(e) => onChange(e.target.value)}
         />
       )
+    case 'icon': {
+      const current = String(value || 'none')
+      return (
+        <div className={styles.iconPicker}>
+          <button
+            type="button"
+            title="Aucune icône"
+            className={`${styles.iconOption}${current === 'none' ? ` ${styles.iconOptionActive}` : ''}`}
+            onClick={() => onChange('none')}
+          >
+            <span className={styles.iconOptionNone}>—</span>
+          </button>
+          {BUTTON_ICONS.map((icon) => (
+            <button
+              key={icon.value}
+              type="button"
+              title={icon.label}
+              className={`${styles.iconOption}${current === icon.value ? ` ${styles.iconOptionActive}` : ''}`}
+              onClick={() => onChange(icon.value)}
+            >
+              <ButtonIcon name={icon.value} size={15} />
+            </button>
+          ))}
+        </div>
+      )
+    }
     case 'number':
       return (
         <input
@@ -47,6 +74,7 @@ function renderInput(
           value={Number(value)}
           min={field.min}
           max={field.max}
+          step={field.step}
           onChange={(e) => onChange(Number(e.target.value))}
         />
       )
@@ -76,7 +104,36 @@ function renderInput(
         </div>
       )
     }
-    case 'select':
+    case 'select': {
+      const hasLayoutIcons = field.options.every((opt) => opt.layoutIcon)
+      if (hasLayoutIcons) {
+        const cols = 3
+        return (
+          <div
+            className={styles.layoutPicker}
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+          >
+            {field.options.map((opt) => {
+              const entry: LayoutIconEntry | null = opt.layoutIcon ? LAYOUT_ICONS[opt.layoutIcon] ?? null : null
+              const isImg = typeof entry === 'string'
+              const SvgIcon = !isImg && entry ? (entry as () => JSX.Element) : null
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.layoutOption}${String(value) === opt.value ? ` ${styles.layoutOptionActive}` : ''}${isImg ? ` ${styles.layoutOptionImg}` : ''}`}
+                  onClick={() => onChange(opt.value)}
+                  title={opt.label}
+                >
+                  {isImg && <img src={entry as string} alt={opt.label} className={styles.layoutImg} />}
+                  {SvgIcon && <div className={styles.layoutPreview}><SvgIcon /></div>}
+                  {!isImg && <span className={styles.layoutLabel}>{opt.label}</span>}
+                </button>
+              )
+            })}
+          </div>
+        )
+      }
       return (
         <select
           className={styles.input}
@@ -90,6 +147,7 @@ function renderInput(
           ))}
         </select>
       )
+    }
     case 'toggle':
       return (
         <div className={styles.toggle}>

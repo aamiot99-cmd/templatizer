@@ -42,9 +42,13 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
   function filterField(field: ConfigSchemaField) {
     if (field.platforms && !field.platforms.includes(platform)) return false
     if (field.visibleWhen) {
-      const depField = widget.configSchema.find((f) => f.key === field.visibleWhen!.key)
-      const currentVal = cell.config[field.visibleWhen.key] ?? depField?.default
-      if (currentVal !== field.visibleWhen.value) return false
+      const conditions = Array.isArray(field.visibleWhen) ? field.visibleWhen : [field.visibleWhen]
+      for (const cond of conditions) {
+        const depField = widget.configSchema.find((f) => f.key === cond.key)
+        const currentVal = cell.config[cond.key] ?? depField?.default
+        if (cond.notValue !== undefined && currentVal === cond.notValue) return false
+        if (cond.value !== undefined && currentVal !== cond.value) return false
+      }
     }
     return true
   }
@@ -55,6 +59,15 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
       (opt) => !opt.sizes || opt.sizes.includes(size),
     )
     return { ...field, options: filtered } as SelectField
+  }
+
+  function applyNumberStep(field: ConfigSchemaField) {
+    if (field.type !== 'number' || field.key !== 'itemCount') return field
+    const layoutField = widget.configSchema.find((f) => f.key === 'layout')
+    const currentLayout = (cell.config.layout ?? layoutField?.default) as string
+    if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
+    if (currentLayout === 'vignettes') return { ...field, max: 5 }
+    return field
   }
 
   return (
@@ -70,6 +83,7 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
         {widget.configSchema
           .filter(filterField)
           .map(applySelectSizeFilter)
+          .map(applyNumberStep)
           .map((field) => (
             <ConfigField
               key={`${selectedCellId}-${field.key}`}
