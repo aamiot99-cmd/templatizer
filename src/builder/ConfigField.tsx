@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import type { ConfigSchemaField } from '../types'
 import styles from './ConfigPanel.module.css'
 import { RichTextEditor } from './RichTextEditor'

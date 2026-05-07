@@ -1,5 +1,7 @@
 /* Layout icons — PNG images for known layouts */
 
+import type { JSX } from 'react'
+
 export type LayoutIconEntry = string | (() => JSX.Element)
 
 export const LAYOUT_ICONS: Record<string, LayoutIconEntry> = {

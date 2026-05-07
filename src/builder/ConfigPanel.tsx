@@ -39,12 +39,17 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
     )
   }
 
+  // After the `if (!widget) return ...` guard above, widget is defined,
+  // but TS narrowing doesn't propagate into nested function declarations.
+  // Capture into a non-nullable local so the closures stay clean.
+  const w = widget
+
   function filterField(field: ConfigSchemaField) {
     if (field.platforms && !field.platforms.includes(platform)) return false
     if (field.visibleWhen) {
       const conditions = Array.isArray(field.visibleWhen) ? field.visibleWhen : [field.visibleWhen]
       for (const cond of conditions) {
-        const depField = widget.configSchema.find((f) => f.key === cond.key)
+        const depField = w.configSchema.find((f) => f.key === cond.key)
         const currentVal = cell.config[cond.key] ?? depField?.default
         if (cond.notValue !== undefined && currentVal === cond.notValue) return false
         if (cond.value !== undefined && currentVal !== cond.value) return false
@@ -63,7 +68,7 @@ export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
 
   function applyNumberStep(field: ConfigSchemaField) {
     if (field.type !== 'number' || field.key !== 'itemCount') return field
-    const layoutField = widget.configSchema.find((f) => f.key === 'layout')
+    const layoutField = w.configSchema.find((f) => f.key === 'layout')
     const currentLayout = (cell.config.layout ?? layoutField?.default) as string
     if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
     if (currentLayout === 'vignettes') return { ...field, max: 5 }

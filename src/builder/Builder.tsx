@@ -6,7 +6,6 @@ import {
   PointerSensor,
   pointerWithin,
   closestCenter,
-  rectIntersection,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -79,6 +78,7 @@ export function Builder({ platform }: BuilderProps) {
       | { type: 'row-drop'; rowId: string }
       | { type: 'cell'; rowId: string; cellId: string }
       | { type: 'row'; rowId: string }
+      | { type: 'col-stack'; rowId: string; cellId: string }
       | undefined
     if (!activeData) return
 
@@ -118,11 +118,6 @@ export function Builder({ platform }: BuilderProps) {
       if (!targetRowId) {
         targetRowId = addRow()
       }
-      const widget = getWidget(activeData.widgetId)
-      if (!widget) return
-      const config = Object.fromEntries(
-        widget.configSchema.map((f) => [f.key, f.default]),
-      )
       addCell(targetRowId, widget.id, config, 'full', targetIndex)
       return
     }
