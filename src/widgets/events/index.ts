@@ -39,8 +39,8 @@ export const eventsWidget: WidgetDefinition = {
       default: 'compact',
       platforms: ['sharepoint'],
       options: [
-        { value: 'compact', label: 'Compacte' },
-        { value: 'filmstrip', label: 'Pellicule', sizes: ['full', 'two-thirds', 'half'] },
+        { value: 'compact', label: 'Compacte', layoutIcon: 'compact' },
+        { value: 'filmstrip', label: 'Pellicule', sizes: ['full', 'two-thirds', 'half'], layoutIcon: 'pellicule' },
       ],
     },
     {
