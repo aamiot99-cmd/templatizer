@@ -135,7 +135,9 @@ export function LoginScreen() {
             <p className={styles.subtitle}>
               {mode === 'magic'
                 ? 'Recevez un lien de connexion par e-mail. Aucun mot de passe à retenir.'
-                : 'Connectez-vous directement avec votre adresse e-mail et votre mot de passe.'}
+                : passwordMode === 'signin'
+                  ? 'Connectez-vous directement avec votre adresse e-mail et votre mot de passe.'
+                  : 'Créez votre compte avec votre adresse e-mail et un mot de passe.'}
             </p>
 
             <form className={styles.form} onSubmit={handleSubmit}>
