@@ -164,12 +164,13 @@ export function LoginScreen() {
                   <input
                     id="login-password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete={passwordMode === 'signup' ? 'new-password' : 'current-password'}
                     required
+                    minLength={passwordMode === 'signup' ? 8 : undefined}
                     className={styles.input}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    disabled={submitting}
+                    disabled={submitting || sent}
                   />
                 </>
               )}
@@ -180,25 +181,48 @@ export function LoginScreen() {
                 disabled={
                   !email.trim() ||
                   submitting ||
-                  (mode === 'magic' && sent) ||
+                  sent ||
                   (mode === 'password' && !password)
                 }
               >
                 {submitting
                   ? mode === 'magic'
                     ? 'Envoi en cours…'
-                    : 'Connexion en cours…'
+                    : passwordMode === 'signup'
+                      ? 'Création en cours…'
+                      : 'Connexion en cours…'
                   : mode === 'magic'
                     ? sent
                       ? 'Lien envoyé ✓'
                       : 'Envoyer le lien de connexion'
-                    : 'Se connecter'}
+                    : passwordMode === 'signup'
+                      ? 'Créer un compte'
+                      : 'Se connecter'}
               </button>
+
+              {mode === 'password' && (
+                <button
+                  type="button"
+                  className={styles.switchLink}
+                  onClick={() => switchPasswordMode(passwordMode === 'signin' ? 'signup' : 'signin')}
+                  disabled={submitting}
+                >
+                  {passwordMode === 'signin'
+                    ? "Pas encore de compte ? Créer un compte"
+                    : 'Déjà un compte ? Se connecter'}
+                </button>
+              )}
 
               {mode === 'magic' && sent && (
                 <div className={`${styles.message} ${styles.messageSuccess}`}>
                   Vérifiez votre boîte e-mail. Cliquez sur le lien pour vous
                   connecter — il expire dans 1 heure.
+                </div>
+              )}
+              {mode === 'password' && passwordMode === 'signup' && sent && (
+                <div className={`${styles.message} ${styles.messageSuccess}`}>
+                  Compte créé. Vérifiez votre boîte e-mail pour confirmer votre
+                  adresse avant de vous connecter.
                 </div>
               )}
               {status === 'error' && errorMessage && (
