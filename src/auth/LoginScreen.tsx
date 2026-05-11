@@ -53,16 +53,31 @@ export function LoginScreen() {
         setStatus('idle')
         return
       }
-      const { error } = await supabase.auth.signInWithPassword({
-        email: trimmedEmail,
-        password,
-      })
-      if (error) {
-        setStatus('error')
-        setErrorMessage(error.message)
+      if (passwordMode === 'signup') {
+        const { data, error } = await supabase.auth.signUp({
+          email: trimmedEmail,
+          password,
+          options: { emailRedirectTo: window.location.origin },
+        })
+        if (error) {
+          setStatus('error')
+          setErrorMessage(error.message)
+        } else if (data.session) {
+          setStatus('idle')
+        } else {
+          setStatus('sent')
+        }
       } else {
-        // useAuthSession picks up the new session and re-renders App.
-        setStatus('idle')
+        const { error } = await supabase.auth.signInWithPassword({
+          email: trimmedEmail,
+          password,
+        })
+        if (error) {
+          setStatus('error')
+          setErrorMessage(error.message)
+        } else {
+          setStatus('idle')
+        }
       }
     }
   }
