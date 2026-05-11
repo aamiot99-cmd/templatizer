@@ -3,10 +3,12 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase'
 import styles from './LoginScreen.module.css'
 
 type Mode = 'magic' | 'password'
+type PasswordMode = 'signin' | 'signup'
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 export function LoginScreen() {
   const [mode, setMode] = useState<Mode>('magic')
+  const [passwordMode, setPasswordMode] = useState<PasswordMode>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [status, setStatus] = useState<Status>('idle')
@@ -15,6 +17,13 @@ export function LoginScreen() {
   const switchMode = (next: Mode) => {
     if (mode === next) return
     setMode(next)
+    setStatus('idle')
+    setErrorMessage(null)
+  }
+
+  const switchPasswordMode = (next: PasswordMode) => {
+    if (passwordMode === next) return
+    setPasswordMode(next)
     setStatus('idle')
     setErrorMessage(null)
   }
