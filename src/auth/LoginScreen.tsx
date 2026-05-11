@@ -54,18 +54,15 @@ export function LoginScreen() {
         return
       }
       if (passwordMode === 'signup') {
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({
           email: trimmedEmail,
           password,
-          options: { emailRedirectTo: window.location.origin },
         })
         if (error) {
           setStatus('error')
           setErrorMessage(error.message)
-        } else if (data.session) {
-          setStatus('idle')
         } else {
-          setStatus('sent')
+          setStatus('idle')
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
