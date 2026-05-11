@@ -145,12 +145,33 @@ function App() {
 
   const inProject = Boolean(activeProjectId && activeProject)
   const userEmail = session.user.email ?? ''
+  const metadata = session.user.user_metadata ?? {}
+  const fullName = (metadata.full_name as string | undefined)?.trim() || userEmail
+  const avatarUrl = metadata.avatar_url as string | undefined
+  const initials = fullName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('') || (userEmail[0]?.toUpperCase() ?? '?')
 
   return (
     <main className="app">
       <header className="app-header">
         <div className="app-userbar">
-          <span className="app-user-email">{userEmail}</span>
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt=""
+              className="app-user-avatar"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="app-user-avatar app-user-avatar-fallback" aria-hidden="true">
+              {initials}
+            </span>
+          )}
+          <span className="app-user-name">{fullName}</span>
           <button
             type="button"
             className="app-signout"
