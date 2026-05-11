@@ -216,12 +216,6 @@ export function LoginScreen() {
                   connecter — il expire dans 1 heure.
                 </div>
               )}
-              {mode === 'password' && passwordMode === 'signup' && sent && (
-                <div className={`${styles.message} ${styles.messageSuccess}`}>
-                  Compte créé. Vérifiez votre boîte e-mail pour confirmer votre
-                  adresse avant de vous connecter.
-                </div>
-              )}
               {status === 'error' && errorMessage && (
                 <div className={`${styles.message} ${styles.messageError}`}>
                   {errorMessage}
