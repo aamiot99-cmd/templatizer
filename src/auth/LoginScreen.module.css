@@ -133,6 +133,29 @@
   cursor: not-allowed;
 }
 
+.switchLink {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  padding: 6px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--wizard-accent);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.switchLink:hover {
+  color: var(--wizard-accent-hover);
+}
+
+.switchLink:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .message {
   margin-top: 16px;
   padding: 12px 14px;
