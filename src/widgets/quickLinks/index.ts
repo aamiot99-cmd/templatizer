@@ -5,7 +5,7 @@ export const quickLinksWidget: WidgetDefinition = {
   id: 'quickLinks',
   purpose: {
     category: 'access',
-    label: 'Liens rapides',
+    label: 'Accès rapide aux ressources clés',
     description:
       "Liste de liens cliquables vers des ressources, avec six modes d'affichage : Compact, Pellicule, Grille, Bouton, Liste et Vignettes.",
     keywords: ['liens', 'rapides', 'raccourcis', 'ressources', 'navigation', 'accès'],
@@ -36,12 +36,12 @@ export const quickLinksWidget: WidgetDefinition = {
       type: 'select',
       default: 'compact',
       options: [
-        { value: 'compact', label: 'Compact' },
-        { value: 'pellicule', label: 'Pellicule' },
-        { value: 'grille', label: 'Grille' },
-        { value: 'bouton', label: 'Bouton' },
-        { value: 'liste', label: 'Liste' },
-        { value: 'vignettes', label: 'Vignettes' },
+        { value: 'compact',   label: 'Compact',   layoutIcon: 'compact' },
+        { value: 'pellicule', label: 'Pellicule',  layoutIcon: 'pellicule' },
+        { value: 'grille',    label: 'Grille',     layoutIcon: 'grille' },
+        { value: 'bouton',    label: 'Bouton',     layoutIcon: 'bouton' },
+        { value: 'liste',     label: 'Liste',      layoutIcon: 'list' },
+        { value: 'vignettes', label: 'Vignettes',  layoutIcon: 'vignettes' },
       ],
     },
     {

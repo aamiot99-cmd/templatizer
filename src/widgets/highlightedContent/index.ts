@@ -5,8 +5,8 @@ export const highlightedContentWidget: WidgetDefinition = {
   id: 'highlightedContent',
   purpose: {
     category: 'access',
-    label: 'Mettre en évidence du contenu',
-    description: 'Afficher et valoriser tout type de contenu SharePoint : documents, pages, actualités, vidéos, images, événements ou contacts.',
+    label: 'Valoriser du contenu SharePoint',
+    description: 'Vitrine de contenu SharePoint (pages, vidéos, événements…) en grille, liste, carrousel ou pellicule.',
     keywords: ['contenu', 'mise en évidence', 'documents', 'pages', 'vidéos', 'images', 'événements', 'contacts', 'highlight'],
   },
   platformLabels: {
@@ -72,10 +72,10 @@ export const highlightedContentWidget: WidgetDefinition = {
       default: 'grille',
       platforms: ['sharepoint'],
       options: [
-        { value: 'grille', label: 'Grille', layoutIcon: 'grille' },
-        { value: 'liste', label: 'Liste', layoutIcon: 'list' },
+        { value: 'grille',    label: 'Grille',    layoutIcon: 'grilleContent' },
+        { value: 'liste',     label: 'Liste',     layoutIcon: 'list' },
         { value: 'carrousel', label: 'Carrousel', layoutIcon: 'carousel' },
-        { value: 'compact', label: 'Compact', layoutIcon: 'compact' },
+        { value: 'compact',   label: 'Compact',   layoutIcon: 'compactList' },
         { value: 'pellicule', label: 'Pellicule', layoutIcon: 'pellicule' },
       ],
     },

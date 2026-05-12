@@ -5,7 +5,7 @@ export const editorialCardWidget: WidgetDefinition = {
   id: 'editorialCard',
   purpose: {
     category: 'communicate',
-    label: 'Carte éditoriale',
+    label: "Mise en avant visuelle d'un contenu",
     description:
       "Carte visuelle avec image de fond, titre et description. Trois dispositions : superposition, bloc de couleur ou fractionné.",
     keywords: ['carte', 'éditoriale', 'hero', 'bannière', 'mise en avant', 'image'],
@@ -23,9 +23,9 @@ export const editorialCardWidget: WidgetDefinition = {
       type: 'select',
       default: 'overlay',
       options: [
-        { value: 'overlay', label: "Superposition d'images" },
-        { value: 'colorBlock', label: 'Bloc de couleur' },
-        { value: 'split', label: 'Fractionner' },
+        { value: 'overlay',    label: "Superposition d'images", layoutIcon: 'overlay' },
+        { value: 'colorBlock', label: 'Bloc de couleur',        layoutIcon: 'colorBlock' },
+        { value: 'split',      label: 'Fractionner',            layoutIcon: 'split' },
       ],
     },
     {

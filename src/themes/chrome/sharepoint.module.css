@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  overflow: hidden;
+  overflow-x: clip;
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: #323130;
   min-height: 100vh;
@@ -16,6 +16,9 @@
   align-items: center;
   flex-shrink: 0;
   padding-right: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
 }
 
 .m365Left {
@@ -248,7 +251,11 @@
   align-items: center;
   padding: 8px 0;
   gap: 2px;
-  align-self: stretch;
+  position: sticky;
+  top: 48px;
+  height: calc(100vh - 48px);
+  align-self: flex-start;
+  overflow-y: auto;
 }
 
 .sidebarIcon {
@@ -299,8 +306,11 @@
 
 /* ── Site header bar ── */
 .siteHeader {
-  background: #ffffff;
+  background: var(--color-primary);
   flex-shrink: 0;
+  position: sticky;
+  top: 48px;
+  z-index: 100;
 }
 
 .siteHeaderInner {
@@ -309,6 +319,11 @@
   height: 96px;
   padding: 0 12px;
   gap: 0;
+  transition: height 0.2s ease;
+}
+
+.siteHeaderScrolled .siteHeaderInner {
+  height: 54px;
 }
 
 .siteLogoWrap {
@@ -323,7 +338,7 @@
 .siteLogoInitials {
   width: 44px;
   height: 44px;
-  background: var(--color-primary);
+  background: rgba(255, 255, 255, 0.22);
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -331,6 +346,13 @@
   place-items: center;
   border-radius: 3px;
   flex-shrink: 0;
+  transition: width 0.2s ease, height 0.2s ease, font-size 0.2s ease;
+}
+
+.siteHeaderScrolled .siteLogoInitials {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
 }
 
 .siteLogoImg {
@@ -338,12 +360,18 @@
   max-width: 160px;
   object-fit: contain;
   border-radius: 3px;
+  filter: brightness(0) invert(1);
+  transition: height 0.2s ease;
+}
+
+.siteHeaderScrolled .siteLogoImg {
+  height: 32px;
 }
 
 .siteName {
   font-size: 15px;
   font-weight: 700;
-  color: #323130;
+  color: #fff;
   white-space: nowrap;
 }
 
@@ -359,7 +387,7 @@
   align-items: center;
   padding: 0 14px;
   font-size: 13px;
-  color: #323130;
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -367,12 +395,12 @@
 }
 
 .navItem:hover {
-  background: #f3f2f1;
-  color: #201f1e;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
 .navItemActive {
-  color: var(--color-primary);
+  color: #fff;
   font-weight: 600;
 }
 
@@ -383,7 +411,7 @@
   left: 14px;
   right: 14px;
   height: 2px;
-  background: var(--color-primary);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .navChevron {
@@ -431,7 +459,7 @@
 
 .siteAction {
   font-size: 12px;
-  color: #323130;
+  color: rgba(255, 255, 255, 0.85);
   padding: 4px 10px;
   border-radius: 2px;
   cursor: pointer;
@@ -442,8 +470,8 @@
 }
 
 .siteAction:hover {
-  background: #f3f2f1;
-  color: #201f1e;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
 /* ── Page action bar ── */

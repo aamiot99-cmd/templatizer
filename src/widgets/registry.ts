@@ -16,10 +16,12 @@ import { mainBannerWidget } from './mainBanner'
 import { highlightedContentWidget } from './highlightedContent'
 import { textWidget } from './text'
 import { miscWidget } from './misc'
+import { buttonWidget } from './button'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
   [miscWidget.id]: miscWidget,
+  [buttonWidget.id]: buttonWidget,
   [mainBannerWidget.id]: mainBannerWidget,
   [newsWidget.id]: newsWidget,
   [socialWidget.id]: socialWidget,

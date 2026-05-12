@@ -5,7 +5,7 @@ export const mainBannerWidget: WidgetDefinition = {
   id: 'mainBanner',
   purpose: {
     category: 'communicate',
-    label: 'Bannière principale',
+    label: "Grande bannière d'accueil illustrée",
     description:
       "Grande bannière en haut de page mélangeant une tuile mise en avant et quatre tuiles secondaires. S'étend sur toute la largeur de la section (full-bleed).",
     keywords: ['bannière', 'banner', 'hero', 'tuiles', 'mise en avant', 'accueil'],

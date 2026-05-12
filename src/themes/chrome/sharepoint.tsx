@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import type { Branding, HubMenu, NavEntry } from '../../types'
 import styles from './sharepoint.module.css'
 
@@ -145,6 +145,13 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
   const userInitials = initials(userName)
   const siteInitials = initials(branding.name)
   const showHubMenu = Boolean(hubMenu?.enabled && hubMenu.entries.length > 0)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 10) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <div className={styles.chrome}>
@@ -224,7 +231,7 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
 
         <div className={styles.main}>
           {/* Site header bar */}
-          <div className={styles.siteHeader}>
+          <div className={`${styles.siteHeader}${scrolled ? ` ${styles.siteHeaderScrolled}` : ''}`}>
             <div className={styles.siteHeaderInner}>
               <div className={styles.siteLogoWrap}>
                 {branding.logo ? (
