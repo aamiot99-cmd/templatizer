@@ -8,9 +8,9 @@ export const newsWidget: WidgetDefinition = {
   id: 'news',
   purpose: {
     category: 'communicate',
-    label: 'Communiquer des actualités',
+    label: 'Actualités et annonces',
     description:
-      "Diffuser des annonces, communiqués et informations importantes à l'ensemble des équipes.",
+      "Fil d'actualités en cinq dispositions : mise en avant, liste, côte à côte, carrousel ou vignettes.",
     keywords: ['actualités', 'annonces', 'news', 'communication', 'flash info'],
   },
   platformLabels: {

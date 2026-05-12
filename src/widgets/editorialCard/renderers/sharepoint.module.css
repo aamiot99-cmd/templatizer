@@ -4,7 +4,8 @@
   overflow: hidden;
   box-sizing: border-box;
   font-family: var(--font-sans);
-  min-height: 220px;
+  min-height: 280px;
+  border-radius: 4px;
 }
 
 .bgImage {
@@ -60,6 +61,7 @@
   background: var(--color-primary);
   color: #fff;
   border: none;
+  border-radius: 2px;
   padding: 8px 20px;
   font-size: 13px;
   font-weight: 600;
@@ -161,7 +163,7 @@
 /* ===== SPLIT ===== */
 .split {
   display: flex;
-  min-height: 220px;
+  min-height: 280px;
   position: relative;
 }
 

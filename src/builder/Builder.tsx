@@ -118,11 +118,6 @@ export function Builder({ platform }: BuilderProps) {
       if (!targetRowId) {
         targetRowId = addRow()
       }
-      const widget = getWidget(activeData.widgetId)
-      if (!widget) return
-      const config = Object.fromEntries(
-        widget.configSchema.map((f) => [f.key, f.default]),
-      )
       addCell(targetRowId, widget.id, config, 'full', targetIndex)
       return
     }

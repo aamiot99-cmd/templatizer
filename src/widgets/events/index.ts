@@ -6,9 +6,9 @@ export const eventsWidget: WidgetDefinition = {
   id: 'events',
   purpose: {
     category: 'live',
-    label: "Mettre en avant les événements",
+    label: 'Agenda des prochains événements',
     description:
-      "Afficher les prochains événements, réunions ou temps forts de l'entreprise.",
+      "Prochains événements avec badge de date. Deux modes : grille compacte ou carrousel pellicule.",
     keywords: ['événements', 'agenda', 'réunions', 'temps forts', 'calendar'],
   },
   platformLabels: {
@@ -39,8 +39,8 @@ export const eventsWidget: WidgetDefinition = {
       default: 'compact',
       platforms: ['sharepoint'],
       options: [
-        { value: 'compact', label: 'Compacte' },
-        { value: 'filmstrip', label: 'Pellicule', sizes: ['full', 'two-thirds', 'half'] },
+        { value: 'compact',   label: 'Compacte',  layoutIcon: 'compact' },
+        { value: 'filmstrip', label: 'Pellicule',  layoutIcon: 'pellicule', sizes: ['full', 'two-thirds', 'half'] },
       ],
     },
     {

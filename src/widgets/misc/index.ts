@@ -5,8 +5,8 @@ export const miscWidget: WidgetDefinition = {
   id: 'misc',
   purpose: {
     category: 'access',
-    label: 'Espace réservé',
-    description: "Réserve un emplacement pour un widget SharePoint non encore intégré ou anticipé.",
+    label: 'Composant natif non catalogué',
+    description: "Espace réservé pour un composant SharePoint natif non encore représenté dans le catalogue.",
     keywords: ['divers', 'placeholder', 'espace', 'autre', 'widget', 'réservé'],
   },
   platformLabels: {

@@ -5,7 +5,7 @@ export const textWidget: WidgetDefinition = {
   id: 'text',
   purpose: {
     category: 'communicate',
-    label: 'Texte enrichi',
+    label: 'Bloc de contenu éditorial libre',
     description: 'Bloc de texte libre avec mise en forme : titres, gras, italique, couleurs, listes et tableaux.',
     keywords: ['texte', 'riche', 'éditorial', 'contenu', 'paragraphe', 'titre'],
   },

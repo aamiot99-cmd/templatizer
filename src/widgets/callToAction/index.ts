@@ -5,9 +5,9 @@ export const callToActionWidget: WidgetDefinition = {
   id: 'callToAction',
   purpose: {
     category: 'communicate',
-    label: "Appel à l'action",
+    label: "Appel à l'action illustré",
     description:
-      "Bannière visuelle avec message et bouton d'action, pour promouvoir une campagne, un événement ou une ressource clé.",
+      "Bannière pleine largeur avec image de fond, accroche et bouton d'appel à l'action.",
     keywords: ['cta', "appel à l'action", 'bannière', 'bouton', 'campagne', 'promo'],
   },
   platformLabels: {

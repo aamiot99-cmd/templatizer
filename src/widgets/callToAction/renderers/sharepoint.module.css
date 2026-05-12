@@ -3,6 +3,9 @@
   overflow: hidden;
   box-sizing: border-box;
   font-family: var(--font-sans);
+  min-height: 155px;
+  display: flex;
+  flex-direction: column;
 }
 
 .image {
@@ -26,11 +29,12 @@
 .content {
   position: relative;
   z-index: 1;
-  padding: 72px 28px 28px;
+  padding: 12px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
+  margin-top: auto;
 }
 
 .messageWrap {

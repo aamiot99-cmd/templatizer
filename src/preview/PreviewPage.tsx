@@ -23,6 +23,10 @@ const NEWS_HEADER_H: Record<string, number> = {
   'two-thirds': 59,
   full: 59,
 }
+const NEWS_SIDEBYSIDE_ROW_H: Record<string, number> = {
+  'two-thirds': 163,
+  full: 130,
+}
 
 const HC_HEADER_H = 54
 const HC_GRID_CARD_H = 275
@@ -45,12 +49,24 @@ function computeAdjustedItemCount(
   if (widgetId === 'news') {
     if ((config.countMode as string) === 'manual') return null
     const rawLayout = (config.layout as string) ?? 'featured'
-    const FULL_ONLY = ['featured', 'sidebyside']
-    const layout = size !== 'full' && FULL_ONLY.includes(rawLayout) ? 'list' : rawLayout
-    if (layout !== 'list') return null
-    const itemH = NEWS_ITEM_H[size] ?? 128
+    const layout =
+      (rawLayout === 'featured' && size !== 'full') ||
+      (rawLayout === 'sidebyside' && size !== 'full' && size !== 'two-thirds')
+        ? 'list'
+        : rawLayout
     const headerH = NEWS_HEADER_H[size] ?? 63
-    return Math.max(1, Math.min(8, Math.round((targetH - headerH) / itemH)))
+    if (layout === 'list') {
+      const itemH = NEWS_ITEM_H[size] ?? 128
+      return Math.max(1, Math.min(8, Math.ceil((targetH - headerH) / itemH)))
+    }
+    if (layout === 'sidebyside') {
+      const rowH = NEWS_SIDEBYSIDE_ROW_H[size] ?? 163
+      const count = Math.max(1, Math.ceil((targetH - headerH) / rowH))
+      // full = 2-column grid so multiply by 2; two-thirds = single column, round to even
+      if (size === 'full') return Math.min(8, count * 2)
+      return Math.min(8, Math.ceil(count / 2) * 2)
+    }
+    return null
   }
   if (widgetId === 'highlightedContent') {
     if ((config.countMode as string) === 'manual') return null
@@ -398,7 +414,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     </div>
   )
 
-  const needsSpInner = platform === 'sharepoint' && !isFullBleed
+  const needsSpInner = (platform === 'sharepoint' || platform === 'jint') && !isFullBleed
 
   return (
     <div className={sectionClass}>

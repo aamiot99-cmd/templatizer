@@ -5,7 +5,7 @@ export const documentLibraryWidget: WidgetDefinition = {
   id: 'documentLibrary',
   purpose: {
     category: 'access',
-    label: 'Bibliothèque de documents',
+    label: 'Accéder aux fichiers partagés',
     description:
       'Affiche le contenu d\'une bibliothèque SharePoint avec navigation dans les dossiers, colonnes Nom / Modifié / Modifié par.',
     keywords: ['documents', 'bibliothèque', 'fichiers', 'dossiers', 'partage', 'ressources'],
