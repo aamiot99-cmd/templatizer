@@ -11,13 +11,10 @@ export interface AuthSession {
 
 export function useAuthSession(): AuthSession {
   const [session, setSession] = useState<Session | null>(null)
-  const [status, setStatus] = useState<AuthStatus>('loading')
+  const [status, setStatus] = useState<AuthStatus>(!supabase ? 'unauthenticated' : 'loading')
 
   useEffect(() => {
-    if (!supabase) {
-      setStatus('unauthenticated')
-      return
-    }
+    if (!supabase) return
 
     let cancelled = false
 
