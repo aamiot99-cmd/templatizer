@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
-export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated'
+type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated'
 
 export interface AuthSession {
   session: Session | null

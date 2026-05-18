@@ -167,7 +167,7 @@ function cloneWireframe(wireframe: Wireframe): Wireframe {
   }
 }
 
-export const MAX_CELLS_PER_ROW = 3
+const MAX_CELLS_PER_ROW = 3
 
 const TWO_CELL_LAYOUTS: number[][] = [
   [1 / 2, 1 / 2],
