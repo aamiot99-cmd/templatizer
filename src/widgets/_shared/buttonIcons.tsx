@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react'
+
 interface IconProps { size: number }
 
 function IconArrowRight({ size }: IconProps) {
@@ -98,7 +100,7 @@ function IconSearch({ size }: IconProps) {
   )
 }
 
-type IconComponent = (props: IconProps) => JSX.Element
+type IconComponent = (props: IconProps) => ReactElement
 
 export const BUTTON_ICONS: Array<{ value: string; label: string; Icon: IconComponent }> = [
   { value: 'arrow-right',   label: 'Flèche',        Icon: IconArrowRight },
