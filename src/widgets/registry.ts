@@ -18,7 +18,7 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 
-export const WIDGETS: Record<string, WidgetDefinition> = {
+const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
   [miscWidget.id]: miscWidget,
   [buttonWidget.id]: buttonWidget,
@@ -43,7 +43,7 @@ export function getWidget(id: string): WidgetDefinition | undefined {
   return WIDGETS[id]
 }
 
-export function listWidgets(): WidgetDefinition[] {
+function listWidgets(): WidgetDefinition[] {
   return Object.values(WIDGETS)
 }
 
