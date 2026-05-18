@@ -340,8 +340,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
-  if (row.cells.length === 0) return null
-
+  // Calculs dérivés avant les hooks — safe même si row.cells est vide
   const ratios =
     row.columnRatios && row.columnRatios.length === row.cells.length
       ? row.columnRatios
@@ -354,6 +353,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
 
+  // Tous les hooks avant tout early return (règle des Hooks React)
   const [itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
@@ -404,7 +404,10 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     measure()
 
     return () => observer.disconnect()
-  }, [hasStacked, measure])
+  }, [hasStacked, measure, row.cells])
+
+  // Early return après tous les hooks
+  if (row.cells.length === 0) return null
 
   const sectionClass = isFullBleed
     ? styles.sectionFullBleed
