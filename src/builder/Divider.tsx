@@ -53,6 +53,7 @@ export function Divider({
   const startXRef = useRef(0)
   const startLeftRef = useRef(leftRatio)
   const draggedEnoughRef = useRef(false)
+  const abortRef = useRef<AbortController | null>(null)
 
   onChangeRef.current = onChange
   onCycleRef.current = onCycle
@@ -72,13 +73,13 @@ export function Divider({
   const handlePointerUp = useCallback(() => {
     setActive(false)
     setDisplayLayout(null)
-    window.removeEventListener('pointermove', handlePointerMove)
-    window.removeEventListener('pointerup', handlePointerUp)
+    abortRef.current?.abort()
+    abortRef.current = null
     if (!draggedEnoughRef.current) {
       onCycleRef.current()
     }
     draggedEnoughRef.current = false
-  }, [handlePointerMove])
+  }, [])
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (disabled) return
@@ -89,8 +90,10 @@ export function Divider({
     draggedEnoughRef.current = false
     setActive(true)
     setDisplayLayout(layoutFor(leftRatio) ?? TWO_CELL_LAYOUTS[0])
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
+    abortRef.current = new AbortController()
+    const { signal } = abortRef.current
+    window.addEventListener('pointermove', handlePointerMove, { signal })
+    window.addEventListener('pointerup', handlePointerUp, { signal })
   }
 
   if (disabled) {
