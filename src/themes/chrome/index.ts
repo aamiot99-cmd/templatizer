@@ -10,7 +10,7 @@ export interface ChromeProps {
   children: ReactNode
 }
 
-export const CHROMES: Partial<Record<Platform, ComponentType<ChromeProps>>> = {
+const CHROMES: Partial<Record<Platform, ComponentType<ChromeProps>>> = {
   jint: JintChrome,
   sharepoint: SharepointChrome,
 }
