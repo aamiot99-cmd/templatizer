@@ -2,11 +2,13 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type {
   Branding,
+  ColumnLayout,
   ConfigValues,
   HubMenu,
   NavEntry,
   Platform,
   ProjectState,
+  RowAlignment,
   StackedCell,
   WidgetSize,
   Wireframe,
@@ -107,6 +109,8 @@ interface ProjectActions {
   reorderRows: (fromIndex: number, toIndex: number) => void
   setRowColumnRatios: (rowId: string, ratios: number[]) => void
   cycleRowLayout: (rowId: string) => void
+  setRowColumnLayout: (rowId: string, layout: ColumnLayout) => void
+  updateRowAlignment: (rowId: string, alignment: RowAlignment) => void
 
   addCell: (
     rowId: string,
@@ -294,6 +298,41 @@ export const useProjectStore = create<ProjectStore>()(
                 TWO_CELL_LAYOUTS[(idx + 1) % TWO_CELL_LAYOUTS.length]
               return { ...r, columnRatios: next }
             }),
+          },
+        })),
+
+      setRowColumnLayout: (rowId, layout) =>
+        set((state) => {
+          const MISC_CONFIG = { title: '', showTitle: false, description: '', size: 'moyen' }
+          const RATIOS: Record<ColumnLayout, number[]> = {
+            single:     [1],
+            two:        [1 / 2, 1 / 2],
+            'third-left':  [1 / 3, 2 / 3],
+            'third-right': [2 / 3, 1 / 3],
+            three:      [1 / 3, 1 / 3, 1 / 3],
+          }
+          const targetCount = RATIOS[layout].length
+          return {
+            wireframe: {
+              rows: state.wireframe.rows.map((r) => {
+                if (r.id !== rowId) return r
+                let cells = [...r.cells]
+                while (cells.length < targetCount) {
+                  cells = [...cells, { id: uid(), widgetId: 'misc', config: MISC_CONFIG, size: 'full' as WidgetSize }]
+                }
+                if (cells.length > targetCount) cells = cells.slice(0, targetCount)
+                return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
+              }),
+            },
+          }
+        }),
+
+      updateRowAlignment: (rowId, alignment) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) =>
+              r.id === rowId ? { ...r, alignment } : r,
+            ),
           },
         })),
 

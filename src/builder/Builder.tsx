@@ -42,6 +42,17 @@ export function Builder({ platform }: BuilderProps) {
 
   const [activeDrag, setActiveDrag] = useState<ActiveDrag>(null)
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
+
+  function selectCell(cellId: string) {
+    setSelectedCellId(cellId)
+    setSelectedRowId(null)
+  }
+
+  function selectRow(rowId: string) {
+    setSelectedRowId(rowId)
+    setSelectedCellId(null)
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
@@ -175,7 +186,7 @@ export function Builder({ platform }: BuilderProps) {
         </div>
         <div
           className={styles.canvasColumn}
-          onClick={() => setSelectedCellId(null)}
+          onClick={() => { setSelectedCellId(null); setSelectedRowId(null) }}
         >
           <div className={styles.canvasHeader}>
             <h2 className={styles.canvasTitle}>
@@ -208,10 +219,16 @@ export function Builder({ platform }: BuilderProps) {
             platform={platform}
             rows={rows}
             selectedCellId={selectedCellId}
-            onSelectCell={setSelectedCellId}
+            onSelectCell={selectCell}
+            selectedRowId={selectedRowId}
+            onSelectRow={selectRow}
           />
         </div>
-        <ConfigPanel platform={platform} selectedCellId={selectedCellId} />
+        <ConfigPanel
+          platform={platform}
+          selectedCellId={selectedCellId}
+          selectedRowId={selectedRowId}
+        />
       </div>
       <DragOverlay
         className={styles.dragOverlay}

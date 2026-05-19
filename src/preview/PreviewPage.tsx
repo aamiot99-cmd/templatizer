@@ -417,8 +417,13 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         ? styles.sectionWhite
         : undefined
 
+  const alignItems =
+    row.alignment === 'center' ? 'center'
+    : row.alignment === 'bottom' ? 'flex-end'
+    : 'flex-start'
+
   const rowContent = (
-    <div className={styles.widgetRow}>
+    <div className={styles.widgetRow} style={{ alignItems }}>
       {row.cells.map((cell, idx) => {
         const widget = getWidget(cell.widgetId)
         if (!widget) return null

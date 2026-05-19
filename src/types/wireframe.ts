@@ -14,10 +14,14 @@ export interface WireframeCell {
   stackedCells?: StackedCell[]
 }
 
+export type RowAlignment = 'top' | 'center' | 'bottom'
+export type ColumnLayout = 'single' | 'two' | 'third-left' | 'third-right' | 'three'
+
 export interface WireframeRow {
   id: string
   cells: WireframeCell[]
   columnRatios?: number[]
+  alignment?: RowAlignment
 }
 
 export interface Wireframe {
