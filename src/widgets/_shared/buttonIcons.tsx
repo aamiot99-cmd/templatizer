@@ -102,21 +102,21 @@ function IconSearch({ size }: IconProps) {
 
 type IconComponent = (props: IconProps) => ReactElement
 
-export const BUTTON_ICONS: Array<{ value: string; label: string; Icon: IconComponent }> = [
-  { value: 'arrow-right',   label: 'Flèche',        Icon: IconArrowRight },
-  { value: 'external-link', label: 'Lien externe',   Icon: IconExternalLink },
-  { value: 'download',      label: 'Télécharger',    Icon: IconDownload },
-  { value: 'mail',          label: 'Messagerie',     Icon: IconMail },
-  { value: 'phone',         label: 'Téléphone',      Icon: IconPhone },
-  { value: 'calendar',      label: 'Agenda',         Icon: IconCalendar },
-  { value: 'globe',         label: 'Site web',       Icon: IconGlobe },
-  { value: 'document',      label: 'Document',       Icon: IconDocument },
-  { value: 'users',         label: 'Équipe',         Icon: IconUsers },
-  { value: 'search',        label: 'Rechercher',     Icon: IconSearch },
-]
+const ICON_MAP: Record<string, IconComponent> = {
+  'arrow-right':   IconArrowRight,
+  'external-link': IconExternalLink,
+  'download':      IconDownload,
+  'mail':          IconMail,
+  'phone':         IconPhone,
+  'calendar':      IconCalendar,
+  'globe':         IconGlobe,
+  'document':      IconDocument,
+  'users':         IconUsers,
+  'search':        IconSearch,
+}
 
 export function ButtonIcon({ name, size }: { name: string; size: number }) {
-  const found = BUTTON_ICONS.find((i) => i.value === name)
-  if (!found) return null
-  return <found.Icon size={size} />
+  const Icon = ICON_MAP[name]
+  if (!Icon) return null
+  return <Icon size={size} />
 }

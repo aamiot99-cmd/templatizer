@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import styles from './Divider.module.css'
 
 interface SnapPoint {
@@ -55,9 +55,11 @@ export function Divider({
   const draggedEnoughRef = useRef(false)
   const abortRef = useRef<AbortController | null>(null)
 
-  onChangeRef.current = onChange
-  onCycleRef.current = onCycle
-  containerWidthRef.current = containerWidth
+  useLayoutEffect(() => {
+    onChangeRef.current = onChange
+    onCycleRef.current = onCycle
+    containerWidthRef.current = containerWidth
+  })
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
     const deltaPx = e.clientX - startXRef.current

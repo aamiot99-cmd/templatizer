@@ -354,7 +354,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
 
   // Tous les hooks avant tout early return (règle des Hooks React)
-  const [itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
+  const [_itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   const measure = useCallback(() => {
@@ -390,10 +390,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   }, [row, hasStacked])
 
   useEffect(() => {
-    if (!hasStacked) {
-      setItemCountOverrides({})
-      return
-    }
+    if (!hasStacked) return
 
     const observer = new ResizeObserver(measure)
     for (const cell of row.cells) {
@@ -401,10 +398,11 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       const el = cellRefs.current.get(cell.id)
       if (el) observer.observe(el)
     }
-    measure()
 
     return () => observer.disconnect()
   }, [hasStacked, measure, row.cells])
+
+  const itemCountOverrides = hasStacked ? _itemCountOverrides : {}
 
   // Early return après tous les hooks
   if (row.cells.length === 0) return null
