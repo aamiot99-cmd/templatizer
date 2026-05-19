@@ -293,7 +293,7 @@ function WireframeCapture({
                 const label =
                   widget?.platformLabels[platform] ??
                   widget?.purpose.label ??
-                  cell.widgetId
+                  (cell.widgetId === '' ? 'Emplacement vide' : cell.widgetId)
                 const flex = ratios[idx] ?? 1 / row.cells.length
                 const stackedCells = cell.stackedCells ?? []
                 return (

@@ -112,6 +112,12 @@ interface ProjectActions {
   setRowColumnLayout: (rowId: string, layout: ColumnLayout) => void
   updateRowAlignment: (rowId: string, alignment: RowAlignment) => void
 
+  fillCell: (
+    rowId: string,
+    cellId: string,
+    widgetId: string,
+    config: ConfigValues,
+  ) => void
   addCell: (
     rowId: string,
     widgetId: string,
@@ -303,13 +309,12 @@ export const useProjectStore = create<ProjectStore>()(
 
       setRowColumnLayout: (rowId, layout) =>
         set((state) => {
-          const MISC_CONFIG = { title: '', showTitle: false, description: '', size: 'moyen' }
           const RATIOS: Record<ColumnLayout, number[]> = {
-            single:     [1],
-            two:        [1 / 2, 1 / 2],
+            single:        [1],
+            two:           [1 / 2, 1 / 2],
             'third-left':  [1 / 3, 2 / 3],
             'third-right': [2 / 3, 1 / 3],
-            three:      [1 / 3, 1 / 3, 1 / 3],
+            three:         [1 / 3, 1 / 3, 1 / 3],
           }
           const targetCount = RATIOS[layout].length
           return {
@@ -318,7 +323,7 @@ export const useProjectStore = create<ProjectStore>()(
                 if (r.id !== rowId) return r
                 let cells = [...r.cells]
                 while (cells.length < targetCount) {
-                  cells = [...cells, { id: uid(), widgetId: 'misc', config: MISC_CONFIG, size: 'full' as WidgetSize }]
+                  cells = [...cells, { id: uid(), widgetId: '', config: {} }]
                 }
                 if (cells.length > targetCount) cells = cells.slice(0, targetCount)
                 return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
@@ -333,6 +338,21 @@ export const useProjectStore = create<ProjectStore>()(
             rows: state.wireframe.rows.map((r) =>
               r.id === rowId ? { ...r, alignment } : r,
             ),
+          },
+        })),
+
+      fillCell: (rowId, cellId, widgetId, config) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) => {
+              if (r.id !== rowId) return r
+              return {
+                ...r,
+                cells: r.cells.map((c) =>
+                  c.id === cellId ? { ...c, widgetId, config, stackedCells: [] } : c,
+                ),
+              }
+            }),
           },
         })),
 

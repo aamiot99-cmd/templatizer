@@ -10,7 +10,7 @@ export interface WireframeCell {
   id: string
   widgetId: string
   config: ConfigValues
-  size: WidgetSize
+  size?: WidgetSize
   stackedCells?: StackedCell[]
 }
 

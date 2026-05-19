@@ -33,6 +33,7 @@ type ActiveDrag =
 export function Builder({ platform }: BuilderProps) {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const addCell = useProjectStore((s) => s.addCell)
+  const fillCell = useProjectStore((s) => s.fillCell)
   const addStackedCell = useProjectStore((s) => s.addStackedCell)
   const moveCell = useProjectStore((s) => s.moveCell)
   const reorderRows = useProjectStore((s) => s.reorderRows)
@@ -100,10 +101,23 @@ export function Builder({ platform }: BuilderProps) {
         widget.configSchema.map((f) => [f.key, f.default]),
       )
 
-      // Drop on a column's stack zone → stack the widget in that column
+      // Drop on a column's stack zone → stack the widget in that column (skip empty slots)
       if (overData?.type === 'col-stack') {
+        const targetRow = rows.find((r) => r.id === overData.rowId)
+        const targetCell = targetRow?.cells.find((c) => c.id === overData.cellId)
+        if (!targetCell || targetCell.widgetId === '') return
         addStackedCell(overData.rowId, overData.cellId, widget.id, config)
         return
+      }
+
+      // Drop on an empty slot → fill it
+      if (overData?.type === 'cell') {
+        const targetRow = rows.find((r) => r.id === overData.rowId)
+        const targetCell = targetRow?.cells.find((c) => c.id === overData.cellId)
+        if (targetCell?.widgetId === '') {
+          fillCell(overData.rowId, overData.cellId, widget.id, config)
+          return
+        }
       }
 
       // Drop on a row or cell → add as a new column
