@@ -142,9 +142,11 @@ Chaque widget dans `src/widgets/<nom>/renderers/` doit avoir exactement un fichi
 - `lumapps.tsx` → rendu LumApps
 - `sharepoint.tsx` → rendu SharePoint
 
-**Note** : si un widget ne supporte pas une plateforme donnée, il peut tomber en fallback sur SharePoint (cf. `resolveRenderer` dans `registry.ts`). Ce fallback doit être documenté dans l'`index.ts` du widget.
+**Fallback Jint → SharePoint** : si un widget n'a pas de renderer `jint:`, `resolveRenderer` utilise automatiquement le renderer `sharepoint:` pour la plateforme Jint. Cela couvre 11 widgets SharePoint-natifs (bouton, actualités SharePoint, liens rapides, etc.) qui s'affichent aussi dans Jint.
 
-Les composants réutilisables entre plusieurs renderers (ex. pagination, icônes) vont dans `src/widgets/_shared/`.
+**Widgets Jint-natifs** : certains widgets (`apps`, `contacts`, `directory`, `events/jint`, `focus`, `imageMap`, `meetings`, `social`) n'ont qu'un renderer `jint:` sans renderer `sharepoint:`. Ces widgets sont propres à Jint et n'apparaissent pas dans les palettes des autres plateformes — le fallback SharePoint→Jint ne fonctionne pas dans l'autre sens.
+
+Les composants réutilisables entre plusieurs renderers (ex. pagination, icônes, initiales) vont dans `src/widgets/_shared/`.
 
 ---
 
@@ -174,11 +176,20 @@ La structure `.lm-shell > .lm-center > .lm-main + .lm-sidebar` est **obligatoire
 
 ## Points de vigilance identifiés lors de l'audit
 
-*(Section mise à jour au fur et à mesure des phases d'audit)*
-
-- Chrome Jalios et LumApps **absents** de `src/themes/chrome/` — uniquement Jint et SharePoint. À vérifier si volontaire.
-- Jint utilise SharePoint comme fallback renderer pour certains widgets — comportement intentionnel documenté dans `registry.ts`.
+- Chrome Jalios et LumApps **intentionnellement absents** : ces plateformes affichent les widgets sans enveloppe de navigation dans l'aperçu. À créer si un contexte shell devient nécessaire en atelier.
+- Jint utilise SharePoint comme fallback renderer pour les widgets sans renderer `jint:` — comportement intentionnel documenté dans `registry.ts:resolveRenderer`.
+- 5 violations `rules-of-hooks` / `setState-in-useEffect` corrigées en phases 2–3 (`PreviewPage`, `useAuthSession`, `JintApps`, `Divider`).
+- Build `tsc -b` était cassé avant l'audit (namespace `JSX` supprimé en React 19) — corrigé en phase 2 via `ReactElement` importé depuis `react`.
+- 5 erreurs ESLint `react-refresh/only-export-components` dans `buttonIcons.tsx` sont **pré-existantes et hors périmètre** de cet audit (non régressées).
 
 ---
 
-*Dernière mise à jour : 2026-05-18 — Audit phase 0 (branche `cleanup/audit-2026-05`)*
+## Historique des audits
+
+| Date | Branche | Phases | État |
+|---|---|---|---|
+| 2026-05-18/19 | `cleanup/audit-2026-05` | 0 → 4 | ✅ Terminé |
+
+---
+
+*Dernière mise à jour : 2026-05-19 — Audit phases 0–4 terminé (branche `cleanup/audit-2026-05`)*
