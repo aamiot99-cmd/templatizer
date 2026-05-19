@@ -189,21 +189,23 @@ function RowConfigPanel({
             ))}
           </div>
         </div>
-        <div className={styles.fieldGroup}>
-          <div className={styles.fieldLabel}>Alignement</div>
-          <div className={styles.alignGroup}>
-            {ALIGN_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                className={`${styles.alignBtn} ${currentAlignment === opt.value ? styles.alignBtnActive : ''}`}
-                onClick={() => onAlignmentChange(opt.value)}
-              >
-                {opt.label}
-              </button>
-            ))}
+        {currentLayout !== 'single' && (
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Alignement</div>
+            <div className={styles.alignGroup}>
+              {ALIGN_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.alignBtn} ${currentAlignment === opt.value ? styles.alignBtnActive : ''}`}
+                  onClick={() => onAlignmentChange(opt.value)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </aside>
   )
