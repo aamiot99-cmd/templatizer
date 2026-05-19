@@ -425,11 +425,13 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const rowContent = (
     <div className={styles.widgetRow} style={{ alignItems }}>
       {row.cells.map((cell, idx) => {
+        const flex = ratios[idx] ?? 1 / row.cells.length
         const widget = getWidget(cell.widgetId)
-        if (!widget) return null
+        if (!widget) {
+          return <div key={cell.id} className={styles.widgetCell} style={{ flex: `${flex} 1 0` }} />
+        }
         const Renderer = resolveRenderer(widget, platform)
         if (!Renderer) return null
-        const flex = ratios[idx] ?? 1 / row.cells.length
         const size = ratioToSize(flex)
 
         const override = itemCountOverrides[cell.id]

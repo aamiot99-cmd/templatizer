@@ -119,18 +119,29 @@ export function Row({ row, platform, selectedCellId, onSelectCell, selectedRowId
             {row.cells.map((cell, idx) => {
               const flex = ratios[idx] ?? 1 / row.cells.length
               const isLast = idx === row.cells.length - 1
-              const isTwoCell = row.cells.length === 2
+              const cellCount = row.cells.length
+              const MIN_RATIO = 0.15
               return (
                 <DividerAwareCell
                   key={cell.id}
                   flex={flex}
                   isLast={isLast}
                   containerWidth={containerWidth}
-                  dividerDisabled={!isTwoCell}
+                  dividerDisabled={false}
                   onChangeLeft={(newLeft) => {
-                    setRowColumnRatios(row.id, [newLeft, 1 - newLeft])
+                    if (cellCount === 2) {
+                      setRowColumnRatios(row.id, [newLeft, 1 - newLeft])
+                    } else {
+                      const nextRatio = ratios[idx + 1] + (ratios[idx] - newLeft)
+                      if (newLeft < MIN_RATIO || nextRatio < MIN_RATIO) return
+                      const newRatios = [...ratios]
+                      newRatios[idx] = newLeft
+                      newRatios[idx + 1] = nextRatio
+                      const sum = newRatios.reduce((a, b) => a + b, 0)
+                      setRowColumnRatios(row.id, newRatios.map((r) => r / sum))
+                    }
                   }}
-                  onCycle={() => cycleRowLayout(row.id)}
+                  onCycle={cellCount === 2 ? () => cycleRowLayout(row.id) : () => {}}
                 >
                   <Chip
                     cell={cell}
