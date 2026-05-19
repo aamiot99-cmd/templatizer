@@ -325,7 +325,11 @@ export const useProjectStore = create<ProjectStore>()(
                 while (cells.length < targetCount) {
                   cells = [...cells, { id: uid(), widgetId: '', config: {} }]
                 }
-                if (cells.length > targetCount) cells = cells.slice(0, targetCount)
+                if (cells.length > targetCount) {
+                  const filled = cells.filter((c) => c.widgetId !== '')
+                  const empty = cells.filter((c) => c.widgetId === '')
+                  cells = [...filled, ...empty].slice(0, targetCount)
+                }
                 return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
               }),
             },
