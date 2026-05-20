@@ -237,6 +237,7 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
         ? {
             lockedBy: row.locked_by,
             lockedByEmail: row.locked_by_email ?? null,
+            lockedByAvatarUrl: null,
             lockedAt: lockTimestamp,
           }
         : null

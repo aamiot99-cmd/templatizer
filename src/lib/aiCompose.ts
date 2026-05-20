@@ -1,6 +1,7 @@
 import { WIDGETS } from '../widgets/registry'
 import type {
   Branding,
+  ConfigSchemaField,
   ConfigValues,
   Platform,
   ProjectState,
@@ -56,8 +57,8 @@ export function applyContent(
   if (!widget) return config
   const textKeys = new Set(
     widget.configSchema
-      .filter((f) => f.type === 'text' || f.type === 'richtext')
-      .map((f) => f.key),
+      .filter((f: ConfigSchemaField) => f.type === 'text' || f.type === 'richtext')
+      .map((f: ConfigSchemaField) => f.key),
   )
   const next = { ...config }
   for (const [key, value] of Object.entries(content)) {
