@@ -83,7 +83,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg);
   color: var(--text-muted);
   display: grid;
   place-items: center;
@@ -164,7 +164,7 @@
   padding: 11px 22px;
   border-radius: 9px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
   color: var(--text);
   font: inherit;
   font-size: 14px;

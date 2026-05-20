@@ -45,8 +45,8 @@
 .button {
   appearance: none;
   border: 1px solid var(--border);
-  background: #fff;
-  color: #08060d;
+  background: var(--bg);
+  color: var(--text);
   padding: 6px 12px;
   border-radius: 6px;
   font: inherit;
@@ -57,18 +57,19 @@
 }
 
 .button:hover {
-  background: #f5f5f7;
-  border-color: #c0bfc4;
+  background: var(--bg-muted);
+  border-color: var(--border-strong);
 }
 
 .buttonPrimary {
-  background: #08060d;
-  color: #fff;
-  border-color: #08060d;
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
 }
 
 .buttonPrimary:hover {
-  background: #201d28;
+  background: var(--text);
+  opacity: 0.9;
 }
 
 .dragOverlay {

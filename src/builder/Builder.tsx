@@ -17,6 +17,7 @@ import { getWidget } from '../widgets/registry'
 import { Pool } from './Pool'
 import { Wireframe } from './Wireframe'
 import { ConfigPanel } from './ConfigPanel'
+import { AiCorrection } from '../admin/AiCorrection'
 import { PLATFORMS, PLATFORM_LABELS } from '../types'
 import styles from './Builder.module.css'
 
@@ -44,6 +45,7 @@ export function Builder({ platform }: BuilderProps) {
   const [activeDrag, setActiveDrag] = useState<ActiveDrag>(null)
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
+  const [aiCorrectionOpen, setAiCorrectionOpen] = useState(false)
 
   function selectCell(cellId: string) {
     setSelectedCellId(cellId)
@@ -187,6 +189,7 @@ export function Builder({ platform }: BuilderProps) {
   }
 
   return (
+    <>
     <DndContext
       sensors={sensors}
       collisionDetection={collisionDetection}
@@ -218,6 +221,14 @@ export function Builder({ platform }: BuilderProps) {
                   </option>
                 ))}
               </select>
+              <button
+                type="button"
+                className={`${styles.button} ${styles.buttonPrimary}`}
+                onClick={() => setAiCorrectionOpen(true)}
+                title="Modifier le wireframe avec l'IA"
+              >
+                ✨ IA
+              </button>
               <button
                 type="button"
                 className={styles.button}
@@ -253,6 +264,8 @@ export function Builder({ platform }: BuilderProps) {
         ) : null}
       </DragOverlay>
     </DndContext>
+    <AiCorrection open={aiCorrectionOpen} onClose={() => setAiCorrectionOpen(false)} />
+    </>
   )
 }
 
@@ -269,12 +282,13 @@ function PoolDragPreview({
     <div
       style={{
         padding: '10px 14px',
-        background: '#fff',
-        border: '1px solid #08060d',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        border: '1px solid var(--text)',
         borderRadius: 8,
         fontSize: 13,
         fontWeight: 600,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        boxShadow: 'var(--shadow-md)',
       }}
     >
       {widget.platformLabels[platform]}

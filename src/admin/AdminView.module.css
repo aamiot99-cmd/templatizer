@@ -1,7 +1,12 @@
 .root {
+  display: block;
+}
+
+.main {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
+  min-width: 0;
 }
 
 .toolbar {
@@ -59,6 +64,32 @@
   transition: background 0.15s ease;
 }
 
+.aiButton {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--wizard-accent-border);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  background: var(--wizard-accent-soft);
+  color: var(--wizard-accent-hover);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.aiButton:hover:not(:disabled) {
+  background: var(--wizard-accent);
+  border-color: var(--wizard-accent);
+  color: white;
+}
+
+.aiButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .primaryButton:hover {
   background: var(--wizard-accent-hover);
 }
@@ -90,18 +121,26 @@
   font-size: 14px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listItem {
+  display: block;
 }
 
 .card {
   position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--bg);
@@ -147,6 +186,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .cardName {
@@ -175,16 +216,53 @@
   font-weight: 500;
 }
 
+.userName {
+  font-weight: 600;
+  color: var(--wizard-accent-hover);
+}
+
+.metaLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.userChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+}
+
+.userAvatar,
+.userAvatarFallback {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--wizard-accent-soft);
+}
+
+.userAvatarFallback {
+  display: inline-grid;
+  place-items: center;
+  color: var(--wizard-accent-hover);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 .cardActions {
   display: flex;
   gap: 8px;
-  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .cardButton {
-  flex: 1;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 14px;
   border: 1px solid var(--border-strong);
   border-radius: 8px;
   background: var(--bg);

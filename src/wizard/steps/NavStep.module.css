@@ -89,7 +89,7 @@
 
 .entry {
   position: relative;
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
@@ -144,7 +144,7 @@
   border-radius: 6px;
   font: inherit;
   font-size: 13px;
-  background: #fff;
+  background: var(--bg);
   width: 100%;
   box-sizing: border-box;
   transition:
@@ -200,7 +200,7 @@
 }
 
 .removeButton:hover {
-  background: #f0eff3;
+  background: var(--bg-muted);
   color: var(--text);
 }
 
@@ -238,7 +238,7 @@
   font-size: 11px;
   font-weight: 700;
   color: var(--wizard-accent);
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--wizard-accent-border);
   border-radius: 6px;
   padding: 3px 4px;
