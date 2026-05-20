@@ -298,3 +298,74 @@
   display: block;
   border-radius: 4px;
 }
+
+/* ── Row config panel ── */
+.panelHeader[data-category='row'] .panelBadge { background: #6b7280; }
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.colLayoutGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.colLayoutBtn {
+  padding: 7px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: #fafafb;
+  color: #8a8793;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+
+.colLayoutBtn:hover {
+  border-color: #a09cab;
+  color: #323130;
+}
+
+.colLayoutBtnActive {
+  border-color: #08060d;
+  background: rgba(8, 6, 13, 0.04);
+  color: #08060d;
+  font-weight: 600;
+}
+
+.alignGroup {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fafafb;
+}
+
+.alignBtn {
+  flex: 1;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 12px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  color: #8a8793;
+  transition: background 0.12s, color 0.12s;
+}
+
+.alignBtn:last-child {
+  border-right: none;
+}
+
+.alignBtnActive {
+  background: #08060d;
+  color: #fff;
+  font-weight: 600;
+}

@@ -67,6 +67,27 @@ export function Chip({
   const stackedCells = cell.stackedCells ?? []
 
   if (!widget) {
+    if (cell.widgetId === '') {
+      return (
+        <div ref={setNodeRef} className={styles.chipColumn} style={style}>
+          <div className={`${styles.emptySlot} ${isOver && isPoolDragging ? styles.emptySlotOver : ''}`}>
+            <span className={styles.emptySlotText}>Déposez un widget ici</span>
+            <button
+              type="button"
+              className={styles.removeButton}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation()
+                removeCell(rowId, cell.id)
+              }}
+              aria-label="Retirer l'emplacement"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )
+    }
     return (
       <div ref={setNodeRef} className={styles.chipColumn} style={style}>
         <div className={styles.chip}>
