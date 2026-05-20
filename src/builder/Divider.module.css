@@ -12,18 +12,18 @@
 
 .bar {
   width: 2px;
-  background: #b0aeb8;
+  background: var(--border);
   border-radius: 2px;
   transition: all 0.12s;
 }
 
 .divider:hover .bar {
-  background: #08060d;
+  background: var(--text);
   width: 3px;
 }
 
 .dividerActive .bar {
-  background: #08060d;
+  background: var(--text);
   width: 3px;
 }
 
@@ -33,12 +33,12 @@
 }
 
 .dividerDisabled:hover .bar {
-  background: #e0dfe3;
+  background: var(--border);
   width: 2px;
 }
 
 .dividerSnapped .bar {
-  background: #08060d;
+  background: var(--text);
   width: 4px;
   box-shadow: 0 0 0 2px rgba(8, 6, 13, 0.1);
 }
@@ -49,8 +49,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 3px 8px;
-  background: #08060d;
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
   font-size: 10px;
   font-weight: 700;
   font-family: ui-monospace, Consolas, monospace;
@@ -61,7 +61,7 @@
 }
 
 .labelSnapped {
-  background: #08060d;
+  background: var(--text);
   font-size: 11px;
   padding: 4px 10px;
 }

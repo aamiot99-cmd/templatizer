@@ -1,9 +1,9 @@
 .pool {
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .poolTitle {
@@ -12,7 +12,7 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   margin: 0 0 14px;
-  color: #6b6375;
+  color: var(--text-muted);
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
 }
@@ -30,7 +30,7 @@
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: #8a8793;
+  color: var(--text-subtle);
   margin: 0 0 6px;
   padding-left: 2px;
   display: flex;
@@ -61,7 +61,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  background: #fafafb;
+  background: var(--bg-subtle);
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: grab;
@@ -73,19 +73,19 @@
 .item::before {
   content: '⠿';
   font-size: 12px;
-  color: #d0cfd4;
+  color: var(--border-strong);
   flex-shrink: 0;
   transition: color 0.15s;
 }
 
 .item:hover {
-  background: #fff;
+  background: var(--bg);
   border-color: var(--border);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .item:hover::before {
-  color: #8a8793;
+  color: var(--text-muted);
 }
 
 .item:active {
@@ -100,13 +100,13 @@
 .itemLabel {
   font-size: 12.5px;
   font-weight: 600;
-  color: #08060d;
+  color: var(--text);
   line-height: 1.3;
 }
 
 .itemDescription {
   font-size: 10.5px;
-  color: #8a8793;
+  color: var(--text-subtle);
   line-height: 1.3;
 }
 

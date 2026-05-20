@@ -12,6 +12,9 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now()
 );
 
+alter table public.profiles
+  add column if not exists avatar_url text;
+
 -- ============================================================
 -- projects: shared workspace, any authenticated admin can read/edit any project.
 -- locked_by + locked_at provide a soft per-project edit lock.
@@ -52,13 +55,16 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, full_name)
+  insert into public.profiles (id, email, full_name, avatar_url)
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data ->> 'full_name', null)
+    coalesce(new.raw_user_meta_data ->> 'full_name', null),
+    coalesce(new.raw_user_meta_data ->> 'avatar_url', null)
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update set
+    full_name = coalesce(excluded.full_name, public.profiles.full_name),
+    avatar_url = coalesce(excluded.avatar_url, public.profiles.avatar_url);
   return new;
 end;
 $$;
@@ -214,3 +220,16 @@ begin
   where id = p_id and locked_by = auth.uid();
 end;
 $$;
+
+-- ============================================================
+-- Backfill: populate avatar_url and full_name on existing profiles
+-- from auth.users metadata (set by Google OAuth on first sign-in).
+-- Safe to re-run: only fills NULL columns.
+-- ============================================================
+update public.profiles p
+set
+  avatar_url = coalesce(p.avatar_url, u.raw_user_meta_data ->> 'avatar_url'),
+  full_name = coalesce(p.full_name, u.raw_user_meta_data ->> 'full_name')
+from auth.users u
+where u.id = p.id
+  and (p.avatar_url is null or p.full_name is null);

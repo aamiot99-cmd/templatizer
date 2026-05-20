@@ -43,7 +43,7 @@ interface OpenAttemptResult {
 
 interface RegistryActions {
   fetchProjects: () => Promise<void>
-  createProject: (name: string) => Promise<string>
+  createProject: (name: string, snapshot?: ProjectState) => Promise<string>
   deleteProject: (id: string) => Promise<void>
   renameProject: (id: string, name: string) => Promise<void>
   saveSnapshot: (id: string, snapshot: ProjectState) => Promise<void>
@@ -65,8 +65,9 @@ interface ProjectRow {
   locked_by: string | null
   locked_at: string | null
   last_edited_by: string | null
-  locker?: { email: string | null } | null
-  editor?: { email: string | null } | null
+  locker?: { email: string | null; avatar_url: string | null } | null
+  editor?: { email: string | null; avatar_url: string | null } | null
+  owner?: { email: string | null; avatar_url: string | null } | null
 }
 
 function rowToRecord(row: ProjectRow): ProjectRecord {
@@ -79,6 +80,7 @@ function rowToRecord(row: ProjectRow): ProjectRecord {
     ? {
         lockedBy: row.locked_by!,
         lockedByEmail: row.locker?.email ?? null,
+        lockedByAvatarUrl: row.locker?.avatar_url ?? null,
         lockedAt: lockTimestamp!,
       }
     : null
@@ -92,11 +94,14 @@ function rowToRecord(row: ProjectRow): ProjectRecord {
     lock,
     lastEditedBy: row.last_edited_by,
     lastEditedByEmail: row.editor?.email ?? null,
+    lastEditedByAvatarUrl: row.editor?.avatar_url ?? null,
+    ownerEmail: row.owner?.email ?? null,
+    ownerAvatarUrl: row.owner?.avatar_url ?? null,
   }
 }
 
 const PROJECT_SELECT =
-  '*, locker:profiles!projects_locked_by_fkey(email), editor:profiles!projects_last_edited_by_fkey(email)'
+  '*, locker:profiles!projects_locked_by_fkey(email, avatar_url), editor:profiles!projects_last_edited_by_fkey(email, avatar_url), owner:profiles!projects_owner_id_fkey(email, avatar_url)'
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = requireSupabase()
@@ -141,11 +146,11 @@ export const useProjectsRegistry = create<ProjectsRegistry>()((set, get) => ({
     }
   },
 
-  createProject: async (name) => {
+  createProject: async (name, initialSnapshot) => {
     const supabase = requireSupabase()
     const userId = await getCurrentUserId()
     const trimmed = name.trim() || 'Projet sans titre'
-    const snapshot = blankProjectState()
+    const snapshot = initialSnapshot ?? blankProjectState()
     const { data, error } = await supabase
       .from('projects')
       .insert({
