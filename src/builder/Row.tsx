@@ -17,6 +17,8 @@ interface RowProps {
   platform: Platform
   selectedCellId: string | null
   onSelectCell: (cellId: string) => void
+  selectedRowId: string | null
+  onSelectRow: (rowId: string) => void
 }
 
 function defaultRatios(count: number): number[] {
@@ -24,7 +26,13 @@ function defaultRatios(count: number): number[] {
   return new Array(count).fill(1 / count)
 }
 
-export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
+const ALIGN_ITEMS: Record<string, string> = {
+  top: 'flex-start',
+  center: 'center',
+  bottom: 'flex-end',
+}
+
+export function Row({ row, platform, selectedCellId, onSelectCell, selectedRowId, onSelectRow }: RowProps) {
   const removeRow = useProjectStore((s) => s.removeRow)
   const setRowColumnRatios = useProjectStore((s) => s.setRowColumnRatios)
   const cycleRowLayout = useProjectStore((s) => s.cycleRowLayout)
@@ -76,6 +84,8 @@ export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
   }
 
   const isEmpty = row.cells.length === 0
+  const isRowSelected = selectedRowId === row.id
+  const alignItems = ALIGN_ITEMS[row.alignment ?? 'top'] ?? 'flex-start'
 
   return (
     <div
@@ -83,12 +93,22 @@ export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
       style={rowStyle}
       className={`${styles.row} ${isEmpty ? styles.rowEmpty : ''} ${
         isOver ? styles.rowDraggingOver : ''
-      } ${isDragging ? styles.rowSortableDragging : ''}`}
+      } ${isDragging ? styles.rowSortableDragging : ''} ${
+        isRowSelected ? styles.rowSelected : ''
+      }`}
+      onClick={(e) => {
+        e.stopPropagation()
+        onSelectRow(row.id)
+      }}
     >
       <div className={styles.handle} {...listeners} {...attributes}>
         ⋮⋮
       </div>
-      <div ref={cellsContainerRef} className={styles.cellsContainer}>
+      <div
+        ref={cellsContainerRef}
+        className={styles.cellsContainer}
+        style={{ alignItems }}
+      >
         {isEmpty ? (
           <span>Déposez un widget ici</span>
         ) : (
@@ -99,18 +119,29 @@ export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
             {row.cells.map((cell, idx) => {
               const flex = ratios[idx] ?? 1 / row.cells.length
               const isLast = idx === row.cells.length - 1
-              const isTwoCell = row.cells.length === 2
+              const cellCount = row.cells.length
+              const MIN_RATIO = 0.15
               return (
                 <DividerAwareCell
                   key={cell.id}
                   flex={flex}
                   isLast={isLast}
                   containerWidth={containerWidth}
-                  dividerDisabled={!isTwoCell}
+                  dividerDisabled={false}
                   onChangeLeft={(newLeft) => {
-                    setRowColumnRatios(row.id, [newLeft, 1 - newLeft])
+                    if (cellCount === 2) {
+                      setRowColumnRatios(row.id, [newLeft, 1 - newLeft])
+                    } else {
+                      const nextRatio = ratios[idx + 1] + (ratios[idx] - newLeft)
+                      if (newLeft < MIN_RATIO || nextRatio < MIN_RATIO) return
+                      const newRatios = [...ratios]
+                      newRatios[idx] = newLeft
+                      newRatios[idx + 1] = nextRatio
+                      const sum = newRatios.reduce((a, b) => a + b, 0)
+                      setRowColumnRatios(row.id, newRatios.map((r) => r / sum))
+                    }
                   }}
-                  onCycle={() => cycleRowLayout(row.id)}
+                  onCycle={cellCount === 2 ? () => cycleRowLayout(row.id) : () => {}}
                 >
                   <Chip
                     cell={cell}
@@ -118,7 +149,9 @@ export function Row({ row, platform, selectedCellId, onSelectCell }: RowProps) {
                     platform={platform}
                     isSelected={cell.id === selectedCellId}
                     selectedCellId={selectedCellId}
-                    onSelect={onSelectCell}
+                    onSelect={(cellId) => {
+                      onSelectCell(cellId)
+                    }}
                   />
                 </DividerAwareCell>
               )
