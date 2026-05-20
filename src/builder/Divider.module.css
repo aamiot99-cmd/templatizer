@@ -1,7 +1,6 @@
 .divider {
   position: relative;
   flex: 0 0 10px;
-  align-self: stretch;
   cursor: col-resize;
   display: flex;
   align-items: stretch;
@@ -12,7 +11,7 @@
 
 .bar {
   width: 2px;
-  background: #b0aeb8;
+  background: #e0dfe3;
   border-radius: 2px;
   transition: all 0.12s;
 }

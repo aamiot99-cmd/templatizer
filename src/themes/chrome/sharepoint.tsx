@@ -1,6 +1,5 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import type { Branding, HubMenu, NavEntry } from '../../types'
-import { initials } from '../../widgets/_shared/utils'
 import styles from './sharepoint.module.css'
 
 interface SharepointChromeProps {
@@ -17,6 +16,9 @@ const DEFAULT_NAV: NavEntry[] = [
   { id: 'default-4', label: 'Ressources', url: '#' },
 ]
 
+function initials(name: string): string {
+  return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
+}
 
 function Waffle() {
   return (

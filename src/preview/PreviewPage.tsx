@@ -293,7 +293,7 @@ function WireframeCapture({
                 const label =
                   widget?.platformLabels[platform] ??
                   widget?.purpose.label ??
-                  (cell.widgetId === '' ? 'Emplacement vide' : cell.widgetId)
+                  cell.widgetId
                 const flex = ratios[idx] ?? 1 / row.cells.length
                 const stackedCells = cell.stackedCells ?? []
                 return (
@@ -340,7 +340,8 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
-  // Calculs dérivés avant les hooks — safe même si row.cells est vide
+  if (row.cells.length === 0) return null
+
   const ratios =
     row.columnRatios && row.columnRatios.length === row.cells.length
       ? row.columnRatios
@@ -353,8 +354,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
 
-  // Tous les hooks avant tout early return (règle des Hooks React)
-  const [_itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
+  const [itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   const measure = useCallback(() => {
@@ -390,7 +390,10 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   }, [row, hasStacked])
 
   useEffect(() => {
-    if (!hasStacked) return
+    if (!hasStacked) {
+      setItemCountOverrides({})
+      return
+    }
 
     const observer = new ResizeObserver(measure)
     for (const cell of row.cells) {
@@ -398,14 +401,10 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       const el = cellRefs.current.get(cell.id)
       if (el) observer.observe(el)
     }
+    measure()
 
     return () => observer.disconnect()
-  }, [hasStacked, measure, row.cells])
-
-  const itemCountOverrides = hasStacked ? _itemCountOverrides : {}
-
-  // Early return après tous les hooks
-  if (row.cells.length === 0) return null
+  }, [hasStacked, measure])
 
   const sectionClass = isFullBleed
     ? styles.sectionFullBleed
@@ -417,21 +416,14 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         ? styles.sectionWhite
         : undefined
 
-  const alignItems =
-    row.alignment === 'center' ? 'center'
-    : row.alignment === 'bottom' ? 'flex-end'
-    : 'flex-start'
-
   const rowContent = (
-    <div className={styles.widgetRow} style={{ alignItems }}>
+    <div className={styles.widgetRow}>
       {row.cells.map((cell, idx) => {
-        const flex = ratios[idx] ?? 1 / row.cells.length
         const widget = getWidget(cell.widgetId)
-        if (!widget) {
-          return <div key={cell.id} className={styles.widgetCell} style={{ flex: `${flex} 1 0` }} />
-        }
+        if (!widget) return null
         const Renderer = resolveRenderer(widget, platform)
         if (!Renderer) return null
+        const flex = ratios[idx] ?? 1 / row.cells.length
         const size = ratioToSize(flex)
 
         const override = itemCountOverrides[cell.id]

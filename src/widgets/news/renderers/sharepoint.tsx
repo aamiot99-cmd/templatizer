@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { WidgetRendererProps } from '../../../types'
-import { initials } from '../../_shared/utils'
 import styles from './sharepoint.module.css'
 
 type Article = {
@@ -85,6 +84,9 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
   }
 }
 
+function initialsOf(name: string): string {
+  return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
+}
 
 function ArticleCard({ item, className }: { item: Article; className?: string }) {
   return (
@@ -116,7 +118,7 @@ function FeaturedLayout({ featured, secondary }: { featured: Article; secondary:
           <div className={styles.featuredTitle}>{featured.title}</div>
           <div className={styles.featuredExcerpt}>{featured.excerpt}</div>
           <div className={styles.meta}>
-            <div className={styles.avatar}>{initials(featured.author)}</div>
+            <div className={styles.avatar}>{initialsOf(featured.author)}</div>
             <span className={styles.authorName}>{featured.author}</span>
             <span className={styles.metaDivider}>{featured.time}</span>
           </div>
@@ -170,7 +172,7 @@ function ListLayout({ secondary, size }: { featured: Article; secondary: Article
             <div className={isHalf ? styles.listTitleHalf : styles.listTitle}>{item.title}</div>
             <div className={styles.listExcerpt}>{item.excerpt}</div>
             <div className={styles.meta}>
-              <div className={styles.avatar}>{initials(item.author)}</div>
+              <div className={styles.avatar}>{initialsOf(item.author)}</div>
               <span className={styles.authorName}>{item.author}</span>
               <span className={styles.metaDivider}>{item.time}</span>
             </div>

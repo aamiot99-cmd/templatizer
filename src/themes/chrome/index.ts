@@ -10,9 +10,7 @@ export interface ChromeProps {
   children: ReactNode
 }
 
-// Jalios et LumApps n'ont pas de chrome : leur aperçu affiche les widgets
-// directement, stylés par le ThemeProvider, sans enveloppe de navigation.
-const CHROMES: Partial<Record<Platform, ComponentType<ChromeProps>>> = {
+export const CHROMES: Partial<Record<Platform, ComponentType<ChromeProps>>> = {
   jint: JintChrome,
   sharepoint: SharepointChrome,
 }

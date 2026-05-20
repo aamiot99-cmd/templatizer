@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import styles from './Divider.module.css'
 
 interface SnapPoint {
@@ -53,13 +53,10 @@ export function Divider({
   const startXRef = useRef(0)
   const startLeftRef = useRef(leftRatio)
   const draggedEnoughRef = useRef(false)
-  const abortRef = useRef<AbortController | null>(null)
 
-  useLayoutEffect(() => {
-    onChangeRef.current = onChange
-    onCycleRef.current = onCycle
-    containerWidthRef.current = containerWidth
-  })
+  onChangeRef.current = onChange
+  onCycleRef.current = onCycle
+  containerWidthRef.current = containerWidth
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
     const deltaPx = e.clientX - startXRef.current
@@ -75,13 +72,13 @@ export function Divider({
   const handlePointerUp = useCallback(() => {
     setActive(false)
     setDisplayLayout(null)
-    abortRef.current?.abort()
-    abortRef.current = null
+    window.removeEventListener('pointermove', handlePointerMove)
+    window.removeEventListener('pointerup', handlePointerUp)
     if (!draggedEnoughRef.current) {
       onCycleRef.current()
     }
     draggedEnoughRef.current = false
-  }, [])
+  }, [handlePointerMove])
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (disabled) return
@@ -92,10 +89,8 @@ export function Divider({
     draggedEnoughRef.current = false
     setActive(true)
     setDisplayLayout(layoutFor(leftRatio) ?? TWO_CELL_LAYOUTS[0])
-    abortRef.current = new AbortController()
-    const { signal } = abortRef.current
-    window.addEventListener('pointermove', handlePointerMove, { signal })
-    window.addEventListener('pointerup', handlePointerUp, { signal })
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
   }
 
   if (disabled) {

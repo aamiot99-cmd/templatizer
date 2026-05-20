@@ -12,8 +12,6 @@ interface WireframeProps {
   rows: WireframeRowT[]
   selectedCellId: string | null
   onSelectCell: (cellId: string) => void
-  selectedRowId: string | null
-  onSelectRow: (rowId: string) => void
 }
 
 export function Wireframe({
@@ -21,8 +19,6 @@ export function Wireframe({
   rows,
   selectedCellId,
   onSelectCell,
-  selectedRowId,
-  onSelectRow,
 }: WireframeProps) {
   const addRow = useProjectStore((s) => s.addRow)
 
@@ -39,8 +35,6 @@ export function Wireframe({
             platform={platform}
             selectedCellId={selectedCellId}
             onSelectCell={onSelectCell}
-            selectedRowId={selectedRowId}
-            onSelectRow={onSelectRow}
           />
         ))}
       </SortableContext>

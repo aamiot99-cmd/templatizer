@@ -1,5 +1,4 @@
 import type { WidgetRendererProps } from '../../../types'
-import { initials } from '../../_shared/utils'
 import styles from './jint.module.css'
 
 const HERO_IMAGE = '/news/pexels-brunogobofoto-3861712.jpg'
@@ -21,6 +20,14 @@ const SIDE_ARTICLES: Array<{
   },
 ]
 
+function initialsOf(name: string): string {
+  return name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
 
 export function JintNews({ config, branding }: WidgetRendererProps) {
   const title = (config.title as string) ?? `Actualités ${branding.name}`
@@ -46,7 +53,7 @@ export function JintNews({ config, branding }: WidgetRendererProps) {
           <div className={styles.content}>
             <div className={styles.heroTitle}>{heroTitle}</div>
             <div className={styles.meta}>
-              <div className={styles.avatar}>{initials(author)}</div>
+              <div className={styles.avatar}>{initialsOf(author)}</div>
               <div className={styles.author}>
                 {author} · {date}
               </div>
@@ -65,7 +72,7 @@ export function JintNews({ config, branding }: WidgetRendererProps) {
               <div className={styles.sideTitle}>{article.title}</div>
               <div className={styles.meta}>
                 <div className={styles.sideAvatar}>
-                  {initials(article.author)}
+                  {initialsOf(article.author)}
                 </div>
                 <div className={styles.sideAuthor}>{article.author}</div>
               </div>

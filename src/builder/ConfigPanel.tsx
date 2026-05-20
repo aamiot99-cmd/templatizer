@@ -1,5 +1,5 @@
 import { ratioToSize } from '../types'
-import type { ColumnLayout, ConfigSchemaField, Platform, RowAlignment, SelectField, WireframeRow } from '../types'
+import type { ConfigSchemaField, Platform, SelectField } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
@@ -8,204 +8,97 @@ import styles from './ConfigPanel.module.css'
 interface ConfigPanelProps {
   platform: Platform
   selectedCellId: string | null
-  selectedRowId: string | null
 }
 
-export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigPanelProps) {
+export function ConfigPanel({ platform, selectedCellId }: ConfigPanelProps) {
   const rows = useProjectStore((s) => s.wireframe.rows)
   const updateCellConfig = useProjectStore((s) => s.updateCellConfig)
-  const setRowColumnLayout = useProjectStore((s) => s.setRowColumnLayout)
-  const updateRowAlignment = useProjectStore((s) => s.updateRowAlignment)
 
-  // Cell config takes priority over row config
-  if (selectedCellId) {
-    const found = findCell(rows, selectedCellId)
-    if (!found) {
-      return (
-        <aside className={styles.panel}>
-          <h3 className={styles.panelTitle}>Paramètres</h3>
-          <div className={styles.empty}>Sélectionnez un widget dans le wireframe pour modifier ses paramètres.</div>
-        </aside>
-      )
-    }
+  const found = findCell(rows, selectedCellId)
 
-    const { rowId, cell, ratio } = found
-    const size = ratioToSize(ratio)
-    const widget = getWidget(cell.widgetId)
-
-    if (!widget) {
-      return (
-        <aside className={styles.panel}>
-          <h3 className={styles.panelTitle}>Widget inconnu</h3>
-        </aside>
-      )
-    }
-
-    const w = widget
-
-    function filterField(field: ConfigSchemaField) {
-      if (field.platforms && !field.platforms.includes(platform)) return false
-      if (field.visibleWhen) {
-        const conditions = Array.isArray(field.visibleWhen) ? field.visibleWhen : [field.visibleWhen]
-        for (const cond of conditions) {
-          const depField = w.configSchema.find((f) => f.key === cond.key)
-          const currentVal = cell.config[cond.key] ?? depField?.default
-          if (cond.notValue !== undefined && currentVal === cond.notValue) return false
-          if (cond.value !== undefined && currentVal !== cond.value) return false
-        }
-      }
-      return true
-    }
-
-    function applySelectSizeFilter(field: ConfigSchemaField) {
-      if (field.type !== 'select') return field
-      const filtered = (field as SelectField).options.filter(
-        (opt) => !opt.sizes || opt.sizes.includes(size),
-      )
-      return { ...field, options: filtered } as SelectField
-    }
-
-    function applyNumberStep(field: ConfigSchemaField) {
-      if (field.type !== 'number' || field.key !== 'itemCount') return field
-      const layoutField = w.configSchema.find((f) => f.key === 'layout')
-      const currentLayout = (cell.config.layout ?? layoutField?.default) as string
-      if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
-      if (currentLayout === 'vignettes') return { ...field, max: 5 }
-      return field
-    }
-
+  if (!found || !selectedCellId) {
     return (
       <aside className={styles.panel}>
-        <div className={styles.panelHeader} data-category={widget.purpose.category}>
-          <span className={styles.panelBadge}>{widget.purpose.category === 'communicate' ? 'COM' : widget.purpose.category === 'access' ? 'ACC' : widget.purpose.category === 'collaborate' ? 'COL' : 'VIE'}</span>
-          <div>
-            <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
-            <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
-          </div>
-        </div>
-        <div className={styles.fields}>
-          {widget.configSchema
-            .filter(filterField)
-            .map(applySelectSizeFilter)
-            .map(applyNumberStep)
-            .map((field) => (
-              <ConfigField
-                key={`${selectedCellId}-${field.key}`}
-                field={field}
-                value={cell.config[field.key]}
-                onChange={(value) =>
-                  updateCellConfig(rowId, cell.id, { [field.key]: value })
-                }
-              />
-            ))}
+        <h3 className={styles.panelTitle}>Paramètres</h3>
+        <div className={styles.empty}>
+          Sélectionnez un widget dans le wireframe pour modifier ses paramètres.
         </div>
       </aside>
     )
   }
 
-  if (selectedRowId) {
-    const row = rows.find((r) => r.id === selectedRowId)
-    if (!row) {
-      return (
-        <aside className={styles.panel}>
-          <h3 className={styles.panelTitle}>Paramètres</h3>
-          <div className={styles.empty}>Sélectionnez un widget dans le wireframe pour modifier ses paramètres.</div>
-        </aside>
-      )
+  const { rowId, cell, ratio } = found
+  const size = ratioToSize(ratio)
+  const widget = getWidget(cell.widgetId)
+
+  if (!widget) {
+    return (
+      <aside className={styles.panel}>
+        <h3 className={styles.panelTitle}>Widget inconnu</h3>
+      </aside>
+    )
+  }
+
+  // After the `if (!widget) return ...` guard above, widget is defined,
+  // but TS narrowing doesn't propagate into nested function declarations.
+  // Capture into a non-nullable local so the closures stay clean.
+  const w = widget
+
+  function filterField(field: ConfigSchemaField) {
+    if (field.platforms && !field.platforms.includes(platform)) return false
+    if (field.visibleWhen) {
+      const conditions = Array.isArray(field.visibleWhen) ? field.visibleWhen : [field.visibleWhen]
+      for (const cond of conditions) {
+        const depField = w.configSchema.find((f) => f.key === cond.key)
+        const currentVal = cell.config[cond.key] ?? depField?.default
+        if (cond.notValue !== undefined && currentVal === cond.notValue) return false
+        if (cond.value !== undefined && currentVal !== cond.value) return false
+      }
     }
-    return <RowConfigPanel row={row} onLayoutChange={(l) => setRowColumnLayout(selectedRowId, l)} onAlignmentChange={(a) => updateRowAlignment(selectedRowId, a)} />
+    return true
+  }
+
+  function applySelectSizeFilter(field: ConfigSchemaField) {
+    if (field.type !== 'select') return field
+    const filtered = (field as SelectField).options.filter(
+      (opt) => !opt.sizes || opt.sizes.includes(size),
+    )
+    return { ...field, options: filtered } as SelectField
+  }
+
+  function applyNumberStep(field: ConfigSchemaField) {
+    if (field.type !== 'number' || field.key !== 'itemCount') return field
+    const layoutField = w.configSchema.find((f) => f.key === 'layout')
+    const currentLayout = (cell.config.layout ?? layoutField?.default) as string
+    if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
+    if (currentLayout === 'vignettes') return { ...field, max: 5 }
+    return field
   }
 
   return (
     <aside className={styles.panel}>
-      <h3 className={styles.panelTitle}>Paramètres</h3>
-      <div className={styles.empty}>
-        Sélectionnez un widget dans le wireframe pour modifier ses paramètres.
-      </div>
-    </aside>
-  )
-}
-
-// ── Row config panel ─────────────────────────────────────────────────────────
-
-const COL_LAYOUTS: { value: ColumnLayout; label: string; count: number }[] = [
-  { value: 'single',      label: 'Une colonne',       count: 1 },
-  { value: 'two',         label: 'Deux colonnes',      count: 2 },
-  { value: 'third-left',  label: '⅓ à gauche',         count: 2 },
-  { value: 'third-right', label: '⅓ à droite',         count: 2 },
-  { value: 'three',       label: 'Trois colonnes',     count: 3 },
-]
-
-const ALIGN_OPTIONS: { value: RowAlignment; label: string }[] = [
-  { value: 'top',    label: 'Haut' },
-  { value: 'center', label: 'Centré' },
-  { value: 'bottom', label: 'Bas' },
-]
-
-function deriveColumnLayout(row: WireframeRow): ColumnLayout {
-  const n = row.cells.length
-  if (n <= 1) return 'single'
-  if (n >= 3) return 'three'
-  const r = row.columnRatios?.[0] ?? 0.5
-  if (Math.abs(r - 1 / 3) < 0.02) return 'third-left'
-  if (Math.abs(r - 2 / 3) < 0.02) return 'third-right'
-  return 'two'
-}
-
-function RowConfigPanel({
-  row,
-  onLayoutChange,
-  onAlignmentChange,
-}: {
-  row: WireframeRow
-  onLayoutChange: (layout: ColumnLayout) => void
-  onAlignmentChange: (alignment: RowAlignment) => void
-}) {
-  const currentLayout = deriveColumnLayout(row)
-  const currentAlignment = row.alignment ?? 'top'
-
-  return (
-    <aside className={styles.panel}>
-      <div className={styles.panelHeader} data-category="row">
-        <span className={styles.panelBadge}>LIG</span>
+      <div className={styles.panelHeader} data-category={widget.purpose.category}>
+        <span className={styles.panelBadge}>{widget.purpose.category === 'communicate' ? 'COM' : widget.purpose.category === 'access' ? 'ACC' : widget.purpose.category === 'collaborate' ? 'COL' : 'VIE'}</span>
         <div>
-          <h3 className={styles.panelTitle}>Ligne</h3>
-          <p className={styles.panelSubtitle}>Disposition et alignement</p>
+          <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
+          <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
         </div>
       </div>
       <div className={styles.fields}>
-        <div className={styles.fieldGroup}>
-          <div className={styles.fieldLabel}>Colonnes</div>
-          <div className={styles.colLayoutGrid}>
-            {COL_LAYOUTS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                className={`${styles.colLayoutBtn} ${currentLayout === opt.value ? styles.colLayoutBtnActive : ''}`}
-                onClick={() => onLayoutChange(opt.value)}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        {currentLayout !== 'single' && (
-          <div className={styles.fieldGroup}>
-            <div className={styles.fieldLabel}>Alignement</div>
-            <div className={styles.alignGroup}>
-              {ALIGN_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className={`${styles.alignBtn} ${currentAlignment === opt.value ? styles.alignBtnActive : ''}`}
-                  onClick={() => onAlignmentChange(opt.value)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {widget.configSchema
+          .filter(filterField)
+          .map(applySelectSizeFilter)
+          .map(applyNumberStep)
+          .map((field) => (
+            <ConfigField
+              key={`${selectedCellId}-${field.key}`}
+              field={field}
+              value={cell.config[field.key]}
+              onChange={(value) =>
+                updateCellConfig(rowId, cell.id, { [field.key]: value })
+              }
+            />
+          ))}
       </div>
     </aside>
   )
@@ -221,12 +114,14 @@ function findCell(
       ? row.columnRatios
       : new Array(row.cells.length).fill(1 / row.cells.length)
 
+    // Search primary cells
     const cellIdx = row.cells.findIndex((c) => c.id === cellId)
     if (cellIdx !== -1) {
       const cell = row.cells[cellIdx]
       return { rowId: row.id, cell, ratio: ratios[cellIdx] }
     }
 
+    // Search stacked cells
     for (let colIdx = 0; colIdx < row.cells.length; colIdx++) {
       const primary = row.cells[colIdx]
       const stackedIdx = primary.stackedCells?.findIndex((sc) => sc.id === cellId) ?? -1

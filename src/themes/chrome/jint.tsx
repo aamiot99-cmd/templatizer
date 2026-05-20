@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import type { Branding, HubMenu, NavEntry } from '../../types'
-import { initials } from '../../widgets/_shared/utils'
 import styles from './jint.module.css'
 
 interface JintChromeProps {
@@ -17,6 +16,14 @@ const DEFAULT_NAV: NavEntry[] = [
   { id: 'default-4', label: 'Centre de news', url: '#' },
 ]
 
+function initials(name: string): string {
+  return name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
 
 function Waffle() {
   return (

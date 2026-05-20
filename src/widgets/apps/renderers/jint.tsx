@@ -44,12 +44,16 @@ export function JintApps({ config, size }: WidgetRendererProps) {
   const apps = DEFAULT_APPS.slice(0, tileCount)
 
   const gridRef = useRef<HTMLDivElement>(null)
-  const [measuredCols, setMeasuredCols] = useState(1)
+  const [cols, setCols] = useState(isCompact ? COMPACT_COLS : 1)
   const [page, setPage] = useState(0)
-  const cols = isCompact ? COMPACT_COLS : measuredCols
 
   useEffect(() => {
-    if (isCompact || !gridRef.current) return
+    if (isCompact) {
+      setCols(COMPACT_COLS)
+      setPage(0)
+      return
+    }
+    if (!gridRef.current) return
     const el = gridRef.current
     const update = () => {
       const width = el.clientWidth
@@ -57,7 +61,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
         1,
         Math.floor((width + TILE_GAP) / (TILE_SIZE + TILE_GAP)),
       )
-      setMeasuredCols(c)
+      setCols(c)
       setPage(0)
     }
     update()
@@ -70,7 +74,6 @@ export function JintApps({ config, size }: WidgetRendererProps) {
   const perPage = Math.max(1, cols * rows)
   const pages = chunk(apps, perPage)
   const totalPages = pages.length
-  const safePage = Math.min(page, Math.max(0, totalPages - 1))
 
   // Page grid template: compact uses 1fr columns (tiles are aspect-ratio 1 in
   // CSS and stay square); non-compact uses fixed TILE_SIZE cells so tiles are
@@ -96,7 +99,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
             className={styles.track}
             style={{
               width: `${totalPages * 100}%`,
-              transform: `translateX(-${(safePage * 100) / totalPages}%)`,
+              transform: `translateX(-${(page * 100) / totalPages}%)`,
             }}
           >
             {pages.map((pageApps, idx) => (
@@ -120,7 +123,7 @@ export function JintApps({ config, size }: WidgetRendererProps) {
         </div>
       </div>
       <PagerControls
-        page={safePage}
+        page={page}
         totalPages={totalPages}
         onPageChange={setPage}
         variant="light"

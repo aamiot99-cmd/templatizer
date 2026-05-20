@@ -2,8 +2,7 @@ import type { JSX } from 'react'
 import type { ConfigSchemaField } from '../types'
 import styles from './ConfigPanel.module.css'
 import { RichTextEditor } from './RichTextEditor'
-import { BUTTON_ICONS } from '../widgets/_shared/buttonIconsData'
-import { ButtonIcon } from '../widgets/_shared/buttonIcons'
+import { BUTTON_ICONS, ButtonIcon } from '../widgets/_shared/buttonIcons'
 import { LAYOUT_ICONS, type LayoutIconEntry } from './layoutIcons'
 
 interface ConfigFieldProps {

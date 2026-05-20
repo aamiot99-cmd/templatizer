@@ -36,7 +36,7 @@ interface RegistryState {
   error: string | null
 }
 
-interface OpenAttemptResult {
+export interface OpenAttemptResult {
   acquired: boolean
   lock: ProjectLock | null
 }

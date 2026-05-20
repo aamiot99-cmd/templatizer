@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { WidgetRendererProps } from '../../../types'
-import { initials } from '../../_shared/utils'
 import styles from './sharepoint.module.css'
 
 type ContentType = 'documents' | 'pages' | 'actualites' | 'videos' | 'images' | 'evenements' | 'contacts' | 'tout'
@@ -222,7 +221,8 @@ function ImageListIcon() {
 }
 
 function AuthorAvatar({ name }: { name: string }) {
-  return <div className={styles.authorAvatar}>{initials(name)}</div>
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  return <div className={styles.authorAvatar}>{initials}</div>
 }
 
 // ─── Card Preview (used in Grille & Pellicule) ─────────────────────────────

@@ -15,11 +15,6 @@
   border-color: #d0cfd4;
 }
 
-.rowSelected {
-  border-color: var(--wizard-accent, #7c3aed);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--wizard-accent, #7c3aed) 15%, transparent);
-}
-
 .rowEmpty {
   border-style: dashed;
   border-color: #d0cfd4;

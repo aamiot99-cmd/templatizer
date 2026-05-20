@@ -11,4 +11,5 @@ export const THEMES: Record<Platform, ThemeTokens> = {
   jint: jintTheme,
 }
 
+export { lumappsTheme, sharepointTheme, jaliosTheme, jintTheme }
 export { ThemeProvider } from './ThemeProvider'
