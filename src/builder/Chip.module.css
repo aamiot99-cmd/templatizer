@@ -178,6 +178,41 @@
   bottom: -3px;
 }
 
+/* ── Empty slot ── */
+
+.emptySlot {
+  position: relative;
+  min-height: 56px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px dashed #d0cfd4;
+  border-radius: 8px;
+  background: #fafafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.emptySlotOver {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.emptySlotText {
+  font-size: 11px;
+  color: #c0bfc8;
+  pointer-events: none;
+}
+
+.emptySlotOver .emptySlotText {
+  color: #3b82f6;
+}
+
+.emptySlot:hover .removeButton {
+  opacity: 1;
+}
+
 /* ── Stack drop zone ── */
 
 .stackZone {

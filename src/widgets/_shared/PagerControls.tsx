@@ -1,6 +1,6 @@
 import styles from './PagerControls.module.css'
 
-export type PagerVariant = 'dark' | 'light'
+type PagerVariant = 'dark' | 'light'
 
 interface PagerControlsProps {
   page: number

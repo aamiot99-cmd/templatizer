@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
-export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated'
+type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated'
 
 export interface AuthSession {
   session: Session | null
@@ -11,13 +11,10 @@ export interface AuthSession {
 
 export function useAuthSession(): AuthSession {
   const [session, setSession] = useState<Session | null>(null)
-  const [status, setStatus] = useState<AuthStatus>('loading')
+  const [status, setStatus] = useState<AuthStatus>(!supabase ? 'unauthenticated' : 'loading')
 
   useEffect(() => {
-    if (!supabase) {
-      setStatus('unauthenticated')
-      return
-    }
+    if (!supabase) return
 
     let cancelled = false
 

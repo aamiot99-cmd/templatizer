@@ -2,11 +2,13 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type {
   Branding,
+  ColumnLayout,
   ConfigValues,
   HubMenu,
   NavEntry,
   Platform,
   ProjectState,
+  RowAlignment,
   StackedCell,
   WidgetSize,
   Wireframe,
@@ -107,7 +109,15 @@ interface ProjectActions {
   reorderRows: (fromIndex: number, toIndex: number) => void
   setRowColumnRatios: (rowId: string, ratios: number[]) => void
   cycleRowLayout: (rowId: string) => void
+  setRowColumnLayout: (rowId: string, layout: ColumnLayout) => void
+  updateRowAlignment: (rowId: string, alignment: RowAlignment) => void
 
+  fillCell: (
+    rowId: string,
+    cellId: string,
+    widgetId: string,
+    config: ConfigValues,
+  ) => void
   addCell: (
     rowId: string,
     widgetId: string,
@@ -167,7 +177,7 @@ function cloneWireframe(wireframe: Wireframe): Wireframe {
   }
 }
 
-export const MAX_CELLS_PER_ROW = 3
+const MAX_CELLS_PER_ROW = 3
 
 const TWO_CELL_LAYOUTS: number[][] = [
   [1 / 2, 1 / 2],
@@ -293,6 +303,59 @@ export const useProjectStore = create<ProjectStore>()(
               const next =
                 TWO_CELL_LAYOUTS[(idx + 1) % TWO_CELL_LAYOUTS.length]
               return { ...r, columnRatios: next }
+            }),
+          },
+        })),
+
+      setRowColumnLayout: (rowId, layout) =>
+        set((state) => {
+          const RATIOS: Record<ColumnLayout, number[]> = {
+            single:        [1],
+            two:           [1 / 2, 1 / 2],
+            'third-left':  [1 / 3, 2 / 3],
+            'third-right': [2 / 3, 1 / 3],
+            three:         [1 / 3, 1 / 3, 1 / 3],
+          }
+          const targetCount = RATIOS[layout].length
+          return {
+            wireframe: {
+              rows: state.wireframe.rows.map((r) => {
+                if (r.id !== rowId) return r
+                let cells = [...r.cells]
+                while (cells.length < targetCount) {
+                  cells = [...cells, { id: uid(), widgetId: '', config: {} }]
+                }
+                if (cells.length > targetCount) {
+                  const filled = cells.filter((c) => c.widgetId !== '')
+                  const empty = cells.filter((c) => c.widgetId === '')
+                  cells = [...filled, ...empty].slice(0, targetCount)
+                }
+                return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
+              }),
+            },
+          }
+        }),
+
+      updateRowAlignment: (rowId, alignment) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) =>
+              r.id === rowId ? { ...r, alignment } : r,
+            ),
+          },
+        })),
+
+      fillCell: (rowId, cellId, widgetId, config) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) => {
+              if (r.id !== rowId) return r
+              return {
+                ...r,
+                cells: r.cells.map((c) =>
+                  c.id === cellId ? { ...c, widgetId, config, stackedCells: [] } : c,
+                ),
+              }
             }),
           },
         })),
