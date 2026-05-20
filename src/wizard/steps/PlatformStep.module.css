@@ -8,7 +8,7 @@
   position: relative;
   appearance: none;
   padding: 24px;
-  background: #fff;
+  background: var(--bg);
   border: 2px solid var(--border);
   border-radius: 14px;
   cursor: pointer;
@@ -21,58 +21,48 @@
 }
 
 .card:hover {
-  border-color: #a0a0a8;
+  border-color: var(--border-strong);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .cardSelected {
-  border-color: #08060d;
-  box-shadow: 0 0 0 4px rgba(8, 6, 13, 0.06);
+  border-color: var(--text);
+  box-shadow: 0 0 0 4px var(--wizard-accent-soft);
 }
 
 .logo {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 14px;
   display: grid;
   place-items: center;
-  color: #fff;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  background: #fff;
+  border: 1px solid var(--border);
   margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  padding: 8px;
 }
 
-.logoLumapps {
-  background: linear-gradient(135deg, #1a73e8, #34a853);
-}
-
-.logoSharepoint {
-  background: linear-gradient(135deg, #0078d4, #2b88d8);
-}
-
-.logoJalios {
-  background: linear-gradient(135deg, #e63946, #c1121f);
-}
-
-.logoJint {
-  background: linear-gradient(135deg, #7b2ff7, #e040fb);
+.logoImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .name {
   font-size: 18px;
   font-weight: 800;
   margin: 0 0 2px;
-  color: #08060d;
+  color: var(--text);
   letter-spacing: -0.3px;
 }
 
 .tagline {
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-primary, #6b6375);
+  color: var(--text-muted);
   margin: 0 0 10px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -80,7 +70,7 @@
 
 .description {
   font-size: 13px;
-  color: #6b6375;
+  color: var(--text-muted);
   margin: 0;
   line-height: 1.4;
 }
@@ -91,11 +81,11 @@
   right: 14px;
   width: 22px;
   height: 22px;
-  background: #08060d;
+  background: var(--text);
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-size: 11px;
   font-weight: 700;
-  color: #fff;
+  color: var(--bg);
 }

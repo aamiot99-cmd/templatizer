@@ -3,7 +3,7 @@
   align-items: stretch;
   gap: 0;
   padding: 8px;
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   min-height: 72px;
@@ -12,7 +12,7 @@
 }
 
 .row:hover {
-  border-color: #d0cfd4;
+  border-color: var(--border-strong);
 }
 
 .rowSelected {
@@ -22,20 +22,20 @@
 
 .rowEmpty {
   border-style: dashed;
-  border-color: #d0cfd4;
-  background: #fafafb;
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
   align-items: center;
   justify-content: center;
-  color: #a09cab;
+  color: var(--text-subtle);
   font-size: 12px;
   padding: 16px;
 }
 
 .rowDraggingOver {
-  border-color: #3b82f6;
+  border-color: var(--wizard-accent);
   border-style: dashed;
-  background: #eff6ff;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  background: var(--wizard-accent-soft);
+  box-shadow: 0 0 0 2px var(--wizard-accent-ring);
 }
 
 .rowSortableDragging {
@@ -48,7 +48,7 @@
   justify-content: center;
   width: 20px;
   margin-right: 4px;
-  color: #d0cfd4;
+  color: var(--border-strong);
   cursor: grab;
   font-size: 14px;
   line-height: 1;
@@ -63,7 +63,7 @@
 }
 
 .row:hover .handle {
-  color: #8a8793;
+  color: var(--text-muted);
 }
 
 .cellsContainer {
@@ -88,8 +88,8 @@
   height: 20px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: #fff;
-  color: #a09cab;
+  background: var(--bg);
+  color: var(--text-subtle);
   font-size: 13px;
   line-height: 1;
   display: grid;
@@ -97,7 +97,7 @@
   cursor: pointer;
   opacity: 0;
   transition: all 0.15s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .row:hover .deleteRow {
