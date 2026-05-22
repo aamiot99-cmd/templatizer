@@ -133,3 +133,51 @@
   color: #6d28d9;
   line-height: 1;
 }
+
+.tooltip {
+  position: fixed;
+  width: 680px;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  z-index: 99999;
+  overflow: hidden;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.15s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tooltipImage {
+  float: left;
+  width: 300px;
+  height: auto;
+  max-height: 220px;
+  object-fit: contain;
+  margin: 2px 14px 6px 0;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.tooltipTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: -0.1px;
+}
+
+.tooltipDescription {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
