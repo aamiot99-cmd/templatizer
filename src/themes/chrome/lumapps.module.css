@@ -13,7 +13,6 @@
 /* ── Top bar (white, ~64px tall) ── */
 .topBar {
   background: #ffffff;
-  border-bottom: 1px solid #e8eaed;
 }
 
 .topBarInner {
