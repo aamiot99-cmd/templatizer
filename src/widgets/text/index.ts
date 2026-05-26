@@ -1,5 +1,6 @@
 import type { WidgetDefinition } from '../../types'
 import { SharepointText } from './renderers/sharepoint'
+import { LumappsText } from './renderers/lumapps'
 
 export const textWidget: WidgetDefinition = {
   id: 'text',
