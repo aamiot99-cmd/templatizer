@@ -1,5 +1,4 @@
 import type { WidgetDefinition } from '../../types'
-import { LumappsNews } from './renderers/lumapps'
 import { SharepointNews } from './renderers/sharepoint'
 import { JaliosNews } from './renderers/jalios'
 import { JintNews } from './renderers/jint'
