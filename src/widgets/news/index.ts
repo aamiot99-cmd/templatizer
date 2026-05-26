@@ -13,7 +13,7 @@ export const newsWidget: WidgetDefinition = {
     keywords: ['actualités', 'annonces', 'news', 'communication', 'flash info'],
   },
   platformLabels: {
-    lumapps: 'News',
+    lumapps: 'Actualités',
     sharepoint: 'Actualités',
     jalios: 'Flash Info',
     jint: 'Actualités',
