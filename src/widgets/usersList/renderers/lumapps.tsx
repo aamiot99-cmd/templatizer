@@ -50,18 +50,9 @@ export function LumappsUsersList({ config }: WidgetRendererProps) {
       <ul className={styles.list}>
         {users.map((user) => (
           <li key={user.email} className={styles.item}>
-            {user.photoGradient ? (
-              <span
-                className={styles.avatarPhoto}
-                style={{ background: user.photoGradient }}
-              >
-                <span aria-hidden="true">{user.photoEmoji ?? '👤'}</span>
-              </span>
-            ) : (
-              <span className={styles.avatarDefault}>
-                <SilhouetteIcon />
-              </span>
-            )}
+            <span className={styles.avatarDefault}>
+              <SilhouetteIcon />
+            </span>
             <div className={styles.info}>
               <div className={styles.name}>{user.name}</div>
               <div className={styles.email}>{user.email}</div>
