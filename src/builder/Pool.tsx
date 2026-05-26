@@ -82,10 +82,13 @@ function PoolItem({ widget, platform }: PoolItemProps) {
     setNodeRef(el)
   }
 
+  // Cancel any pending tooltip timer when the drag starts. Visibility itself
+  // is derived at render time (see `tooltipVisible` below) so we don't need
+  // to call setState here, which keeps react-hooks/set-state-in-effect happy.
   useEffect(() => {
-    if (isDragging) {
-      if (showTimerRef.current) clearTimeout(showTimerRef.current)
-      setTooltipPos(null)
+    if (isDragging && showTimerRef.current) {
+      clearTimeout(showTimerRef.current)
+      showTimerRef.current = null
     }
   }, [isDragging])
 
@@ -149,6 +152,7 @@ function PoolItem({ widget, platform }: PoolItemProps) {
         {isNativeJint && <span className={styles.platformPill}>Jint</span>}
       </div>
       {tooltipPos &&
+        !isDragging &&
         richDoc &&
         createPortal(
           <div
