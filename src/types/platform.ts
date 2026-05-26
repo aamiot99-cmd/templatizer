@@ -1,12 +1,13 @@
-export type Platform = 'lumapps' | 'sharepoint' | 'jalios' | 'jint'
+export type Platform = 'lumapps' | 'sharepoint' | 'jalios' | 'jint' | 'powell'
 
-export const PLATFORMS: Platform[] = ['lumapps', 'sharepoint', 'jalios', 'jint']
+export const PLATFORMS: Platform[] = ['lumapps', 'sharepoint', 'jalios', 'jint', 'powell']
 
 export const PLATFORM_LABELS: Record<Platform, string> = {
   lumapps: 'LumApps',
   sharepoint: 'SharePoint',
   jalios: 'Jalios',
   jint: 'Jint',
+  powell: 'Powell',
 }
 
 export interface Branding {

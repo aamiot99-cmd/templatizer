@@ -82,6 +82,7 @@ export function Wizard() {
               <li key={step.id}>
                 <button
                   type="button"
+                  data-label={step.label}
                   className={`${styles.step} ${active ? styles.stepActive : ''}`}
                   onClick={() => setCurrentStepIndex(index)}
                 >
@@ -93,6 +94,28 @@ export function Wizard() {
           })}
         </ul>
       </nav>
+
+      {/* Enfant direct du wizard (hors sidebar) → pas de conflit de stacking context */}
+      <div className={styles.stepsPopover}>
+        <h3 className={styles.sidebarTitle}>Étapes</h3>
+        <ul className={styles.steps}>
+          {STEPS.map((step, index) => {
+            const active = index === currentStepIndex
+            return (
+              <li key={step.id}>
+                <button
+                  type="button"
+                  className={`${styles.step} ${active ? styles.stepActive : ''}`}
+                  onClick={() => setCurrentStepIndex(index)}
+                >
+                  <span className={styles.stepNumber}>{index + 1}</span>
+                  <span className={styles.stepLabel}>{step.label}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
 
       <section className={styles.content}>
         <header className={styles.contentHeader}>

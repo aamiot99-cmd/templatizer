@@ -1,6 +1,8 @@
 import type { Platform } from '../../types'
 import { PLATFORMS, PLATFORM_LABELS } from '../../types'
 import { useProjectStore } from '../../store/projectStore'
+import { useAuthSession } from '../../auth/useAuthSession'
+import { BETA_PLATFORMS, BETA_EMAILS } from '../../auth/betaAccess'
 import styles from './PlatformStep.module.css'
 
 interface PlatformCardInfo {
@@ -34,11 +36,19 @@ const PLATFORM_CARDS: Record<Platform, PlatformCardInfo> = {
     description:
       'Intranet M365-like moderne, avec layout libre en wireframe et effets glassmorphism.',
   },
+  powell: {
+    logoSrc: '/logos-technos/powell.svg',
+    tagline: 'SharePoint Overlay',
+    description:
+      "Surcouche SharePoint qui enrichit l'expérience M365 avec des composants collaboratifs avancés.",
+  },
 }
 
 export function PlatformStep() {
   const platform = useProjectStore((s) => s.platform)
   const setPlatform = useProjectStore((s) => s.setPlatform)
+  const { session } = useAuthSession()
+  const isBetaUser = BETA_EMAILS.includes(session?.user?.email ?? '')
 
   return (
     <div className={styles.grid}>
@@ -46,14 +56,18 @@ export function PlatformStep() {
         const info = PLATFORM_CARDS[p]
         const selected = p === platform
         const label = PLATFORM_LABELS[p]
+        const comingSoon = !isBetaUser && BETA_PLATFORMS.includes(p)
         return (
           <button
             key={p}
             type="button"
-            className={`${styles.card} ${selected ? styles.cardSelected : ''}`}
-            onClick={() => setPlatform(p)}
+            className={`${styles.card} ${selected ? styles.cardSelected : ''} ${comingSoon ? styles.cardComingSoon : ''}`}
+            onClick={comingSoon ? undefined : () => setPlatform(p)}
           >
-            {selected && <div className={styles.checkmark}>✓</div>}
+            {comingSoon
+              ? <div className={styles.comingSoonBadge}>À venir</div>
+              : selected && <div className={styles.checkmark}>✓</div>
+            }
             <div className={styles.logo}>
               <img
                 src={info.logoSrc}

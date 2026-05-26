@@ -127,7 +127,7 @@ export function Chip({
         <div className={styles.category}>
           {USAGE_CATEGORY_LABELS[widget.purpose.category]}
         </div>
-        <div className={styles.label}>{widget.platformLabels[platform]}</div>
+        <div className={styles.label}>{widget.platformLabels[platform] ?? widget.purpose.label}</div>
         <button
           type="button"
           className={styles.removeButton}
@@ -201,7 +201,7 @@ function StackedChip({
       <div className={styles.category}>
         {USAGE_CATEGORY_LABELS[widget.purpose.category]}
       </div>
-      <div className={styles.label}>{widget.platformLabels[platform]}</div>
+      <div className={styles.label}>{widget.platformLabels[platform] ?? widget.purpose.label}</div>
       <button
         type="button"
         className={styles.removeButton}

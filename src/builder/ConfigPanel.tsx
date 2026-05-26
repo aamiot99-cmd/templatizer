@@ -79,7 +79,7 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
         <div className={styles.panelHeader} data-category={widget.purpose.category}>
           <span className={styles.panelBadge}>{widget.purpose.category === 'communicate' ? 'COM' : widget.purpose.category === 'access' ? 'ACC' : widget.purpose.category === 'collaborate' ? 'COL' : 'VIE'}</span>
           <div>
-            <h3 className={styles.panelTitle}>{widget.platformLabels[platform]}</h3>
+            <h3 className={styles.panelTitle}>{widget.platformLabels[platform] ?? widget.purpose.label}</h3>
             <p className={styles.panelSubtitle}>{widget.purpose.label}</p>
           </div>
         </div>

@@ -6,7 +6,7 @@
 
 .app-shell {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 200px 1fr;
   min-height: 100vh;
   transition: grid-template-columns 0.2s ease;
 }
@@ -235,6 +235,12 @@
 
 .app-header {
   margin-bottom: 40px;
+}
+
+@media (max-width: 1300px) {
+  .app-shell-collapsed .app-main {
+    padding: 24px 24px;
+  }
 }
 
 @media (max-width: 720px) {

@@ -146,7 +146,7 @@ function PoolItem({ widget, platform }: PoolItemProps) {
         {...attributes}
       >
         <div className={styles.itemText}>
-          <div className={styles.itemLabel}>{widget.platformLabels[platform]}</div>
+          <div className={styles.itemLabel}>{widget.platformLabels[platform] ?? widget.purpose.label}</div>
           <div className={styles.itemDescription}>{widget.purpose.label}</div>
         </div>
         {isNativeJint && <span className={styles.platformPill}>Jint</span>}
