@@ -1,0 +1,249 @@
+/* LumApps chrome - palette claire en dur (Material-style, Roboto-feel). */
+
+.chrome {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  background: #f0f2f5;
+  color: #202124;
+  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── Top bar (white, ~64px tall) ── */
+.topBar {
+  background: #ffffff;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.topBarInner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 12px 32px;
+}
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 160px;
+}
+
+.logoImg {
+  display: block;
+  max-height: 36px;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.logoInitials {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ── Search ── */
+.searchBox {
+  position: relative;
+  flex: 1;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  padding: 0 56px 0 16px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 14px;
+}
+
+.searchInput::placeholder {
+  color: #80868b;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #1a73e8;
+}
+
+.searchIconBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  border-left: 1px solid #dadce0;
+  background: #f8f9fa;
+  color: #5f6368;
+  cursor: default;
+}
+
+/* ── Right actions ── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #5f6368;
+  border-radius: 50%;
+  cursor: default;
+  transition: background 0.15s ease;
+}
+
+.iconBtn:hover {
+  background: #f1f3f4;
+  color: #202124;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fde293;
+  color: #5f6368;
+  margin-left: 4px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #dadce0;
+}
+
+.avatarFallback {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #5f6368;
+}
+
+/* ── Navigation bar (below header) ── */
+.navBar {
+  background: #ffffff;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.navBarInner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.navHome {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: #80868b;
+  cursor: default;
+}
+
+.navHomeActive {
+  color: #1a73e8;
+}
+
+.nav {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 48px;
+  padding: 0 14px;
+  color: #5f6368;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.navItem:hover {
+  color: #202124;
+}
+
+.navItemHasChildren {
+  padding-right: 8px;
+}
+
+.navChevron {
+  display: inline-flex;
+  align-items: center;
+  color: #80868b;
+}
+
+/* Dropdown for items with children */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #ffffff;
+  border: 1px solid #e8eaed;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(60, 64, 67, 0.15);
+  padding: 6px 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 50;
+}
+
+.navItem:hover .dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dropdownItem {
+  padding: 10px 16px;
+  font-size: 13.5px;
+  color: #202124;
+  cursor: default;
+}
+
+.dropdownItem:hover {
+  background: #f1f3f4;
+}
+
+/* ── Content area ── */
+.content {
+  flex: 1;
+  width: 100%;
+}
