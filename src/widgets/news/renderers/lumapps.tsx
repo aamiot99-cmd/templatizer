@@ -82,7 +82,7 @@ export function LumappsNews({ config, branding }: WidgetRendererProps) {
         <div className={styles.category}>{story.category}</div>
         <article className={styles.card}>
           <div className={styles.hero} style={{ background: story.gradient }}>
-            <span className={styles.heroEmoji}>{story.emoji}</span>
+            <span className={styles.heroIcon}>{story.icon}</span>
             <div className={styles.heroOverlay}>
               <h4 className={styles.heroTitle}>{story.title}</h4>
               <div className={styles.tagRow}>
