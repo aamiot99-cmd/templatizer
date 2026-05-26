@@ -82,7 +82,7 @@ export function LumappsImageGallery({ config }: WidgetRendererProps) {
             data-tall={layout === 'masonry' && (i % 3 === 1) ? 'true' : undefined}
             style={{ background: img.gradient }}
           >
-            <span className={styles.emoji}>{img.emoji}</span>
+            <span className={styles.tileIcon}>{img.icon}</span>
             <figcaption className={styles.caption}>{img.caption}</figcaption>
           </figure>
         ))}
