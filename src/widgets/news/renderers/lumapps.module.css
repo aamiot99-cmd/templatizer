@@ -13,22 +13,19 @@
   letter-spacing: -0.2px;
 }
 
-/* ── Pink/gradient frame around the hero card ── */
+/* ── Frame around the hero card (no background, label sits above) ── */
 .frame {
   position: relative;
-  border-radius: 12px;
-  padding: 36px 20px 20px;
-  /* gradient is set inline from branding.colors.primary */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .category {
-  position: absolute;
-  top: 12px;
-  left: 22px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.2px;
-  color: #ffffff;
+  /* color is set inline from branding.colors.primary */
 }
 
 /* ── Hero card ── */
