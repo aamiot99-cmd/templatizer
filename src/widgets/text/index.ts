@@ -12,7 +12,7 @@ export const textWidget: WidgetDefinition = {
   },
   platformLabels: {
     sharepoint: 'Texte',
-    lumapps: 'Texte',
+    lumapps: 'Rich Text',
     jalios: 'Texte',
     jint: 'Texte',
   },
