@@ -102,7 +102,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
+  justify-self: end;
 }
 
 .iconBtn {
