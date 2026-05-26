@@ -249,7 +249,7 @@
   background: #f1f3f4;
 }
 
-/* ── Content area: constrained to the same 1128px column as the bars above
+/* ── Content area: constrained to the same 1240px column as the bars above
    so the right edge of widgets aligns with the right edge of the top-bar
    icons / avatar. The light grey page background fills the viewport. */
 .content {
