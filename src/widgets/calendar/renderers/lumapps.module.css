@@ -4,95 +4,126 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(60, 64, 67, 0.1);
-  padding: 20px 22px;
+  padding: 22px 24px 18px;
   width: 100%;
   color: #202124;
 }
 
-.header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
 .title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  margin: 0 0 18px;
+  font-size: 24px;
+  font-weight: 400;
+  color: #5f6368;
   letter-spacing: -0.2px;
-  color: #202124;
 }
 
-.seeAll {
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
+/* ── Month block ── */
+.monthBlock {
+  margin-bottom: 18px;
 }
 
+.monthBlock:last-of-type {
+  margin-bottom: 12px;
+}
+
+.monthHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.monthLabel {
+  font-size: 14px;
+  color: #9aa0a6;
+  font-weight: 400;
+  flex-shrink: 0;
+  width: 44px;
+}
+
+.monthRule {
+  flex: 1;
+  height: 1px;
+  background: #e8eaed;
+}
+
+/* ── Event list ── */
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
 }
 
 .item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
   align-items: center;
-  gap: 14px;
-  padding: 10px 4px;
-  border-bottom: 1px solid #e8eaed;
 }
 
-.item:last-child {
-  border-bottom: none;
-}
-
-.dateBadge {
+.dateCol {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 56px;
-  border-radius: 8px;
-  flex-shrink: 0;
+  color: #202124;
+  line-height: 1.1;
+}
+
+.weekday {
+  font-size: 13px;
+  color: #5f6368;
+  margin-bottom: 4px;
 }
 
 .day {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  line-height: 1;
+  color: #202124;
 }
 
-.month {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.eventBody {
-  flex: 1;
-  min-width: 0;
+.eventCard {
+  border-radius: 6px;
+  padding: 14px 18px;
+  color: #ffffff;
+  /* background is set inline from branding.colors.primary */
 }
 
 .eventTitle {
-  font-size: 14px;
-  font-weight: 500;
-  color: #202124;
-  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 700;
   line-height: 1.3;
+  margin-bottom: 4px;
 }
 
-.eventMeta {
+.eventTime {
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+/* ── More button ── */
+.moreButton {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: #f1f3f4;
+  border: none;
+  border-radius: 6px;
   color: #5f6368;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: default;
+  transition: background 0.15s ease;
+}
+
+.moreButton:hover {
+  background: #e8eaed;
 }
