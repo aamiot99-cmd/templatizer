@@ -30,7 +30,7 @@ function buildPosts(company: string): [SocialPost[], SocialPost[]] {
         gradient: 'linear-gradient(135deg,#1a5c3a,#2d8a5e)',
         emoji: '👩‍💼',
         quote:
-          '"Je suis ravie de rejoindre cette équipe exceptionnelle." — Marie Fontaine, Group CFO',
+          '"Je suis ravie de rejoindre cette équipe exceptionnelle." - Marie Fontaine, Group CFO',
       },
     },
   ]
@@ -38,7 +38,7 @@ function buildPosts(company: string): [SocialPost[], SocialPost[]] {
     {
       company,
       date: '18/03/2026',
-      text: "🌍 Journée internationale des droits des femmes — Droits. Justice. Action. pour toutes les femmes. 💜",
+      text: "🌍 Journée internationale des droits des femmes. Droits. Justice. Action. pour toutes les femmes. 💜",
       tags: '#IWD2026 #Inclusion #Equity',
     },
     {
@@ -50,7 +50,7 @@ function buildPosts(company: string): [SocialPost[], SocialPost[]] {
         gradient: 'linear-gradient(135deg,#5b21b6,#8b5cf6)',
         emoji: '💡',
         quote:
-          '"Les meilleures idées viennent du terrain." — Jury du programme',
+          '"Les meilleures idées viennent du terrain." - Jury du programme',
       },
     },
   ]

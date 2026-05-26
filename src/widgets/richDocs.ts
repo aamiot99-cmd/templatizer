@@ -1,5 +1,5 @@
 /**
- * Rich documentation for widgets — used by the Pool tooltip in the wireframe step.
+ * Rich documentation for widgets - used by the Pool tooltip in the wireframe step.
  * Currently focused on Jint web parts (descriptions and example images sourced
  * from https://support.jint.co/hc/en-us/sections/7061840904593-Web-parts).
  *
@@ -13,7 +13,7 @@ export interface WidgetRichDoc {
   description: string
   /** Optional URL to an example screenshot. */
   imageUrl: string | null
-  /** Source URL (docs page) — shown as "Learn more". */
+  /** Source URL (docs page) - shown as "Learn more". */
   docsUrl?: string
 }
 
@@ -75,6 +75,12 @@ export const WIDGET_RICH_DOCS: Record<string, WidgetRichDoc> = {
     description:
       "Le NewsHub, ou Social Media Wall, est un web part de communication qui agrège les publications de vos réseaux sociaux externes directement dans votre intranet Microsoft 365, supprimant la double saisie tout en gardant le fil naturel. Il prend en charge les flux RSS, chaînes YouTube, pages Facebook, comptes Instagram Business et pages LinkedIn (entreprise, école, vitrine), permettant aux collaborateurs d'interagir avec les publications externes et de devenir ambassadeurs de la marque. Chaque flux est connecté via une clé sans qu'aucun identifiant ne transite par les serveurs Jint.",
     imageUrl: 'https://support.jint.co/hc/article_attachments/4414329193617',
+  },
+  documentCenter: {
+    platformName: 'Search Center (Search Bar + Filter + Result)',
+    description:
+      "Le Centre documentaire combine les 3 webparts Jint Search Center : Search Bar (barre de saisie), Search Filter (filtres pour affiner les résultats) et Search Result (affichage en tableau, tuiles ou cartes). Cette modularité permet de construire l'expérience de recherche adaptée aux besoins des utilisateurs, propulsée par le moteur Microsoft Search. Templatizer bundle les 3 en un seul widget occupant toute une section, pour simplifier la conception.",
+    imageUrl: 'https://support.jint.co/hc/article_attachments/6978428840221',
   },
 }
 

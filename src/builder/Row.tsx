@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { useDroppable } from '@dnd-kit/core'
+import { useDndContext, useDroppable } from '@dnd-kit/core'
+import { getWidget } from '../widgets/registry'
 import {
   SortableContext,
   horizontalListSortingStrategy,
@@ -51,6 +52,13 @@ export function Row({ row, platform, selectedCellId, onSelectCell, selectedRowId
     return () => observer.disconnect()
   }, [])
 
+  const { active: dndActive } = useDndContext()
+  const dndDraggedWidget =
+    dndActive?.data.current?.type === 'pool'
+      ? getWidget(dndActive.data.current.widgetId as string)
+      : null
+  const isSectionExclusiveDrag = Boolean(dndDraggedWidget?.isSectionExclusive)
+
   const {
     attributes,
     listeners,
@@ -61,12 +69,16 @@ export function Row({ row, platform, selectedCellId, onSelectCell, selectedRowId
   } = useSortable({
     id: `row-${row.id}`,
     data: { type: 'row', rowId: row.id },
+    disabled: isSectionExclusiveDrag,
   })
 
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: `row-drop-${row.id}`,
     data: { type: 'row-drop', rowId: row.id },
+    disabled: isSectionExclusiveDrag,
   })
+
+  const showRowDraggingOver = isOver && !isSectionExclusiveDrag
 
   const composedRef = (node: HTMLDivElement | null) => {
     setSortableRef(node)
@@ -92,7 +104,7 @@ export function Row({ row, platform, selectedCellId, onSelectCell, selectedRowId
       ref={composedRef}
       style={rowStyle}
       className={`${styles.row} ${isEmpty ? styles.rowEmpty : ''} ${
-        isOver ? styles.rowDraggingOver : ''
+        showRowDraggingOver ? styles.rowDraggingOver : ''
       } ${isDragging ? styles.rowSortableDragging : ''} ${
         isRowSelected ? styles.rowSelected : ''
       }`}

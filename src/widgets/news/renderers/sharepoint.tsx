@@ -24,7 +24,7 @@ function getArticles(company: string): { featured: Article; secondary: Article[]
     },
     secondary: [
       {
-        title: `Résultats T1 2025 — ${company}`,
+        title: `Résultats T1 2025 · ${company}`,
         excerpt: `Découvrez comment le partage des connaissances accélère la croissance chez ${company}…`,
         author: 'Marie Dupont',
         time: 'il y a environ une heure',

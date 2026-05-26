@@ -128,5 +128,12 @@ export interface WidgetDefinition {
   /** If true, the widget breaks out of the section's horizontal padding/max-width
    *  to span the full width of the content area (e.g. SharePoint "Bannière principale"). */
   isFullBleed?: boolean
+  /** If true, the widget must occupy its own row alone: forced to size 'full',
+   *  no other widget can share the row (e.g. Document Center which bundles a
+   *  search bar + filters + results). */
+  isSectionExclusive?: boolean
+  /** If true, the section background hosting this widget is always white,
+   *  regardless of the alternating Jint section colors (even/odd). */
+  forceWhiteSection?: boolean
   renderers: Partial<Record<Platform, ComponentType<WidgetRendererProps>>>
 }

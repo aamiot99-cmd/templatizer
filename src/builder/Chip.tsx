@@ -37,6 +37,11 @@ export function Chip({
 
   const { active } = useDndContext()
   const isPoolDragging = active?.data.current?.type === 'pool'
+  const draggedWidget =
+    active?.data.current?.type === 'pool'
+      ? getWidget(active.data.current.widgetId as string)
+      : null
+  const isSectionExclusiveDrag = Boolean(draggedWidget?.isSectionExclusive)
 
   const {
     attributes,
@@ -50,14 +55,17 @@ export function Chip({
   } = useSortable({
     id: `cell-${cell.id}`,
     data: { type: 'cell', rowId, cellId: cell.id },
+    disabled: isSectionExclusiveDrag,
   })
 
   const { setNodeRef: stackZoneRef, isOver: stackZoneIsOver } = useDroppable({
     id: `col-stack-${cell.id}`,
     data: { type: 'col-stack', rowId, cellId: cell.id },
+    disabled: isSectionExclusiveDrag,
   })
 
-  const showDropIndicator = isOver && sortableActive && sortableActive.id !== `cell-${cell.id}`
+  const showDropIndicator =
+    !isSectionExclusiveDrag && isOver && sortableActive && sortableActive.id !== `cell-${cell.id}`
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -105,7 +113,7 @@ export function Chip({
     >
       {showDropIndicator && <div className={styles.dropIndicator} />}
 
-      {/* Primary chip — drag handle for the whole column */}
+      {/* Primary chip - drag handle for the whole column */}
       <div
         data-category={CATEGORY_COLORS[widget.purpose.category]}
         className={`${styles.chip} ${isSelected ? styles.chipSelected : ''} ${showDropIndicator ? styles.chipDropTarget : ''}`}
@@ -146,7 +154,7 @@ export function Chip({
         />
       ))}
 
-      {/* Drop zone for stacking — visible during pool drag */}
+      {/* Drop zone for stacking - visible during pool drag */}
       <div
         ref={stackZoneRef}
         className={[

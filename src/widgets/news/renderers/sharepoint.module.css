@@ -173,7 +173,7 @@
   margin-top: 2px;
 }
 
-/* ── Side by side layout — full ── */
+/* ── Side by side layout - full ── */
 .sideBySideGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

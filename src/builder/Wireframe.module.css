@@ -25,3 +25,31 @@
   color: #08060d;
   background: #fafafb;
 }
+
+.rowGap {
+  position: relative;
+  height: 24px;
+  margin: -6px 0;
+}
+
+.rowGap::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 0;
+  background: var(--wizard-accent);
+  border-radius: 999px;
+  opacity: 0;
+  transition:
+    height 0.15s ease,
+    opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.rowGapOver::after {
+  height: 3px;
+  opacity: 1;
+}

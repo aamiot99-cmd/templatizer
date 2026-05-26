@@ -38,6 +38,7 @@ const WIDGETS: WidgetMeta[] = [
   { id: 'imageMap', label: 'Image interactive', desc: 'Image avec zones cliquables (hotspots).', platforms: ['jint'], textKeys: ['title'] },
   { id: 'meetings', label: 'Réunions', desc: 'Liste de réunions/agenda à venir.', platforms: ['jint'], textKeys: ['title', 'linkLabel'] },
   { id: 'social', label: 'Réseaux sociaux', desc: 'Fil de posts type réseau social interne.', platforms: ['jint'], textKeys: ['title', 'companyName'] },
+  { id: 'documentCenter', label: 'Centre documentaire', desc: 'Centre de recherche complet (barre + filtres + résultats). Bundle 3 webparts Jint Search Center, occupe TOUJOURS une ligne entière à lui seul (size full, pas d\'autre widget possible dans sa ligne).', platforms: ['jint'], textKeys: ['title', 'searchPlaceholder'] },
 ]
 
 interface AvailableWidget extends WidgetMeta {

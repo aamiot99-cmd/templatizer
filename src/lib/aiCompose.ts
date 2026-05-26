@@ -46,7 +46,7 @@ function defaultsFor(widgetId: string): ConfigValues {
   return values
 }
 
-/** Overlay LLM-provided content onto the cell config — only on text/richtext fields. */
+/** Overlay LLM-provided content onto the cell config - only on text/richtext fields. */
 export function applyContent(
   widgetId: string,
   config: ConfigValues,

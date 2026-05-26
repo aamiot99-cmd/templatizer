@@ -5,7 +5,7 @@ export function JaliosNews({ config, branding }: WidgetRendererProps) {
   const label = (config.label as string) ?? '⚡ Flash Info'
   const title =
     (config.title as string) ??
-    `Lancement du nouveau portail ${branding.name} — bienvenue !`
+    `Lancement du nouveau portail ${branding.name}, bienvenue !`
   const body =
     (config.body as string) ??
     "Votre espace digital de travail vient d'être renouvelé. Retrouvez toutes vos ressources, actualités et outils au même endroit. Découvrez les nouvelles fonctionnalités dès maintenant."

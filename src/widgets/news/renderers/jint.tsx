@@ -26,7 +26,7 @@ export function JintNews({ config, branding }: WidgetRendererProps) {
   const title = (config.title as string) ?? `Actualités ${branding.name}`
   const heroTitle =
     (config.heroTitle as string) ??
-    `Lancement du nouveau portail ${branding.name} — une nouvelle ère pour nos équipes`
+    `Lancement du nouveau portail ${branding.name} : une nouvelle ère pour nos équipes`
   const author = (config.author as string) ?? 'Jane Doe'
   const date = (config.date as string) ?? '12 mars 2025'
 

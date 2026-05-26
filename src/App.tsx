@@ -306,7 +306,7 @@ function App() {
               </button>
               <h1>{activeProject!.name}</h1>
               <p>
-                Édition du projet — vos modifications sont enregistrées
+                Édition du projet. Vos modifications sont enregistrées
                 automatiquement.
               </p>
             </>
