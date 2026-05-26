@@ -111,6 +111,22 @@ export function LumappsChrome({ branding, navEntries, children }: LumappsChromeP
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const tenantInitials = initials(branding.name)
 
+  // Pull the current Google avatar of the admin building the page.
+  const { session } = useAuthSession()
+  const metadata = session?.user.user_metadata ?? {}
+  const userAvatarUrl = (metadata.avatar_url as string | undefined) || undefined
+  const userFullName =
+    (metadata.full_name as string | undefined)?.trim() ||
+    session?.user.email ||
+    ''
+  const userInitials =
+    userFullName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? '')
+      .join('') || '?'
+
   return (
     <div className={styles.chrome}>
       {/* Top bar */}
