@@ -52,17 +52,15 @@ const STORIES: Story[] = [
 
 export function LumappsNews({ config, branding }: WidgetRendererProps) {
   const story = STORIES[0]
-  const accent = branding.colors.primary
-  // Slightly desaturated/lighter end of the brand color for the frame gradient.
-  const frame = `linear-gradient(135deg, ${accent}, color-mix(in srgb, ${accent} 60%, #f97316))`
-
   const title = (config.title as string) || ''
 
   return (
     <div className={styles.root}>
       {title && <h3 className={styles.widgetTitle}>{title}</h3>}
-      <div className={styles.frame} style={{ background: frame }}>
-        <div className={styles.category}>{story.category}</div>
+      <div className={styles.frame}>
+        <div className={styles.category} style={{ color: branding.colors.primary }}>
+          {story.category}
+        </div>
         <article className={styles.card}>
           <div className={styles.hero} style={{ background: story.gradient }}>
             <span className={styles.heroEmoji}>{story.emoji}</span>
