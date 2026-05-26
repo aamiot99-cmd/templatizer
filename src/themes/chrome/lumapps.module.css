@@ -164,10 +164,11 @@
 }
 
 .navHome {
-  display: grid;
-  place-items: center;
-  width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
   height: 48px;
+  padding: 0 14px 0 0;
   border: none;
   background: transparent;
   color: #80868b;
