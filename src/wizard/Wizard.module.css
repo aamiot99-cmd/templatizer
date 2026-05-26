@@ -197,3 +197,83 @@
   background: var(--wizard-accent-hover);
   border-color: var(--wizard-accent-hover);
 }
+
+/* Popover étapes compact — caché par défaut */
+.stepsPopover {
+  display: none;
+}
+
+@media (max-width: 1300px) {
+  .wizard {
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    position: relative;
+  }
+
+  .sidebar {
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .sidebarTitle {
+    display: none;
+  }
+
+  /* Trait : cercles 28px centrés dans 60px → centre = 30px, ligne 2px → left 29px */
+  .steps::before {
+    left: 29px;
+  }
+
+  .step {
+    justify-content: center;
+    padding: 8px 0;
+  }
+
+  .stepLabel {
+    display: none;
+  }
+
+  /* Positionné par rapport au wizard (position: relative), pas à la sidebar */
+  .stepsPopover {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    min-height: 100vh;
+    background: var(--bg);
+    padding: 0 8px 0 0;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.15s;
+  }
+
+  /* Visible quand on survole la sidebar OU le popover lui-même */
+  .sidebar:hover ~ .stepsPopover,
+  .stepsPopover:hover {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Restaure le titre dans le popover */
+  .stepsPopover .sidebarTitle {
+    display: block;
+  }
+
+  /* Le trait du popover reprend la position d'origine (padding 10px 14px → left 27px) */
+  .stepsPopover .steps::before {
+    left: 27px;
+  }
+
+  /* Steps du popover : mise en page complète (nombre + label) */
+  .stepsPopover .step {
+    justify-content: flex-start;
+    padding: 10px 14px;
+  }
+
+  .stepsPopover .stepLabel {
+    display: block;
+  }
+}

@@ -18,7 +18,7 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 
-const WIDGETS: Record<string, WidgetDefinition> = {
+export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
   [miscWidget.id]: miscWidget,
   [buttonWidget.id]: buttonWidget,
@@ -57,7 +57,7 @@ export function resolveRenderer(
 ) {
   const direct = widget.renderers[platform]
   if (direct) return direct
-  // Jint is a SharePoint overlay: SharePoint webparts are usable in Jint.
-  if (platform === 'jint') return widget.renderers.sharepoint
+  // Jint and Powell are SharePoint overlays: SharePoint webparts are usable in both.
+  if (platform === 'jint' || platform === 'powell') return widget.renderers.sharepoint
   return undefined
 }

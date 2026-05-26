@@ -19,6 +19,8 @@ import { Wireframe } from './Wireframe'
 import { ConfigPanel } from './ConfigPanel'
 import { AiCorrection } from '../admin/AiCorrection'
 import { PLATFORMS, PLATFORM_LABELS } from '../types'
+import { useAuthSession } from '../auth/useAuthSession'
+import { BETA_PLATFORMS, BETA_EMAILS } from '../auth/betaAccess'
 import styles from './Builder.module.css'
 
 interface BuilderProps {
@@ -41,6 +43,9 @@ export function Builder({ platform }: BuilderProps) {
   const addRow = useProjectStore((s) => s.addRow)
   const setPlatform = useProjectStore((s) => s.setPlatform)
   const resetProject = useProjectStore((s) => s.resetProject)
+
+  const { session } = useAuthSession()
+  const isBetaUser = BETA_EMAILS.includes(session?.user?.email ?? '')
 
   const [activeDrag, setActiveDrag] = useState<ActiveDrag>(null)
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
@@ -215,11 +220,14 @@ export function Builder({ platform }: BuilderProps) {
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value as Platform)}
               >
-                {PLATFORMS.map((p) => (
-                  <option key={p} value={p}>
-                    {PLATFORM_LABELS[p]}
-                  </option>
-                ))}
+                {PLATFORMS.map((p) => {
+                  const locked = !isBetaUser && BETA_PLATFORMS.includes(p)
+                  return (
+                    <option key={p} value={p} disabled={locked}>
+                      {PLATFORM_LABELS[p]}{locked ? ' (À venir)' : ''}
+                    </option>
+                  )
+                })}
               </select>
               <button
                 type="button"
@@ -291,7 +299,7 @@ function PoolDragPreview({
         boxShadow: 'var(--shadow-md)',
       }}
     >
-      {widget.platformLabels[platform]}
+      {widget.platformLabels[platform] ?? widget.purpose.label}
     </div>
   )
 }

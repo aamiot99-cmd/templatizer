@@ -122,7 +122,7 @@ export interface WidgetRendererProps {
 export interface WidgetDefinition {
   id: string
   purpose: WidgetPurpose
-  platformLabels: Record<Platform, string>
+  platformLabels: Partial<Record<Platform, string>>
   configSchema: ConfigSchemaField[]
   supportedSizes?: Partial<Record<Platform, WidgetSize[]>>
   /** If true, the widget breaks out of the section's horizontal padding/max-width
