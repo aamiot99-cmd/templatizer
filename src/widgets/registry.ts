@@ -18,6 +18,11 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 import { documentCenterWidget } from './documentCenter'
+import { calendarWidget } from './calendar'
+import { imageGalleryWidget } from './imageGallery'
+import { linksListWidget } from './linksList'
+import { titleWidget } from './title'
+import { usersListWidget } from './usersList'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
