@@ -27,5 +27,6 @@ export const textWidget: WidgetDefinition = {
   ],
   renderers: {
     sharepoint: SharepointText,
+    lumapps: LumappsText,
   },
 }
