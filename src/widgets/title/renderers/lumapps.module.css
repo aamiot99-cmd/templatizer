@@ -1,0 +1,62 @@
+/* Renderer LumApps - palette claire en dur. */
+
+.root {
+  width: 100%;
+  padding: 16px 4px;
+  color: #202124;
+}
+
+.root[data-align='center'] {
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: #202124;
+  line-height: 1.2;
+}
+
+.title[data-size='small'] {
+  font-size: 18px;
+}
+
+.title[data-size='medium'] {
+  font-size: 24px;
+}
+
+.title[data-size='large'] {
+  font-size: 32px;
+}
+
+.separator {
+  width: 48px;
+  height: 3px;
+  border-radius: 999px;
+  margin: 6px 0 12px;
+}
+
+.root[data-align='center'] .separator {
+  margin: 6px auto 12px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5f6368;
+  max-width: 720px;
+}
+
+.root[data-align='center'] .subtitle {
+  margin: 0 auto;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: #80868b;
+  font-size: 13px;
+  font-style: italic;
+}
