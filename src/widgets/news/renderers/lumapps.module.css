@@ -145,10 +145,11 @@
   font-size: 12px;
   font-weight: 600;
   text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #ec4899;
+  padding: 6px 14px;
+  border-radius: 12px;
+  color: #ffffff;
   cursor: default;
+  /* background is set inline from branding.colors.primary */
 }
 
 .seeMoreArrow {
