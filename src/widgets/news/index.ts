@@ -2,6 +2,7 @@ import type { WidgetDefinition } from '../../types'
 import { SharepointNews } from './renderers/sharepoint'
 import { JaliosNews } from './renderers/jalios'
 import { JintNews } from './renderers/jint'
+import { LumappsNews } from './renderers/lumapps'
 
 export const newsWidget: WidgetDefinition = {
   id: 'news',
