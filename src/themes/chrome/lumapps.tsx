@@ -155,7 +155,16 @@ export function LumappsChrome({ branding, navEntries, children }: LumappsChromeP
             <button type="button" className={styles.iconBtn}><PlayIcon /></button>
             <button type="button" className={styles.iconBtn}><BellIcon /></button>
             <div className={styles.avatar} aria-label="Mon profil">
-              <span className={styles.avatarFallback}>{tenantInitials}</span>
+              {userAvatarUrl ? (
+                <img
+                  src={userAvatarUrl}
+                  alt=""
+                  className={styles.avatarImg}
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className={styles.avatarFallback}>{userInitials}</span>
+              )}
             </div>
           </div>
         </div>
