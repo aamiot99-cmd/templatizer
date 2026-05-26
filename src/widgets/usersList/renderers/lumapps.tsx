@@ -4,9 +4,6 @@ import styles from './lumapps.module.css'
 interface User {
   name: string
   email: string
-  /** Optional gradient for a "real photo" effect; absent = blue silhouette icon. */
-  photoGradient?: string
-  photoEmoji?: string
 }
 
 const USERS: User[] = [
@@ -15,18 +12,8 @@ const USERS: User[] = [
   { name: 'Hélène Soubiron',    email: 'helene.soubiron@lecko.fr' },
   { name: 'PERRIER Justine',    email: 'justine.perrier@lecko.fr' },
   { name: 'Mehdi Lahjouji',     email: 'mehdi.lahjouji@lecko.eu' },
-  {
-    name: 'Théo Dumont',
-    email: 'tdumont@lecko.fr',
-    photoGradient: 'linear-gradient(135deg, #f59e0b, #ea580c)',
-    photoEmoji: '👨‍💻',
-  },
-  {
-    name: 'Antoine Amiot',
-    email: 'aamiot@lecko.fr',
-    photoGradient: 'linear-gradient(135deg, #2563eb, #1e40afFF)',
-    photoEmoji: '👨',
-  },
+  { name: 'Théo Dumont',        email: 'tdumont@lecko.fr' },
+  { name: 'Antoine Amiot',      email: 'aamiot@lecko.fr' },
 ]
 
 function SilhouetteIcon() {
