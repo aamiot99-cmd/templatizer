@@ -44,6 +44,11 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [imageMapWidget.id]: imageMapWidget,
   [highlightedContentWidget.id]: highlightedContentWidget,
   [documentCenterWidget.id]: documentCenterWidget,
+  [calendarWidget.id]: calendarWidget,
+  [imageGalleryWidget.id]: imageGalleryWidget,
+  [linksListWidget.id]: linksListWidget,
+  [titleWidget.id]: titleWidget,
+  [usersListWidget.id]: usersListWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {
