@@ -88,7 +88,10 @@ export function LumappsNews({ config, branding }: WidgetRendererProps) {
               ))}
               <button type="button" className={styles.pagArrow} aria-label="Suivant">›</button>
             </div>
-            <a className={styles.seeMore} style={{ color: '#ffffff' }}>
+            <a
+              className={styles.seeMore}
+              style={{ background: branding.colors.primary }}
+            >
               <span>See more</span>
               <span className={styles.seeMoreArrow}>›</span>
             </a>
