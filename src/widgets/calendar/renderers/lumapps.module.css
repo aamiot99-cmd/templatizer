@@ -85,7 +85,7 @@
 }
 
 .eventCard {
-  border-radius: 3px;
+  border-radius: 0;
   padding: 14px 18px;
   color: #ffffff;
   /* background is set inline from branding.colors.primary */
