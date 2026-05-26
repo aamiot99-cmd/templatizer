@@ -249,7 +249,7 @@
   background: #f1f3f4;
 }
 
-/* ── Content area: constrained to the same 1240px column as the bars above.
+/* ── Content area: constrained to the same 1160px column as the bars above.
    Padding is 16px (not 32px) because each `.widgetRow` rendered inside already
    adds its own 16px horizontal padding. Combined, widgets sit at 32px from
    the .content's left edge, matching the topBarInner's 32px padding so the
