@@ -55,8 +55,9 @@
 /* ── Search ── */
 .searchBox {
   position: relative;
-  flex: 1;
-  max-width: 520px;
+  width: 520px;
+  max-width: 100%;
+  justify-self: center;
   display: flex;
   align-items: center;
 }
