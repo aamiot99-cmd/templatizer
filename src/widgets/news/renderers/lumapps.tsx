@@ -96,8 +96,14 @@ export function LumappsNews({ config, branding }: WidgetRendererProps) {
           </div>
           <footer className={styles.footer}>
             <div className={styles.reactions}>
-              <span className={styles.reactionItem}>👍 {story.reactions}</span>
-              <span className={styles.reactionItem}>💬 {story.comments}</span>
+              <span className={styles.reactionItem}>
+                <MIcon path={THUMB_UP_PATH} size={14} />
+                {story.reactions}
+              </span>
+              <span className={styles.reactionItem}>
+                <MIcon path={COMMENT_PATH} size={14} />
+                {story.comments}
+              </span>
             </div>
             <div className={styles.pagination}>
               <button type="button" className={styles.pagArrow} aria-label="Précédent">‹</button>
