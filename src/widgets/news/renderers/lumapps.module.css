@@ -7,10 +7,10 @@
 
 .widgetTitle {
   margin: 0 0 12px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: #202124;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.1px;
 }
 
 /* ── Frame around the hero card (no background, label sits above) ── */
