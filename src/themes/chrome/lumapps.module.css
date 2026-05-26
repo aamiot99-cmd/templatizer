@@ -110,7 +110,7 @@
   height: 36px;
   border: none;
   background: transparent;
-  color: #5f6368;
+  color: #3c4043;
   border-radius: 50%;
   cursor: default;
   transition: background 0.15s ease;
@@ -119,6 +119,11 @@
 .iconBtn:hover {
   background: #f1f3f4;
   color: #202124;
+}
+
+/* Bolder outline icons inside the top-bar action buttons. */
+.iconBtn svg {
+  stroke-width: 2.4;
 }
 
 .avatar {
