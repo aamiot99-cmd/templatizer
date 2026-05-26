@@ -70,7 +70,7 @@ export const newsWidget: WidgetDefinition = {
       label: 'Afficher les réactions (likes, commentaires)',
       type: 'boolean',
       default: true,
-      platforms: ['lumapps', 'jalios', 'jint'],
+      platforms: ['jalios', 'jint'],
     },
   ],
   renderers: {
