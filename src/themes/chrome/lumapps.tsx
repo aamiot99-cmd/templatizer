@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import type { Branding, NavEntry } from '../../types'
+import { useAuthSession } from '../../auth/useAuthSession'
 import styles from './lumapps.module.css'
 
 interface LumappsChromeProps {
