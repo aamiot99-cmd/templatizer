@@ -74,7 +74,6 @@ export const newsWidget: WidgetDefinition = {
     },
   ],
   renderers: {
-    lumapps: LumappsNews,
     sharepoint: SharepointNews,
     jalios: JaliosNews,
     jint: JintNews,
