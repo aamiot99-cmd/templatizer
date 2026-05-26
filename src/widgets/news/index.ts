@@ -78,5 +78,6 @@ export const newsWidget: WidgetDefinition = {
     sharepoint: SharepointNews,
     jalios: JaliosNews,
     jint: JintNews,
+    lumapps: LumappsNews,
   },
 }
