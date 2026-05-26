@@ -238,6 +238,12 @@
   padding: 24px 0;
 }
 
+/* Generic section spacing for platforms without dedicated chrome
+   (LumApps, Jalios). Just provides vertical breathing room between rows. */
+.sectionDefault {
+  padding: 12px 0;
+}
+
 /* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
 .sectionFullBleed {
   background: #ffffff;
