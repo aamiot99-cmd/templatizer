@@ -44,7 +44,7 @@ export function BrandingStep() {
         <SubSection
           number={2}
           title="Palette de couleurs"
-          description="Définissez la charte graphique. Le logo reste visible à droite — utilisez la pipette du navigateur pour y prélever une couleur."
+          description="Définissez la charte graphique. Le logo reste visible à droite. Utilisez la pipette du navigateur pour y prélever une couleur."
         >
           <div className={styles.colorRow}>
             <ColorControl

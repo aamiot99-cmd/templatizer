@@ -45,7 +45,7 @@
   justify-content: start;
 }
 
-/* Compact (1/3) — tiles are square (aspect-ratio 1), sized from column width.
+/* Compact (1/3) - tiles are square (aspect-ratio 1), sized from column width.
    The widget is content-sized, so the grid's 3 rows of square tiles naturally
    give the widget its height. */
 .gridCompact .page {

@@ -104,7 +104,7 @@ export function PreviewPage() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    document.title = `${branding.name} — ${PLATFORM_LABELS[platform]}`
+    document.title = `${branding.name} · ${PLATFORM_LABELS[platform]}`
   }, [branding.name, platform])
 
   useEffect(() => {
@@ -340,7 +340,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
-  // Calculs dérivés avant les hooks — safe même si row.cells est vide
+  // Calculs dérivés avant les hooks - safe même si row.cells est vide
   const ratios =
     row.columnRatios && row.columnRatios.length === row.cells.length
       ? row.columnRatios
@@ -349,6 +349,11 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const isFullBleed = row.cells.some((cell) => {
     const widget = getWidget(cell.widgetId)
     return Boolean(widget?.isFullBleed)
+  })
+
+  const forceWhite = row.cells.some((cell) => {
+    const widget = getWidget(cell.widgetId)
+    return Boolean(widget?.forceWhiteSection)
   })
 
   const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
@@ -409,13 +414,15 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const sectionClass = isFullBleed
     ? styles.sectionFullBleed
-    : platform === 'jint'
-      ? index % 2 === 0
-        ? styles.sectionEven
-        : styles.sectionOdd
-      : platform === 'sharepoint'
-        ? styles.sectionWhite
-        : undefined
+    : forceWhite
+      ? styles.sectionWhite
+      : platform === 'jint'
+        ? index % 2 === 0
+          ? styles.sectionEven
+          : styles.sectionOdd
+        : platform === 'sharepoint'
+          ? styles.sectionWhite
+          : undefined
 
   const alignItems =
     row.alignment === 'center' ? 'center'

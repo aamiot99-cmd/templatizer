@@ -1,4 +1,4 @@
-/* Layout icons — PNG images for known layouts */
+/* Layout icons - PNG images for known layouts */
 
 import type { JSX } from 'react'
 

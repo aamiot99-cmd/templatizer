@@ -1,10 +1,22 @@
 import { useMemo, useState } from 'react'
 import { useProjectsRegistry } from '../store/projectsRegistry'
 import { useAuthSession } from '../auth/useAuthSession'
-import { PLATFORM_LABELS } from '../types'
+import { PLATFORMS, PLATFORM_LABELS } from '../types'
+import type { Platform } from '../types'
 import type { ProjectLock } from './types'
 import { AiWizard } from './AiWizard'
 import styles from './AdminView.module.css'
+
+type PlatformFilter = Platform | 'all'
+type SortMode = 'recent' | 'oldest' | 'name-asc' | 'name-desc' | 'updated'
+
+const SORT_LABELS: Record<SortMode, string> = {
+  recent: 'Plus récents',
+  oldest: 'Plus anciens',
+  updated: 'Récemment modifiés',
+  'name-asc': 'Nom (A→Z)',
+  'name-desc': 'Nom (Z→A)',
+}
 
 export type NavSection = 'all' | 'mine' | 'settings'
 
@@ -100,8 +112,12 @@ export function AdminView({ activeSection }: AdminViewProps) {
   const [busy, setBusy] = useState(false)
   const [openingId, setOpeningId] = useState<string | null>(null)
   const [aiOpen, setAiOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
+  const [creatorFilter, setCreatorFilter] = useState<string>('all')
+  const [sortMode, setSortMode] = useState<SortMode>('recent')
 
-  const visibleProjects = useMemo(() => {
+  const sectionProjects = useMemo(() => {
     if (activeSection === 'mine') {
       return currentUserId
         ? projects.filter((p) => p.ownerId === currentUserId)
@@ -109,6 +125,61 @@ export function AdminView({ activeSection }: AdminViewProps) {
     }
     return projects
   }, [projects, activeSection, currentUserId])
+
+  // Distinct creators present in the current section, for the creator filter dropdown.
+  const creators = useMemo(() => {
+    const map = new Map<string, { id: string; email: string | null }>()
+    for (const p of sectionProjects) {
+      if (!map.has(p.ownerId)) {
+        map.set(p.ownerId, { id: p.ownerId, email: p.ownerEmail })
+      }
+    }
+    return Array.from(map.values()).sort((a, b) =>
+      (a.email ?? '').localeCompare(b.email ?? ''),
+    )
+  }, [sectionProjects])
+
+  const visibleProjects = useMemo(() => {
+    let list = sectionProjects
+    const q = search.trim().toLowerCase()
+    if (q) {
+      list = list.filter((p) => p.name.toLowerCase().includes(q))
+    }
+    if (platformFilter !== 'all') {
+      list = list.filter((p) => p.snapshot.platform === platformFilter)
+    }
+    if (creatorFilter !== 'all') {
+      list = list.filter((p) => p.ownerId === creatorFilter)
+    }
+    list = [...list].sort((a, b) => {
+      switch (sortMode) {
+        case 'recent':
+          return b.createdAt - a.createdAt
+        case 'oldest':
+          return a.createdAt - b.createdAt
+        case 'updated':
+          return b.updatedAt - a.updatedAt
+        case 'name-asc':
+          return a.name.localeCompare(b.name)
+        case 'name-desc':
+          return b.name.localeCompare(a.name)
+      }
+    })
+    return list
+  }, [sectionProjects, search, platformFilter, creatorFilter, sortMode])
+
+  const hasActiveFilters =
+    search.trim() !== '' ||
+    platformFilter !== 'all' ||
+    creatorFilter !== 'all' ||
+    sortMode !== 'recent'
+
+  const resetFilters = () => {
+    setSearch('')
+    setPlatformFilter('all')
+    setCreatorFilter('all')
+    setSortMode('recent')
+  }
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -177,9 +248,12 @@ export function AdminView({ activeSection }: AdminViewProps) {
   }
 
   const showingMine = activeSection === 'mine'
-  const emptyMessage = showingMine
-    ? 'Vous n\'avez encore créé aucun projet. Cliquez sur « + Nouveau projet » pour démarrer.'
-    : 'Aucun projet pour le moment. Créez votre premier projet pour commencer.'
+  const noProjectsAtAll = sectionProjects.length === 0
+  const emptyMessage = noProjectsAtAll
+    ? showingMine
+      ? "Vous n'avez encore créé aucun projet. Cliquez sur « + Nouveau projet » pour démarrer."
+      : 'Aucun projet pour le moment. Créez votre premier projet pour commencer.'
+    : 'Aucun projet ne correspond aux filtres actuels.'
 
   return (
     <div className={styles.root}>
@@ -216,6 +290,92 @@ export function AdminView({ activeSection }: AdminViewProps) {
             </button>
           </form>
         </div>
+
+        {!noProjectsAtAll && (
+          <div className={styles.filterBar}>
+            <div className={styles.searchWrap}>
+              <svg
+                className={styles.searchIcon}
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                type="search"
+                className={styles.searchInput}
+                placeholder="Rechercher par nom…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <label className={styles.filterField}>
+              <span className={styles.filterLabel}>Plateforme</span>
+              <select
+                className={styles.filterSelect}
+                value={platformFilter}
+                onChange={(e) => setPlatformFilter(e.target.value as PlatformFilter)}
+              >
+                <option value="all">Toutes</option>
+                {PLATFORMS.map((p) => (
+                  <option key={p} value={p}>
+                    {PLATFORM_LABELS[p]}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className={styles.filterField}>
+              <span className={styles.filterLabel}>Créé par</span>
+              <select
+                className={styles.filterSelect}
+                value={creatorFilter}
+                onChange={(e) => setCreatorFilter(e.target.value)}
+              >
+                <option value="all">Tous</option>
+                {creators.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {formatUserName(c.email) || c.id.slice(0, 8)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className={styles.filterField}>
+              <span className={styles.filterLabel}>Trier par</span>
+              <select
+                className={styles.filterSelect}
+                value={sortMode}
+                onChange={(e) => setSortMode(e.target.value as SortMode)}
+              >
+                {(Object.keys(SORT_LABELS) as SortMode[]).map((mode) => (
+                  <option key={mode} value={mode}>
+                    {SORT_LABELS[mode]}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className={styles.resetFilters}
+                onClick={resetFilters}
+              >
+                Réinitialiser
+              </button>
+            )}
+          </div>
+        )}
 
         {status === 'error' && error && (
           <div className={styles.errorBanner}>

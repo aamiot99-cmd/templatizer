@@ -1,8 +1,13 @@
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useDraggable } from '@dnd-kit/core'
 import type { Platform, UsageCategory, WidgetDefinition } from '../types'
 import { USAGE_CATEGORY_LABELS } from '../types'
 import { listWidgetsForPlatform } from '../widgets/registry'
+import { getRichDoc } from '../widgets/richDocs'
 import styles from './Pool.module.css'
+
+const TOOLTIP_DELAY_MS = 350
 
 const CATEGORY_ORDER: UsageCategory[] = [
   'communicate',
@@ -67,19 +72,106 @@ function PoolItem({ widget, platform }: PoolItemProps) {
   })
 
   const isNativeJint = platform === 'jint' && Boolean(widget.renderers.jint)
+  const richDoc = getRichDoc(widget.id)
+  const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null)
+  const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const itemElRef = useRef<HTMLDivElement | null>(null)
+
+  const composedRef = (el: HTMLDivElement | null) => {
+    itemElRef.current = el
+    setNodeRef(el)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      if (showTimerRef.current) clearTimeout(showTimerRef.current)
+      setTooltipPos(null)
+    }
+  }, [isDragging])
+
+  useEffect(() => {
+    return () => {
+      if (showTimerRef.current) clearTimeout(showTimerRef.current)
+    }
+  }, [])
+
+  const showTooltip = () => {
+    const el = itemElRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const TOOLTIP_WIDTH = 680
+    const TOOLTIP_HEIGHT_ESTIMATE = 200
+    const MARGIN = 12
+
+    // Vertical: prefer top-aligned with item; flip up if would overflow bottom.
+    let top = rect.top
+    if (top + TOOLTIP_HEIGHT_ESTIMATE > window.innerHeight - MARGIN) {
+      top = Math.max(MARGIN, window.innerHeight - TOOLTIP_HEIGHT_ESTIMATE - MARGIN)
+    }
+
+    // Horizontal: prefer right of item; flip to left if would overflow right edge.
+    let left = rect.right + 12
+    if (left + TOOLTIP_WIDTH > window.innerWidth - MARGIN) {
+      left = Math.max(MARGIN, rect.left - TOOLTIP_WIDTH - 12)
+    }
+
+    setTooltipPos({ top, left })
+  }
+
+  const handleMouseEnter = () => {
+    if (!richDoc || isDragging) return
+    if (showTimerRef.current) clearTimeout(showTimerRef.current)
+    showTimerRef.current = setTimeout(showTooltip, TOOLTIP_DELAY_MS)
+  }
+
+  const handleMouseLeave = () => {
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current)
+      showTimerRef.current = null
+    }
+    setTooltipPos(null)
+  }
 
   return (
-    <div
-      ref={setNodeRef}
-      className={`${styles.item} ${isDragging ? styles.itemDragging : ''} ${isNativeJint ? styles.itemWithPill : ''}`}
-      {...listeners}
-      {...attributes}
-    >
-      <div className={styles.itemText}>
-        <div className={styles.itemLabel}>{widget.platformLabels[platform]}</div>
-        <div className={styles.itemDescription}>{widget.purpose.label}</div>
+    <>
+      <div
+        ref={composedRef}
+        className={`${styles.item} ${isDragging ? styles.itemDragging : ''} ${isNativeJint ? styles.itemWithPill : ''}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...listeners}
+        {...attributes}
+      >
+        <div className={styles.itemText}>
+          <div className={styles.itemLabel}>{widget.platformLabels[platform]}</div>
+          <div className={styles.itemDescription}>{widget.purpose.label}</div>
+        </div>
+        {isNativeJint && <span className={styles.platformPill}>Jint</span>}
       </div>
-      {isNativeJint && <span className={styles.platformPill}>Jint</span>}
-    </div>
+      {tooltipPos &&
+        richDoc &&
+        createPortal(
+          <div
+            className={styles.tooltip}
+            role="tooltip"
+            style={{ top: tooltipPos.top, left: tooltipPos.left }}
+          >
+            {richDoc.imageUrl && (
+              <img
+                src={richDoc.imageUrl}
+                alt=""
+                className={styles.tooltipImage}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+                }}
+              />
+            )}
+            <div className={styles.tooltipTitle}>{richDoc.platformName}</div>
+            <p className={styles.tooltipDescription}>{richDoc.description}</p>
+          </div>,
+          document.body,
+        )}
+    </>
   )
 }

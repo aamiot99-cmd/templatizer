@@ -11,9 +11,18 @@ import {
 } from '@dnd-kit/core'
 import type { CollisionDetection, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import type { Platform } from '../types'
+import type { Platform, WireframeRow } from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
+
+function rowHasSectionExclusive(row: WireframeRow | undefined): boolean {
+  if (!row) return false
+  return row.cells.some((cell) => {
+    if (!cell.widgetId) return false
+    const widget = getWidget(cell.widgetId)
+    return Boolean(widget?.isSectionExclusive)
+  })
+}
 import { Pool } from './Pool'
 import { Wireframe } from './Wireframe'
 import { ConfigPanel } from './ConfigPanel'
@@ -63,6 +72,24 @@ export function Builder({ platform }: BuilderProps) {
   )
 
   const collisionDetection: CollisionDetection = (args) => {
+    // If a section-exclusive widget is being dragged from the pool, ONLY consider
+    // row-gap droppables as valid targets. This prevents rows/cells from
+    // accidentally winning collision detection.
+    const activeData = args.active.data.current as
+      | { type?: string; widgetId?: string }
+      | undefined
+    if (activeData?.type === 'pool' && activeData.widgetId) {
+      const widget = getWidget(activeData.widgetId)
+      if (widget?.isSectionExclusive) {
+        const gapContainers = args.droppableContainers.filter(
+          (c) => (c.data.current as { type?: string } | undefined)?.type === 'row-gap',
+        )
+        const gapArgs = { ...args, droppableContainers: gapContainers }
+        const pointerHits = pointerWithin(gapArgs)
+        if (pointerHits.length > 0) return pointerHits
+        return closestCenter(gapArgs)
+      }
+    }
     const pointerCollisions = pointerWithin(args)
     if (pointerCollisions.length > 0) return pointerCollisions
     return closestCenter(args)
@@ -93,6 +120,7 @@ export function Builder({ platform }: BuilderProps) {
       | { type: 'cell'; rowId: string; cellId: string }
       | { type: 'row'; rowId: string }
       | { type: 'col-stack'; rowId: string; cellId: string }
+      | { type: 'row-gap'; index: number }
       | undefined
     if (!activeData) return
 
@@ -103,20 +131,31 @@ export function Builder({ platform }: BuilderProps) {
         widget.configSchema.map((f) => [f.key, f.default]),
       )
 
-      // Drop on a column's stack zone → stack the widget in that column (skip empty slots)
+      // Section-exclusive widget: always create a brand new row, never share.
+      if (widget.isSectionExclusive) {
+        const insertIndex =
+          overData?.type === 'row-gap' ? overData.index : undefined
+        const newRowId = addRow(insertIndex)
+        addCell(newRowId, widget.id, config, 'full')
+        return
+      }
+
+      // Drop on a column's stack zone → stack the widget in that column (skip empty slots).
+      // Refuse if the host row contains a section-exclusive widget.
       if (overData?.type === 'col-stack') {
         const targetRow = rows.find((r) => r.id === overData.rowId)
         const targetCell = targetRow?.cells.find((c) => c.id === overData.cellId)
         if (!targetCell || targetCell.widgetId === '') return
+        if (rowHasSectionExclusive(targetRow)) return
         addStackedCell(overData.rowId, overData.cellId, widget.id, config)
         return
       }
 
-      // Drop on an empty slot → fill it
+      // Drop on an empty slot → fill it (unless row is section-exclusive).
       if (overData?.type === 'cell') {
         const targetRow = rows.find((r) => r.id === overData.rowId)
         const targetCell = targetRow?.cells.find((c) => c.id === overData.cellId)
-        if (targetCell?.widgetId === '') {
+        if (targetCell?.widgetId === '' && !rowHasSectionExclusive(targetRow)) {
           fillCell(overData.rowId, overData.cellId, widget.id, config)
           return
         }
@@ -137,7 +176,8 @@ export function Builder({ platform }: BuilderProps) {
       }
       if (targetRowId) {
         const targetRow = rows.find((r) => r.id === targetRowId)
-        if (targetRow && targetRow.cells.length >= 3) {
+        // Reject if row is full OR contains a section-exclusive widget.
+        if (targetRow && (targetRow.cells.length >= 3 || rowHasSectionExclusive(targetRow))) {
           targetRowId = null
           targetIndex = undefined
         }
@@ -207,7 +247,7 @@ export function Builder({ platform }: BuilderProps) {
         >
           <div className={styles.canvasHeader}>
             <h2 className={styles.canvasTitle}>
-              Wireframe — {PLATFORM_LABELS[platform]}
+              Wireframe · {PLATFORM_LABELS[platform]}
             </h2>
             <div className={styles.canvasActions}>
               <select

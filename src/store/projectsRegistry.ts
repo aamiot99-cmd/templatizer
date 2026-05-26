@@ -299,7 +299,7 @@ function errorMessage(e: unknown): string {
       if (typeof obj.details === 'string') parts.push(obj.details)
       if (typeof obj.hint === 'string') parts.push(`(${obj.hint})`)
       if (typeof obj.code === 'string') parts.push(`[${obj.code}]`)
-      return parts.join(' — ')
+      return parts.join(' · ')
     }
     try {
       return JSON.stringify(e)

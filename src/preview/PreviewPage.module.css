@@ -244,6 +244,14 @@
   padding: 0;
 }
 
+/* Breathing room around a full-bleed widget at the top of the page:
+   symmetrical top/bottom margin so it isn't glued to the nav or to the
+   following section. */
+.sectionFullBleed:first-child {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
 /* SharePoint-style section inner: constrains rows to 1200px centered with 72px
    horizontal padding (mirrors the native SharePoint "section" chrome). */
 .spSectionInner {
@@ -265,7 +273,7 @@
 }
 
 /* Inside an spSectionInner (SharePoint), widgetRow no longer needs its own
-   max-width/padding — the wrapper provides it. */
+   max-width/padding - the wrapper provides it. */
 .spSectionInner .widgetRow {
   max-width: none;
   padding: 0;

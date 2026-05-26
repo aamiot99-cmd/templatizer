@@ -4,7 +4,7 @@ import styles from './lumapps.module.css'
 export function LumappsNews({ config, branding }: WidgetRendererProps) {
   const title =
     (config.title as string) ??
-    `${branding.name} 2025 — New digital workplace experience now live for all employees`
+    `${branding.name} 2025 : New digital workplace experience now live for all employees`
   const tagLabel = (config.tagLabel as string) ?? 'Featured'
   const showMetrics = (config.showMetrics as boolean) ?? true
 

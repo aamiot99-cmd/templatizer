@@ -75,7 +75,7 @@ export function AiCorrection({ open, onClose }: AiCorrectionProps) {
           : `${result.applied} opérations appliquées.`,
       )
       if (skippedCount > 0) {
-        console.warn('AI correction — skipped ops:', result.skipped)
+        console.warn('AI correction - skipped ops:', result.skipped)
       }
       setPrompt('')
       // Auto-close after a short delay so the user sees the result.

@@ -17,6 +17,7 @@ import { highlightedContentWidget } from './highlightedContent'
 import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
+import { documentCenterWidget } from './documentCenter'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
@@ -37,6 +38,7 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [meetingsWidget.id]: meetingsWidget,
   [imageMapWidget.id]: imageMapWidget,
   [highlightedContentWidget.id]: highlightedContentWidget,
+  [documentCenterWidget.id]: documentCenterWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {
