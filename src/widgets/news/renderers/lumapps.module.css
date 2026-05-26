@@ -43,10 +43,11 @@
   place-items: center;
 }
 
-.heroEmoji {
-  font-size: 96px;
-  opacity: 0.6;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+.heroIcon {
+  display: inline-flex;
+  color: #ffffff;
+  opacity: 0.55;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
 .heroOverlay {
