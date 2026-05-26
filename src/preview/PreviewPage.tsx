@@ -422,7 +422,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
           : styles.sectionOdd
         : platform === 'sharepoint'
           ? styles.sectionWhite
-          : undefined
+          : styles.sectionDefault
 
   const alignItems =
     row.alignment === 'center' ? 'center'
