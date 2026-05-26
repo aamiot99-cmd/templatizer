@@ -17,10 +17,11 @@
 }
 
 .topBarInner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 24px;
-  max-width: 1320px;
+  max-width: 1128px;
   margin: 0 auto;
   padding: 12px 32px;
 }
@@ -28,8 +29,8 @@
 .logoWrap {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
-  min-width: 160px;
+  justify-self: start;
+  min-width: 0;
 }
 
 .logoImg {
