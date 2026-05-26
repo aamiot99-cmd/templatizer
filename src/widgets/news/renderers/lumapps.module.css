@@ -1,0 +1,160 @@
+/* Renderer LumApps - palette claire en dur. Style "Top Stories" hero. */
+
+.root {
+  width: 100%;
+  color: #202124;
+}
+
+.widgetTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #202124;
+  letter-spacing: -0.2px;
+}
+
+/* ── Pink/gradient frame around the hero card ── */
+.frame {
+  position: relative;
+  border-radius: 12px;
+  padding: 36px 20px 20px;
+  /* gradient is set inline from branding.colors.primary */
+}
+
+.category {
+  position: absolute;
+  top: 12px;
+  left: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+/* ── Hero card ── */
+.card {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.hero {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+}
+
+.heroEmoji {
+  font-size: 96px;
+  opacity: 0.6;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.heroOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 22px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%);
+  color: #ffffff;
+}
+
+.heroTitle {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
+  letter-spacing: -0.1px;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #5eead4;
+  color: #134e4a;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ── Footer (reactions, pagination, see more) ── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px 12px;
+  background: #ffffff;
+}
+
+.reactions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.reactionItem {
+  font-size: 12px;
+  color: #5f6368;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagArrow {
+  border: none;
+  background: transparent;
+  color: #5f6368;
+  font-size: 14px;
+  line-height: 1;
+  cursor: default;
+  padding: 2px 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dadce0;
+}
+
+.dotActive {
+  background: #202124;
+  width: 14px;
+  border-radius: 999px;
+}
+
+.seeMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ec4899;
+  cursor: default;
+}
+
+.seeMoreArrow {
+  font-size: 14px;
+  line-height: 1;
+}
