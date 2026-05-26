@@ -33,11 +33,15 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 8px;
-  border-radius: 8px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #e8eaed;
   cursor: default;
   text-decoration: none;
   transition: background 0.15s ease;
+}
+
+.item:last-child {
+  border-bottom: none;
 }
 
 .item:hover {
@@ -46,6 +50,8 @@
 
 .list[data-layout='grid'] .item {
   background: #f8f9fa;
+  border-bottom: none;
+  border-radius: 8px;
 }
 
 .icon {
