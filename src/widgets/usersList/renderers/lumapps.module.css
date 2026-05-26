@@ -51,25 +51,15 @@
 }
 
 /* ── Avatars ── */
-.avatarDefault,
-.avatarPhoto {
+.avatarDefault {
   display: grid;
   place-items: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   flex-shrink: 0;
-}
-
-.avatarDefault {
   background: #c4d5fc;
   color: #ffffff;
-}
-
-.avatarPhoto {
-  font-size: 22px;
-  color: #ffffff;
-  overflow: hidden;
 }
 
 /* ── User info ── */
