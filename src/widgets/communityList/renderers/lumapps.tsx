@@ -38,26 +38,43 @@ const COMMUNITIES: Community[] = [
 export function LumappsCommunityList({ config }: WidgetRendererProps) {
   const title = (config.title as string) || 'Communautés à rejoindre'
   const maxItems = Math.max(2, Math.min(8, (config.maxItems as number) || 4))
+  const layout = (config.layout as 'grid' | 'carousel') || 'grid'
   const items = COMMUNITIES.slice(0, maxItems)
+
+  const cards = items.map((c, i) => (
+    <article key={i} className={styles.card}>
+      <div
+        className={styles.banner}
+        style={{ backgroundImage: `url("${c.bannerUrl}")` }}
+      />
+      <div className={styles.body}>
+        <div className={styles.communityName}>{c.name}</div>
+        <p className={styles.description}>{c.description}</p>
+        <a className={styles.followLink}>Suivre</a>
+      </div>
+    </article>
+  ))
 
   return (
     <div className={styles.root}>
       <h3 className={styles.title}>{title}</h3>
-      <div className={styles.grid}>
-        {items.map((c, i) => (
-          <article key={i} className={styles.card}>
-            <div
-              className={styles.banner}
-              style={{ backgroundImage: `url("${c.bannerUrl}")` }}
-            />
-            <div className={styles.body}>
-              <div className={styles.communityName}>{c.name}</div>
-              <p className={styles.description}>{c.description}</p>
-              <a className={styles.followLink}>Suivre</a>
-            </div>
-          </article>
-        ))}
-      </div>
+      {layout === 'grid' ? (
+        <div className={styles.grid}>{cards}</div>
+      ) : (
+        <div className={styles.carousel}>
+          <div className={styles.carouselTrack}>{cards}</div>
+          <div className={styles.dots} aria-hidden="true">
+            <button type="button" className={styles.dotArrow} aria-label="Précédent">‹</button>
+            {items.map((_, i) => (
+              <span
+                key={i}
+                className={`${styles.dot} ${i === 0 ? styles.dotActive : ''}`}
+              />
+            ))}
+            <button type="button" className={styles.dotArrow} aria-label="Suivant">›</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
