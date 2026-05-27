@@ -23,9 +23,11 @@ interface ConfigPanelProps {
 
 export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigPanelProps) {
   const rows = useProjectStore((s) => s.wireframe.rows)
+  const branding = useProjectStore((s) => s.branding)
   const updateCellConfig = useProjectStore((s) => s.updateCellConfig)
   const setRowColumnLayout = useProjectStore((s) => s.setRowColumnLayout)
   const updateRowAlignment = useProjectStore((s) => s.updateRowAlignment)
+  const setRowBackground = useProjectStore((s) => s.setRowBackground)
 
   // Cell config takes priority over row config
   if (selectedCellId) {
