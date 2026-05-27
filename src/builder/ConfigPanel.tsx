@@ -254,12 +254,12 @@ function RowConfigPanel({
         )}
         <div className={styles.fieldGroup}>
           <div className={styles.fieldLabel}>Fond de la section</div>
-          <div className={styles.alignGroup}>
+          <div className={styles.colLayoutGrid}>
             {BG_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
-                className={`${styles.alignBtn} ${currentBgType === opt.value ? styles.alignBtnActive : ''}`}
+                className={`${styles.colLayoutBtn} ${currentBgType === opt.value ? styles.colLayoutBtnActive : ''}`}
                 onClick={() =>
                   onBackgroundChange({ type: opt.value, colorKey: currentColorKey })
                 }
@@ -272,12 +272,12 @@ function RowConfigPanel({
         {showColorPicker && (
           <div className={styles.fieldGroup}>
             <div className={styles.fieldLabel}>Couleur</div>
-            <div className={styles.alignGroup}>
+            <div className={styles.colLayoutGrid}>
               {COLOR_KEYS.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
-                  className={`${styles.alignBtn} ${currentColorKey === opt.value ? styles.alignBtnActive : ''}`}
+                  className={`${styles.colLayoutBtn} ${currentColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
                   onClick={() =>
                     onBackgroundChange({ type: currentBgType, colorKey: opt.value })
                   }
