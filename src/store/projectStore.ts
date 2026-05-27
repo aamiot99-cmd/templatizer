@@ -111,6 +111,7 @@ interface ProjectActions {
   cycleRowLayout: (rowId: string) => void
   setRowColumnLayout: (rowId: string, layout: ColumnLayout) => void
   updateRowAlignment: (rowId: string, alignment: RowAlignment) => void
+  setRowBackground: (rowId: string, background: RowBackground) => void
 
   fillCell: (
     rowId: string,
