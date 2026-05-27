@@ -503,7 +503,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const needsSpInner = (platform === 'sharepoint' || platform === 'jint') && !isFullBleed
 
   return (
-    <div className={sectionClass}>
+    <div className={sectionClass} style={sectionStyle}>
       {needsSpInner ? (
         <div className={styles.spSectionInner}>{rowContent}</div>
       ) : (
