@@ -40,6 +40,32 @@ const SIZE_TO_COLS: Record<string, number> = {
   'one-third': 1,
 }
 
+/** Builds the inline style applied on a widget cell to override the
+ *  widget's default background via CSS variables. Returns undefined for
+ *  the 'default' case so the widget renders its natural visual. */
+function buildWidgetCellStyle(
+  bg: string,
+  colors: { primary: string; secondary: string; text: string },
+): React.CSSProperties | undefined {
+  if (bg === 'default') return undefined
+  const style: Record<string, string> = {}
+  if (bg === 'none') {
+    style['--widget-bg'] = 'transparent'
+    style['--widget-shadow'] = 'none'
+    style['--widget-radius'] = '0'
+  } else if (bg === 'white') {
+    style['--widget-bg'] = '#ffffff'
+  } else if (bg === 'primary' || bg === 'secondary') {
+    const color = colors[bg]
+    style['--widget-bg'] = color
+    if (isDarkColor(color)) {
+      style['--text-on-bg'] = '#ffffff'
+      style['--text-on-bg-muted'] = 'rgba(255, 255, 255, 0.78)'
+    }
+  }
+  return style as React.CSSProperties
+}
+
 /** Returns true if a #rrggbb hex color is dark enough that dark grey text
  *  loses contrast on it. Uses the ITU-R BT.601 luminance weights. */
 function isDarkColor(hex: string): boolean {
