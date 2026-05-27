@@ -13,7 +13,7 @@ interface Article {
   excerpt: string
   reactions: number
   comments: number
-  thumbGradient: string
+  thumbUrl: string
 }
 
 const ARTICLES: Article[] = [
@@ -30,7 +30,7 @@ const ARTICLES: Article[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et ligula non nibh tincidunt tristique sed sit amet neque. Ut eleifend augue et…",
     reactions: 0,
     comments: 2,
-    thumbGradient: 'linear-gradient(135deg, #fbbf24, #b45309)',
+    thumbUrl: '/photos/Office.jpg',
   },
   {
     authorName: 'Stephen Bronson',
@@ -45,7 +45,7 @@ const ARTICLES: Article[] = [
       'Mark Johnson wants to help you improve your social skills within your team and explore the strategies that yield the best results in the field.',
     reactions: 0,
     comments: 2,
-    thumbGradient: 'linear-gradient(135deg, #f472b6, #be185d)',
+    thumbUrl: '/photos/team building.jpg',
   },
   {
     authorName: 'Camille Vasseur',
@@ -60,7 +60,7 @@ const ARTICLES: Article[] = [
       "Retour d'expérience sur 6 mois de déploiement et les leviers concrets observés sur les équipes pilotes.",
     reactions: 12,
     comments: 4,
-    thumbGradient: 'linear-gradient(135deg, #34d399, #047857)',
+    thumbUrl: '/photos/meeting.jpg',
   },
   {
     authorName: 'Hugo Lefranc',
@@ -75,7 +75,7 @@ const ARTICLES: Article[] = [
       'Why your line charts get unreadable past 8 series, and three layout tricks to fix it without sacrificing detail.',
     reactions: 17,
     comments: 9,
-    thumbGradient: 'linear-gradient(135deg, #60a5fa, #1e40af)',
+    thumbUrl: '/photos/Office 2.jpg',
   },
 ]
 
