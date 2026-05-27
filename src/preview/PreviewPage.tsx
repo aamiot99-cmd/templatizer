@@ -516,6 +516,12 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
         const stackedCells = cell.stackedCells ?? []
 
+        // Per-widget background override. 'default' = let the widget's own
+        // CSS render its natural look. Otherwise inject CSS vars consumed
+        // by each widget's .root.
+        const widgetBg = (cell.config.widgetBg as string | undefined) ?? 'default'
+        const widgetCellStyle = buildWidgetCellStyle(widgetBg, branding.colors)
+
         return (
           <div
             key={cell.id}
@@ -526,7 +532,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
             className={styles.widgetCell}
             style={{ flex: `${flex} 1 0` }}
           >
-            <div className={styles.widgetCellInner}>
+            <div className={styles.widgetCellInner} style={widgetCellStyle}>
               <Renderer config={config} size={size} branding={branding} />
               {stackedCells.map((sc) => {
                 const sw = getWidget(sc.widgetId)
