@@ -99,9 +99,17 @@ function authorInitials(name: string): string {
   return name.split(/\s+/).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || '?'
 }
 
-function ArticleCard({ article }: { article: Article }) {
+function ArticleCard({
+  article,
+  variant = 'list',
+  dots,
+}: {
+  article: Article
+  variant?: 'list' | 'carousel'
+  dots?: React.ReactNode
+}) {
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-variant={variant}>
       <div className={styles.thumb} style={{ background: article.thumbGradient }} />
       <div className={styles.cardBody}>
         <header className={styles.authorRow}>
