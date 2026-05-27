@@ -162,6 +162,19 @@ const ALIGN_OPTIONS: { value: RowAlignment; label: string }[] = [
   { value: 'bottom', label: 'Bas' },
 ]
 
+const BG_OPTIONS: { value: RowBackgroundType; label: string }[] = [
+  { value: 'none',    label: 'Sans fond' },
+  { value: 'white',   label: 'Fond blanc' },
+  { value: 'solid',   label: 'Fond plein' },
+  { value: 'dotted',  label: 'Pointillés' },
+]
+
+const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
+  { value: 'primary',   label: 'Principale' },
+  { value: 'secondary', label: 'Secondaire' },
+  { value: 'text',      label: 'Texte' },
+]
+
 function deriveColumnLayout(row: WireframeRow): ColumnLayout {
   const n = row.cells.length
   if (n <= 1) return 'single'
