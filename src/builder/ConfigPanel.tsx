@@ -203,7 +203,10 @@ function RowConfigPanel({
   const currentAlignment = row.alignment ?? 'top'
   const currentBgType: RowBackgroundType = row.background?.type ?? 'none'
   const currentColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
-  const showColorPicker = currentBgType === 'solid' || currentBgType === 'dotted'
+  const showColorPicker =
+    currentBgType === 'solid' ||
+    currentBgType === 'dotted' ||
+    currentBgType === 'dotted-clear'
 
   return (
     <aside className={styles.panel}>
