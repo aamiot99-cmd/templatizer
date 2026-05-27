@@ -432,12 +432,15 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     const bg = row.background
     const color = branding.colors[bg.colorKey ?? 'primary']
     if (bg.type === 'white') {
-      sectionClass = styles.sectionWhite
+      sectionClass = styles.sectionRowWhite
     } else if (bg.type === 'solid') {
-      sectionClass = styles.sectionDefault
-      sectionStyle = { background: color }
+      sectionClass = styles.sectionRowSolid
+      sectionStyle = { ['--row-bg-color' as string]: color } as React.CSSProperties
     } else if (bg.type === 'dotted') {
-      sectionClass = styles.sectionDotted
+      sectionClass = styles.sectionRowDotted
+      sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
+    } else if (bg.type === 'dotted-clear') {
+      sectionClass = styles.sectionRowDottedClear
       sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
     } else {
       // 'none' = let the default platform alternation apply
