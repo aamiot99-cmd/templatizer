@@ -176,15 +176,22 @@ export function LumappsArticlesList({ config }: WidgetRendererProps) {
         </div>
       ) : (
         <div className={styles.carousel}>
-          <ArticleCard article={items[0]} />
-          <div className={styles.dots} aria-hidden="true">
-            {items.map((_, i) => (
-              <span
-                key={i}
-                className={`${styles.dot} ${i === 0 ? styles.dotActive : ''}`}
-              />
-            ))}
-          </div>
+          <ArticleCard
+            article={items[0]}
+            variant="carousel"
+            dots={
+              <div className={styles.dots} aria-hidden="true">
+                <button type="button" className={styles.dotArrow} aria-label="Précédent">‹</button>
+                {items.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`${styles.dot} ${i === 0 ? styles.dotActive : ''}`}
+                  />
+                ))}
+                <button type="button" className={styles.dotArrow} aria-label="Suivant">›</button>
+              </div>
+            }
+          />
         </div>
       )}
     </div>
