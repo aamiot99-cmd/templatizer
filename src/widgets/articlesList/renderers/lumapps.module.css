@@ -180,11 +180,23 @@
   color: #5f6368;
 }
 
-/* ── Carousel pagination ── */
+/* ── Carousel pagination (inside the card, below the text actions) ── */
 .dots {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  margin-top: 10px;
+}
+
+.dotArrow {
+  border: none;
+  background: transparent;
+  color: #5f6368;
+  font-size: 14px;
+  line-height: 1;
+  cursor: default;
+  padding: 0 4px;
 }
 
 .dot {
