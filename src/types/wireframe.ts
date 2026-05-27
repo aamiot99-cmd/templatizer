@@ -17,11 +17,21 @@ export interface WireframeCell {
 export type RowAlignment = 'top' | 'center' | 'bottom'
 export type ColumnLayout = 'single' | 'two' | 'third-left' | 'third-right' | 'three'
 
+export type RowBackgroundType = 'none' | 'solid' | 'white' | 'dotted'
+export type BrandColorKey = 'primary' | 'secondary' | 'text'
+
+export interface RowBackground {
+  type: RowBackgroundType
+  /** Theme color key used by 'solid' and 'dotted' types. */
+  colorKey?: BrandColorKey
+}
+
 export interface WireframeRow {
   id: string
   cells: WireframeCell[]
   columnRatios?: number[]
   alignment?: RowAlignment
+  background?: RowBackground
 }
 
 export interface Wireframe {
