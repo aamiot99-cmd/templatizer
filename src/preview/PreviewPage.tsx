@@ -529,13 +529,10 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   } else if (forceWhite) {
     sectionClass = styles.sectionWhite
   } else if (hasCustomBg) {
-    const classes: string[] = [styles.sectionRow]
-    if (fill === 'white') classes.push(styles.sectionRowFillWhite)
-    else if (fill === 'solid') classes.push(styles.sectionRowFillSolid)
-    if (pattern === 'dotted') classes.push(styles.sectionRowPatternDotted)
-    sectionClass = classes.join(' ')
+    sectionClass = styles.sectionRow
     sectionStyle = {
-      ['--row-bg-color' as string]: fillColor,
+      // Solid fill uses the brand color, white fill overrides to #fff.
+      ['--row-bg-color' as string]: fill === 'white' ? '#ffffff' : fillColor,
       ['--dot-color' as string]: patternColor,
       ...(isDarkSection
         ? {
