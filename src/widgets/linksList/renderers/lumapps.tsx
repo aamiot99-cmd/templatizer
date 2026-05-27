@@ -57,7 +57,7 @@ const LINKS: LinkItem[] = [
   },
 ]
 
-export function LumappsLinksList({ config, branding }: WidgetRendererProps) {
+export function LumappsLinksList({ config }: WidgetRendererProps) {
   const title = (config.title as string) || 'Liens utiles'
   const layout = (config.layout as 'list' | 'grid') || 'list'
   const showDescriptions = config.showDescriptions !== false
@@ -80,9 +80,7 @@ export function LumappsLinksList({ config, branding }: WidgetRendererProps) {
               {item.icon}
             </span>
             <div className={styles.body}>
-              <div className={styles.label} style={{ color: branding.colors.primary }}>
-                {item.label}
-              </div>
+              <div className={styles.label}>{item.label}</div>
               {showDescriptions && (
                 <div className={styles.description}>{item.description}</div>
               )}
