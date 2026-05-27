@@ -36,7 +36,11 @@ export interface RowBackground {
   fill?: RowFillType
   /** Decorative motif layer overlaid on top of the fill. */
   pattern?: RowPatternType
-  /** Theme color key used by 'solid' fill and any non-'none' pattern. */
+  /** Theme color key used by the 'solid' fill. */
+  fillColorKey?: BrandColorKey
+  /** Theme color key used by the pattern (dotted/curves). */
+  patternColorKey?: BrandColorKey
+  /** @deprecated single colorKey kept for backward-compat (used by both layers). */
   colorKey?: BrandColorKey
   /** @deprecated single-axis type (kept for backward-compat with old projects). */
   type?: RowBackgroundType
