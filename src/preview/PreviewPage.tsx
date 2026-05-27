@@ -412,17 +412,40 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   // Early return après tous les hooks
   if (row.cells.length === 0) return null
 
-  const sectionClass = isFullBleed
-    ? styles.sectionFullBleed
-    : forceWhite
-      ? styles.sectionWhite
-      : platform === 'jint'
-        ? index % 2 === 0
-          ? styles.sectionEven
-          : styles.sectionOdd
-        : platform === 'sharepoint'
-          ? styles.sectionWhite
-          : styles.sectionDefault
+  const defaultSectionClass = () =>
+    platform === 'jint'
+      ? index % 2 === 0
+        ? styles.sectionEven
+        : styles.sectionOdd
+      : platform === 'sharepoint'
+        ? styles.sectionWhite
+        : styles.sectionDefault
+
+  let sectionClass: string | undefined
+  let sectionStyle: React.CSSProperties | undefined
+
+  if (isFullBleed) {
+    sectionClass = styles.sectionFullBleed
+  } else if (forceWhite) {
+    sectionClass = styles.sectionWhite
+  } else if (row.background) {
+    const bg = row.background
+    const color = branding.colors[bg.colorKey ?? 'primary']
+    if (bg.type === 'white') {
+      sectionClass = styles.sectionWhite
+    } else if (bg.type === 'solid') {
+      sectionClass = styles.sectionDefault
+      sectionStyle = { background: color }
+    } else if (bg.type === 'dotted') {
+      sectionClass = styles.sectionDotted
+      sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
+    } else {
+      // 'none' = let the default platform alternation apply
+      sectionClass = defaultSectionClass()
+    }
+  } else {
+    sectionClass = defaultSectionClass()
+  }
 
   const alignItems =
     row.alignment === 'center' ? 'center'
