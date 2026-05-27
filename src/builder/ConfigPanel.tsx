@@ -6,7 +6,8 @@ import type {
   Platform,
   RowAlignment,
   RowBackground,
-  RowBackgroundType,
+  RowFillType,
+  RowPatternType,
   SelectField,
   WireframeRow,
 } from '../types'
