@@ -244,6 +244,24 @@
   padding: 12px 0;
 }
 
+/* Dotted background: scattered solid circles of varying sizes, using the
+   --dot-color CSS variable injected from the row's chosen brand color. */
+.sectionDotted {
+  position: relative;
+  padding: 12px 0;
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(circle 22px at 8% 30%,  var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 14px at 22% 78%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 30px at 50% 18%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 10px at 65% 55%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 18px at 82% 88%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 26px at 92% 32%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle  8px at 38% 50%, var(--dot-color, #6366f1), transparent 100%);
+  background-repeat: no-repeat;
+  background-attachment: local;
+}
+
 /* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
 .sectionFullBleed {
   background: #ffffff;
