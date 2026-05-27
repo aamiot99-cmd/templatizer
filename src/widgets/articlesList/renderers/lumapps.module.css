@@ -41,6 +41,11 @@
   max-width: 720px;
 }
 
+/* Carousel variant: illustration takes more horizontal space than the text. */
+.card[data-variant='carousel'] {
+  grid-template-columns: 1.4fr 1fr;
+}
+
 .thumb {
   height: 100%;
   min-height: 180px;
