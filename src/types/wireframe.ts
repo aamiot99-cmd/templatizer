@@ -17,7 +17,12 @@ export interface WireframeCell {
 export type RowAlignment = 'top' | 'center' | 'bottom'
 export type ColumnLayout = 'single' | 'two' | 'third-left' | 'third-right' | 'three'
 
-export type RowBackgroundType = 'none' | 'solid' | 'white' | 'dotted'
+export type RowBackgroundType =
+  | 'none'
+  | 'solid'
+  | 'white'
+  | 'dotted'
+  | 'dotted-clear'
 export type BrandColorKey = 'primary' | 'secondary' | 'text'
 
 export interface RowBackground {
