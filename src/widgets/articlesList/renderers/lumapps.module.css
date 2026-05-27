@@ -3,6 +3,9 @@
 .root {
   width: 100%;
   color: var(--text-on-bg, #202124);
+  background: var(--widget-bg, transparent);
+  border-radius: var(--widget-radius, 0);
+  box-shadow: var(--widget-shadow, none);
 }
 
 .title {

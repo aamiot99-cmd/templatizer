@@ -1,9 +1,9 @@
 /* Renderer LumApps - palette claire en dur. */
 
 .root {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.1);
+  background: var(--widget-bg, #ffffff);
+  border-radius: var(--widget-radius, 12px);
+  box-shadow: var(--widget-shadow, 0 1px 3px rgba(60, 64, 67, 0.1));
   padding: 22px 24px 18px;
   width: 100%;
   color: #202124;
