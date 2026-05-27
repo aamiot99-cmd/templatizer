@@ -507,8 +507,46 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const needsSpInner = (platform === 'sharepoint' || platform === 'jint') && !isFullBleed
 
+  const curvesColor =
+    row.background?.type === 'curves'
+      ? branding.colors[row.background.colorKey ?? 'primary']
+      : null
+
   return (
     <div className={sectionClass} style={sectionStyle}>
+      {curvesColor && (
+        <svg
+          className={styles.curvesLayer}
+          viewBox="0 0 1200 300"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M 0 90 C 200 30 400 180 600 110 S 1000 40 1200 100"
+            stroke={curvesColor}
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.9"
+          />
+          <path
+            d="M 0 220 C 200 280 400 150 600 210 S 1000 270 1200 200"
+            stroke={curvesColor}
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.7"
+          />
+          <path
+            d="M 0 40 C 300 110 500 -20 800 60 S 1100 120 1200 50"
+            stroke={curvesColor}
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.5"
+          />
+        </svg>
+      )}
       {needsSpInner ? (
         <div className={styles.spSectionInner}>{rowContent}</div>
       ) : (
