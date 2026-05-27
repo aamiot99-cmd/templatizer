@@ -525,7 +525,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const needsSpInner = (platform === 'sharepoint' || platform === 'jint') && !isFullBleed
 
-  const curvesColor = pattern === 'curves' ? bgColor : null
+  const curvesColor = pattern === 'curves' ? patternColor : null
 
   return (
     <div className={sectionClass} style={sectionStyle}>
