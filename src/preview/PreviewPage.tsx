@@ -575,7 +575,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         // CSS render its natural look. Otherwise inject CSS vars consumed
         // by each widget's .root.
         const widgetBg = (cell.config.widgetBg as string | undefined) ?? 'default'
-        const widgetCellStyle = buildWidgetCellStyle(widgetBg, branding.colors)
+        const widgetCellStyle = buildWidgetCellStyle(widgetBg, cell.widgetId, branding.colors)
 
         return (
           <div
