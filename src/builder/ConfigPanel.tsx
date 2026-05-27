@@ -225,14 +225,20 @@ function RowConfigPanel({
       default: break
     }
   }
-  const currentColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
-  const showColorPicker = currentFill === 'solid' || currentPattern !== 'none'
+  const legacyColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
+  const currentFillColorKey: BrandColorKey =
+    row.background?.fillColorKey ?? legacyColorKey
+  const currentPatternColorKey: BrandColorKey =
+    row.background?.patternColorKey ?? legacyColorKey
+  const showFillColorPicker = currentFill === 'solid'
+  const showPatternColorPicker = currentPattern !== 'none'
 
   const writeBackground = (next: Partial<RowBackground>) => {
     onBackgroundChange({
       fill: next.fill ?? currentFill,
       pattern: next.pattern ?? currentPattern,
-      colorKey: next.colorKey ?? currentColorKey,
+      fillColorKey: next.fillColorKey ?? currentFillColorKey,
+      patternColorKey: next.patternColorKey ?? currentPatternColorKey,
     })
   }
 
