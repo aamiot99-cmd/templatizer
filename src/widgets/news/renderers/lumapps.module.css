@@ -39,15 +39,9 @@
 .hero {
   position: relative;
   aspect-ratio: 16 / 9;
-  display: grid;
-  place-items: center;
-}
-
-.heroIcon {
-  display: inline-flex;
-  color: #ffffff;
-  opacity: 0.55;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .heroOverlay {
