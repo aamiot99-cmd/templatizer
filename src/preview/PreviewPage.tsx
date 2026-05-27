@@ -40,6 +40,19 @@ const SIZE_TO_COLS: Record<string, number> = {
   'one-third': 1,
 }
 
+/** Returns true if a #rrggbb hex color is dark enough that dark grey text
+ *  loses contrast on it. Uses the ITU-R BT.601 luminance weights. */
+function isDarkColor(hex: string): boolean {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim())
+  if (!m) return false
+  const n = parseInt(m[1], 16)
+  const r = (n >> 16) & 0xff
+  const g = (n >> 8) & 0xff
+  const b = n & 0xff
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance < 0.55
+}
+
 function computeAdjustedItemCount(
   widgetId: string,
   config: ConfigValues,
