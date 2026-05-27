@@ -37,9 +37,8 @@ export function LumappsImageGallery({ config }: WidgetRendererProps) {
             key={i}
             className={styles.tile}
             data-tall={layout === 'masonry' && (i % 3 === 1) ? 'true' : undefined}
-            style={{ background: img.gradient }}
+            style={{ backgroundImage: `url("${img.url}")` }}
           >
-            <span className={styles.tileIcon}>{img.icon}</span>
             <figcaption className={styles.caption}>{img.caption}</figcaption>
           </figure>
         ))}
