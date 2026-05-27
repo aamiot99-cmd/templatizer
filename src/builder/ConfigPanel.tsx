@@ -168,6 +168,7 @@ const BG_OPTIONS: { value: RowBackgroundType; label: string }[] = [
   { value: 'solid',          label: 'Fond plein' },
   { value: 'dotted',         label: 'Pointillés' },
   { value: 'dotted-clear',   label: 'Pointillés clairs' },
+  { value: 'curves',         label: 'Courbes' },
 ]
 
 const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
