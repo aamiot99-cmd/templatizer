@@ -610,6 +610,12 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   return (
     <div className={sectionClass} style={sectionStyle}>
+      {hasCustomBg && fill !== 'none' && (
+        <div className={styles.sectionFillLayer} aria-hidden="true" />
+      )}
+      {hasCustomBg && pattern === 'dotted' && (
+        <div className={styles.sectionDottedLayer} aria-hidden="true" />
+      )}
       {curvesColor && (
         <svg
           className={styles.curvesLayer}
@@ -643,11 +649,13 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
           />
         </svg>
       )}
-      {needsSpInner ? (
-        <div className={styles.spSectionInner}>{rowContent}</div>
-      ) : (
-        rowContent
-      )}
+      <div className={styles.sectionRowContent}>
+        {needsSpInner ? (
+          <div className={styles.spSectionInner}>{rowContent}</div>
+        ) : (
+          rowContent
+        )}
+      </div>
     </div>
   )
 }
