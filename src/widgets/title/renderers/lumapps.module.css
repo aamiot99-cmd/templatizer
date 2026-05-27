@@ -14,7 +14,7 @@
   margin: 0 0 8px;
   font-weight: 600;
   letter-spacing: -0.4px;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
   line-height: 1.2;
 }
 
