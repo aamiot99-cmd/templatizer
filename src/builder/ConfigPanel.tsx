@@ -1,5 +1,15 @@
 import { ratioToSize } from '../types'
-import type { ColumnLayout, ConfigSchemaField, Platform, RowAlignment, SelectField, WireframeRow } from '../types'
+import type {
+  BrandColorKey,
+  ColumnLayout,
+  ConfigSchemaField,
+  Platform,
+  RowAlignment,
+  RowBackground,
+  RowBackgroundType,
+  SelectField,
+  WireframeRow,
+} from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
