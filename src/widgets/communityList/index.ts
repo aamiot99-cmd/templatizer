@@ -25,6 +25,16 @@ export const communityListWidget: WidgetDefinition = {
       placeholder: 'Ex. : Communautés métier',
     },
     {
+      key: 'layout',
+      label: 'Disposition',
+      type: 'select',
+      default: 'grid',
+      options: [
+        { value: 'grid', label: 'Grille' },
+        { value: 'carousel', label: 'Carrousel' },
+      ],
+    },
+    {
       key: 'maxItems',
       label: 'Nombre de communautés',
       type: 'number',
