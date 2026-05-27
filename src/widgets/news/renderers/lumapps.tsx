@@ -68,8 +68,10 @@ export function LumappsNews({ config, branding }: WidgetRendererProps) {
       <div className={styles.frame}>
         <div className={styles.category}>{story.category}</div>
         <article className={styles.card}>
-          <div className={styles.hero} style={{ background: story.gradient }}>
-            <span className={styles.heroIcon}>{story.icon}</span>
+          <div
+            className={styles.hero}
+            style={{ backgroundImage: `url("${story.imageUrl}")` }}
+          >
             <div className={styles.heroOverlay}>
               <h4 className={styles.heroTitle}>{story.title}</h4>
               <div className={styles.tagRow}>
