@@ -23,6 +23,56 @@
   gap: 14px;
 }
 
+/* ── Carousel mode ── */
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.carouselTrack {
+  display: flex;
+  gap: 14px;
+  overflow-x: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.carouselTrack > .card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.dotArrow {
+  border: none;
+  background: transparent;
+  color: #5f6368;
+  font-size: 14px;
+  line-height: 1;
+  cursor: default;
+  padding: 0 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dadce0;
+}
+
+.dotActive {
+  background: #202124;
+  width: 14px;
+  border-radius: 999px;
+}
+
 .card {
   background: #ffffff;
   border: 1px solid #e8eaed;
