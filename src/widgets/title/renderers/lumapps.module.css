@@ -45,7 +45,7 @@
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
-  color: #5f6368;
+  color: var(--text-on-bg-muted, #5f6368);
   max-width: 720px;
 }
 
