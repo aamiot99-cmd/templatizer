@@ -160,17 +160,18 @@
   line-height: 1.5;
   color: #5f6368;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* ── Actions ── */
+/* ── Actions: anchored at the bottom of the card body, regardless of how
+   short the excerpt actually is. */
 .actions {
   display: flex;
   gap: 16px;
-  margin-top: 10px;
-  padding-top: 10px;
+  margin-top: auto;
+  padding-top: 12px;
   border-top: 1px solid #f1f3f4;
 }
 
