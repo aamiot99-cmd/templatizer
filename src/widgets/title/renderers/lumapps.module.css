@@ -3,7 +3,7 @@
 .root {
   width: 100%;
   padding: 16px 4px;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
 }
 
 .root[data-align='center'] {
