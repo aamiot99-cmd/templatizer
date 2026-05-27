@@ -80,6 +80,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Reset: white card always uses dark text, even if the widget bg is dark. */
+  --text-on-bg: #202124;
+  --text-on-bg-muted: #5f6368;
 }
 
 .banner {
