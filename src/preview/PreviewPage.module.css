@@ -245,12 +245,9 @@
 }
 
 /* ── Row backgrounds: independent fill + pattern dimensions ────────────────
-   - .sectionRow is the base wrapper (padding + isolation).
-   - .sectionRowFillWhite / .sectionRowFillSolid render the fill via ::before
-     (full viewport width, z-index: -2).
-   - .sectionRowPatternDotted overlays dots via ::after (z-index: -1).
-   - Curves are rendered as an inline <svg class="curvesLayer"> child.
-   Classes combine freely: any fill + any pattern can coexist. */
+   Background layers are rendered as REAL <div>/<svg> children (not pseudo-
+   elements with negative z-index) so html2canvas-pro can capture them on
+   PNG export. The row content is positioned with z-index: 1 to paint above. */
 
 .sectionRow {
   position: relative;
@@ -258,36 +255,24 @@
   isolation: isolate;
 }
 
-/* Fill layer (::before) */
-.sectionRowFillWhite::before,
-.sectionRowFillSolid::before {
-  content: '';
+/* Shared positioning for all bleed-to-viewport background layers. */
+.sectionFillLayer,
+.sectionDottedLayer,
+.curvesLayer {
   position: absolute;
   top: 0;
   bottom: 0;
   left: calc(50% - 50vw);
   right: calc(50% - 50vw);
-  z-index: -2;
-}
-
-.sectionRowFillWhite::before {
-  background: #ffffff;
-}
-
-.sectionRowFillSolid::before {
-  background: var(--row-bg-color, #6366f1);
-}
-
-/* Dotted pattern (::after) overlays the fill if any. */
-.sectionRowPatternDotted::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(50% - 50vw);
-  right: calc(50% - 50vw);
-  z-index: -1;
+  width: 100vw;
   pointer-events: none;
+}
+
+.sectionFillLayer {
+  background: var(--row-bg-color, #ffffff);
+}
+
+.sectionDottedLayer {
   background-image:
     radial-gradient(circle 22px at 6% 30%,  var(--dot-color, #6366f1), transparent 100%),
     radial-gradient(circle 14px at 18% 78%, var(--dot-color, #6366f1), transparent 100%),
@@ -300,17 +285,10 @@
   background-repeat: no-repeat;
 }
 
-/* Curves SVG layer: spans full viewport behind the widgets. */
-.curvesLayer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(50% - 50vw);
-  right: calc(50% - 50vw);
-  width: 100vw;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
+/* Row content paints on top of the absolutely-positioned bg layers. */
+.sectionRowContent {
+  position: relative;
+  z-index: 1;
 }
 
 /* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
