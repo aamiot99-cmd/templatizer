@@ -110,7 +110,10 @@ function ArticleCard({
 }) {
   return (
     <article className={styles.card} data-variant={variant}>
-      <div className={styles.thumb} style={{ background: article.thumbGradient }} />
+      <div
+        className={styles.thumb}
+        style={{ backgroundImage: `url("${article.thumbUrl}")` }}
+      />
       <div className={styles.cardBody}>
         <header className={styles.authorRow}>
           <span
