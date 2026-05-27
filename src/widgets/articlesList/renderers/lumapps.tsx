@@ -151,6 +151,8 @@ function ArticleCard({
             {article.comments}
           </span>
         </div>
+
+        {dots}
       </div>
     </article>
   )
