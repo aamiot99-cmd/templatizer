@@ -163,10 +163,11 @@ const ALIGN_OPTIONS: { value: RowAlignment; label: string }[] = [
 ]
 
 const BG_OPTIONS: { value: RowBackgroundType; label: string }[] = [
-  { value: 'none',    label: 'Sans fond' },
-  { value: 'white',   label: 'Fond blanc' },
-  { value: 'solid',   label: 'Fond plein' },
-  { value: 'dotted',  label: 'Pointillés' },
+  { value: 'none',           label: 'Sans fond' },
+  { value: 'white',          label: 'Fond blanc' },
+  { value: 'solid',          label: 'Fond plein' },
+  { value: 'dotted',         label: 'Pointillés' },
+  { value: 'dotted-clear',   label: 'Pointillés clairs' },
 ]
 
 const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
