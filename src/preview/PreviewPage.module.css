@@ -244,19 +244,60 @@
   padding: 12px 0;
 }
 
-/* ── Row-level custom backgrounds ─────────────────────────────────────────
-   These extend FULL VIEWPORT WIDTH (not just the constrained content
-   column) using a ::before pseudo-element while keeping the widget rows
-   centered inside via their own max-width. */
+/* ── Row backgrounds: independent fill + pattern dimensions ────────────────
+   - .sectionRow is the base wrapper (padding + isolation).
+   - .sectionRowFillWhite / .sectionRowFillSolid render the fill via ::before
+     (full viewport width, z-index: -2).
+   - .sectionRowPatternDotted overlays dots via ::after (z-index: -1).
+   - Curves are rendered as an inline <svg class="curvesLayer"> child.
+   Classes combine freely: any fill + any pattern can coexist. */
 
-.sectionRowWhite,
-.sectionRowSolid,
-.sectionRowDotted,
-.sectionRowDottedClear,
-.sectionRowCurves {
+.sectionRow {
   position: relative;
   padding: 12px 0;
   isolation: isolate;
+}
+
+/* Fill layer (::before) */
+.sectionRowFillWhite::before,
+.sectionRowFillSolid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  z-index: -2;
+}
+
+.sectionRowFillWhite::before {
+  background: #ffffff;
+}
+
+.sectionRowFillSolid::before {
+  background: var(--row-bg-color, #6366f1);
+}
+
+/* Dotted pattern (::after) overlays the fill if any. */
+.sectionRowPatternDotted::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle 22px at 6% 30%,  var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 14px at 18% 78%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 30px at 42% 18%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 10px at 58% 55%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 18px at 76% 88%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 26px at 88% 32%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle  8px at 33% 50%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 12px at 95% 70%, var(--dot-color, #6366f1), transparent 100%);
+  background-repeat: no-repeat;
 }
 
 /* Curves SVG layer: spans full viewport behind the widgets. */
@@ -270,51 +311,6 @@
   height: 100%;
   z-index: -1;
   pointer-events: none;
-}
-
-.sectionRowWhite::before,
-.sectionRowSolid::before,
-.sectionRowDotted::before,
-.sectionRowDottedClear::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(50% - 50vw);
-  right: calc(50% - 50vw);
-  z-index: -1;
-}
-
-.sectionRowWhite::before {
-  background: #ffffff;
-}
-
-.sectionRowSolid::before {
-  background: var(--row-bg-color, #6366f1);
-}
-
-/* Dots layer used by both 'dotted' (over white) and 'dotted-clear' (over
-   the original page background). */
-.sectionRowDotted::before,
-.sectionRowDottedClear::before {
-  background-image:
-    radial-gradient(circle 22px at 6% 30%,  var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 14px at 18% 78%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 30px at 42% 18%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 10px at 58% 55%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 18px at 76% 88%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 26px at 88% 32%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle  8px at 33% 50%, var(--dot-color, #6366f1), transparent 100%),
-    radial-gradient(circle 12px at 95% 70%, var(--dot-color, #6366f1), transparent 100%);
-  background-repeat: no-repeat;
-}
-
-.sectionRowDotted::before {
-  background-color: #ffffff;
-}
-
-.sectionRowDottedClear::before {
-  background-color: transparent;
 }
 
 /* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
