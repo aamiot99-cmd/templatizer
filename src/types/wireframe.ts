@@ -23,6 +23,7 @@ export type RowBackgroundType =
   | 'white'
   | 'dotted'
   | 'dotted-clear'
+  | 'curves'
 export type BrandColorKey = 'primary' | 'secondary' | 'text'
 
 export interface RowBackground {
