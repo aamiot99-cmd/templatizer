@@ -524,18 +524,18 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
           <path
             d="M 0 90 C 200 30 400 180 600 110 S 1000 40 1200 100"
             stroke={curvesColor}
-            strokeWidth="10"
+            strokeWidth="8"
             strokeLinecap="round"
             fill="none"
-            opacity="0.9"
+            opacity="0.22"
           />
           <path
             d="M 0 220 C 200 280 400 150 600 210 S 1000 270 1200 200"
             stroke={curvesColor}
-            strokeWidth="6"
+            strokeWidth="5"
             strokeLinecap="round"
             fill="none"
-            opacity="0.7"
+            opacity="0.16"
           />
           <path
             d="M 0 40 C 300 110 500 -20 800 60 S 1100 120 1200 50"
@@ -543,7 +543,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
             strokeWidth="3"
             strokeLinecap="round"
             fill="none"
-            opacity="0.5"
+            opacity="0.1"
           />
         </svg>
       )}
