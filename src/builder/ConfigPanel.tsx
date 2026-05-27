@@ -314,16 +314,38 @@ function RowConfigPanel({
             ))}
           </div>
         </div>
-        {showColorPicker && (
+        {showFillColorPicker && (
           <div className={styles.fieldGroup}>
-            <div className={styles.fieldLabel}>Couleur</div>
+            <div className={styles.fieldLabel}>Couleur du fond</div>
             <div className={styles.colLayoutGrid}>
               {COLOR_KEYS.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
-                  className={`${styles.colLayoutBtn} ${currentColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
-                  onClick={() => writeBackground({ colorKey: opt.value })}
+                  className={`${styles.colLayoutBtn} ${currentFillColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
+                  onClick={() => writeBackground({ fillColorKey: opt.value })}
+                >
+                  <span
+                    className={styles.colorSwatch}
+                    style={{ background: brandingColors[opt.value] }}
+                    aria-hidden="true"
+                  />
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {showPatternColorPicker && (
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Couleur du motif</div>
+            <div className={styles.colLayoutGrid}>
+              {COLOR_KEYS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.colLayoutBtn} ${currentPatternColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
+                  onClick={() => writeBackground({ patternColorKey: opt.value })}
                 >
                   <span
                     className={styles.colorSwatch}
