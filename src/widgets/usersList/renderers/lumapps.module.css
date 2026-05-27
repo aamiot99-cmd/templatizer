@@ -6,7 +6,7 @@
   box-shadow: var(--widget-shadow, 0 1px 3px rgba(60, 64, 67, 0.1));
   padding: 18px 22px 12px;
   width: 100%;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
 }
 
 /* ── Header ── */
@@ -27,7 +27,7 @@
   margin: 0;
   font-size: 15px;
   font-weight: 600;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
   letter-spacing: -0.1px;
 }
 
@@ -71,14 +71,14 @@
 .name {
   font-size: 14px;
   font-weight: 700;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
   line-height: 1.3;
   margin-bottom: 2px;
 }
 
 .email {
   font-size: 13px;
-  color: #80868b;
+  color: var(--text-on-bg-muted, #80868b);
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;

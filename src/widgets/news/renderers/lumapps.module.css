@@ -101,7 +101,7 @@
 
 .reactionItem {
   font-size: 12px;
-  color: #5f6368;
+  color: var(--text-on-bg-muted, #5f6368);
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -116,7 +116,7 @@
 .pagArrow {
   border: none;
   background: transparent;
-  color: #5f6368;
+  color: var(--text-on-bg-muted, #5f6368);
   font-size: 14px;
   line-height: 1;
   cursor: default;
