@@ -9,6 +9,7 @@ import type {
   Platform,
   ProjectState,
   RowAlignment,
+  RowBackground,
   StackedCell,
   WidgetSize,
   Wireframe,
