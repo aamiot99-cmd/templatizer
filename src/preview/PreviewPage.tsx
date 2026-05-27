@@ -449,6 +449,10 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     branding.colors[bg?.patternColorKey ?? bg?.colorKey ?? 'primary']
   const hasCustomBg = fill !== 'none' || pattern !== 'none'
 
+  // When the fill is solid AND dark, flip text colors of widgets sitting
+  // directly on the section background to a light scheme via CSS vars.
+  const isDarkSection = fill === 'solid' && isDarkColor(fillColor)
+
   let sectionClass: string | undefined
   let sectionStyle: React.CSSProperties | undefined = undefined
 
@@ -465,6 +469,12 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     sectionStyle = {
       ['--row-bg-color' as string]: fillColor,
       ['--dot-color' as string]: patternColor,
+      ...(isDarkSection
+        ? {
+            ['--text-on-bg' as string]: '#ffffff',
+            ['--text-on-bg-muted' as string]: 'rgba(255, 255, 255, 0.78)',
+          }
+        : {}),
     } as React.CSSProperties
   } else {
     sectionClass = defaultSectionClass()
