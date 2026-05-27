@@ -4,6 +4,9 @@
   width: 100%;
   padding: 16px 4px;
   color: var(--text-on-bg, #202124);
+  background: var(--widget-bg, transparent);
+  border-radius: var(--widget-radius, 0);
+  box-shadow: var(--widget-shadow, none);
 }
 
 .root[data-align='center'] {
