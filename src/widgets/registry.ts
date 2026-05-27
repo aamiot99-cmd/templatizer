@@ -23,6 +23,10 @@ import { imageGalleryWidget } from './imageGallery'
 import { linksListWidget } from './linksList'
 import { titleWidget } from './title'
 import { usersListWidget } from './usersList'
+import { articlesListWidget } from './articlesList'
+import { communityListWidget } from './communityList'
+import { communityPostsWidget } from './communityPosts'
+import { filesListWidget } from './filesList'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
