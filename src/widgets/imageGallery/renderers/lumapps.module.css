@@ -28,8 +28,10 @@
   border-radius: 8px;
   overflow: hidden;
   aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #e8eaed;
   cursor: default;
   transition: transform 0.2s ease;
 }
@@ -40,13 +42,6 @@
 
 .tile:hover {
   transform: translateY(-2px);
-}
-
-.tileIcon {
-  display: inline-flex;
-  color: #ffffff;
-  opacity: 0.85;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18));
 }
 
 .caption {
