@@ -20,6 +20,18 @@
   font-weight: 600;
 }
 
+/* execCommand foreColor / fontSize may inject <font color> or
+   <span style="color"> wrappers. Force them to inherit so the widget bg
+   override drives the actual text color at render. Links keep their own. */
+.content :global(font[color]),
+.content :global(*[style*='color']) {
+  color: inherit !important;
+}
+.content :global(a),
+.content :global(a *) {
+  color: #1a73e8 !important;
+}
+
 .content :global(h1) { font-size: 22px; }
 .content :global(h2) { font-size: 18px; }
 .content :global(h3) { font-size: 16px; }
