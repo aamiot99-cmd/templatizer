@@ -206,13 +206,35 @@ function RowConfigPanel({
 }) {
   const currentLayout = deriveColumnLayout(row)
   const currentAlignment = row.alignment ?? 'top'
-  const currentBgType: RowBackgroundType = row.background?.type ?? 'none'
+
+  // Read the row background, normalizing legacy single-axis `type` to the
+  // new (fill + pattern) model so old projects keep their previous look.
+  let currentFill: RowFillType = row.background?.fill ?? 'none'
+  let currentPattern: RowPatternType = row.background?.pattern ?? 'none'
+  if (
+    row.background &&
+    row.background.fill === undefined &&
+    row.background.pattern === undefined
+  ) {
+    switch (row.background.type) {
+      case 'white':        currentFill = 'white'; break
+      case 'solid':        currentFill = 'solid'; break
+      case 'dotted':       currentFill = 'white'; currentPattern = 'dotted'; break
+      case 'dotted-clear': currentFill = 'none';  currentPattern = 'dotted'; break
+      case 'curves':       currentFill = 'none';  currentPattern = 'curves'; break
+      default: break
+    }
+  }
   const currentColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
-  const showColorPicker =
-    currentBgType === 'solid' ||
-    currentBgType === 'dotted' ||
-    currentBgType === 'dotted-clear' ||
-    currentBgType === 'curves'
+  const showColorPicker = currentFill === 'solid' || currentPattern !== 'none'
+
+  const writeBackground = (next: Partial<RowBackground>) => {
+    onBackgroundChange({
+      fill: next.fill ?? currentFill,
+      pattern: next.pattern ?? currentPattern,
+      colorKey: next.colorKey ?? currentColorKey,
+    })
+  }
 
   return (
     <aside className={styles.panel}>
