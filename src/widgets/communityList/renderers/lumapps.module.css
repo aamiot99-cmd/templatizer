@@ -33,6 +33,9 @@
 
 .banner {
   height: 64px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .iconAvatar {
