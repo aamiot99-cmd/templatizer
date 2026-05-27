@@ -7,13 +7,13 @@ interface User {
 }
 
 const USERS: User[] = [
-  { name: 'QUINTIN Sandrine',   email: 'sandrine.quintin@lecko.fr' },
-  { name: 'Charlotte NGuyen',   email: 'charlotte.nguyen@lecko.fr' },
-  { name: 'Hélène Soubiron',    email: 'helene.soubiron@lecko.fr' },
-  { name: 'PERRIER Justine',    email: 'justine.perrier@lecko.fr' },
-  { name: 'Mehdi Lahjouji',     email: 'mehdi.lahjouji@lecko.eu' },
-  { name: 'Théo Dumont',        email: 'tdumont@lecko.fr' },
-  { name: 'Antoine Amiot',      email: 'aamiot@lecko.fr' },
+  { name: 'Camille Vasseur',     email: 'camille.vasseur@example.com' },
+  { name: 'Lucas Berthier',      email: 'lucas.berthier@example.com' },
+  { name: 'Inès Moreau',         email: 'ines.moreau@example.com' },
+  { name: 'Hugo Lefranc',        email: 'hugo.lefranc@example.com' },
+  { name: 'Émilie Saint-Pierre', email: 'emilie.saintpierre@example.com' },
+  { name: 'Romain Caron',        email: 'romain.caron@example.com' },
+  { name: 'Anaïs Delahaye',      email: 'anais.delahaye@example.com' },
 ]
 
 function SilhouetteIcon() {
