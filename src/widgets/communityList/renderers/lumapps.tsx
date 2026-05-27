@@ -5,7 +5,7 @@ interface Community {
   name: string
   description: string
   members: number
-  bannerGradient: string
+  bannerUrl: string
   iconLetter: string
   iconColor: string
 }
@@ -15,7 +15,7 @@ const COMMUNITIES: Community[] = [
     name: 'Tribu Design Système',
     description: 'Pour échanger autour de Material, Figma et des bonnes pratiques UI.',
     members: 142,
-    bannerGradient: 'linear-gradient(135deg, #818cf8, #4338ca)',
+    bannerUrl: '/photos/Office 3.jpg',
     iconLetter: 'D',
     iconColor: '#4338ca',
   },
@@ -23,7 +23,7 @@ const COMMUNITIES: Community[] = [
     name: 'Club Café Innovation',
     description: 'Discussions hebdomadaires sur les tendances tech et les expérimentations internes.',
     members: 86,
-    bannerGradient: 'linear-gradient(135deg, #fb923c, #c2410c)',
+    bannerUrl: '/photos/meeting 2.jpg',
     iconLetter: 'I',
     iconColor: '#c2410c',
   },
@@ -31,7 +31,7 @@ const COMMUNITIES: Community[] = [
     name: 'Réseau Mentors Lecko',
     description: 'Programme de mentorat ouvert à tous les collaborateurs de plus de 2 ans.',
     members: 54,
-    bannerGradient: 'linear-gradient(135deg, #34d399, #047857)',
+    bannerUrl: '/photos/team building 2.jpg',
     iconLetter: 'M',
     iconColor: '#047857',
   },
@@ -39,7 +39,7 @@ const COMMUNITIES: Community[] = [
     name: 'Sport & Bien-être',
     description: 'Running, yoga, escalade : retrouvez les groupes sport de tous les bureaux.',
     members: 213,
-    bannerGradient: 'linear-gradient(135deg, #f472b6, #be185d)',
+    bannerUrl: '/photos/team building.jpg',
     iconLetter: 'S',
     iconColor: '#be185d',
   },
@@ -47,7 +47,7 @@ const COMMUNITIES: Community[] = [
     name: 'Communauté Data',
     description: 'Échanges autour des projets data, du machine learning et des dashboards.',
     members: 67,
-    bannerGradient: 'linear-gradient(135deg, #38bdf8, #0369a1)',
+    bannerUrl: '/photos/Office.jpg',
     iconLetter: 'D',
     iconColor: '#0369a1',
   },
