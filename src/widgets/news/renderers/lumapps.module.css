@@ -37,6 +37,9 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  /* Reset: white card always uses dark text, even if the widget bg is dark. */
+  --text-on-bg: #202124;
+  --text-on-bg-muted: #5f6368;
 }
 
 .hero {
