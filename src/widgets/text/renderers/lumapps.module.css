@@ -6,7 +6,7 @@
   box-shadow: var(--widget-shadow, 0 1px 3px rgba(60, 64, 67, 0.1));
   padding: 20px 24px;
   width: 100%;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -16,7 +16,7 @@
 .content :global(h3),
 .content :global(h4) {
   margin: 0 0 8px;
-  color: #202124;
+  color: var(--text-on-bg, #202124);
   font-weight: 600;
 }
 
