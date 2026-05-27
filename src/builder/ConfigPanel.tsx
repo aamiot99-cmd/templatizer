@@ -279,16 +279,29 @@ function RowConfigPanel({
           </div>
         )}
         <div className={styles.fieldGroup}>
-          <div className={styles.fieldLabel}>Fond de la section</div>
+          <div className={styles.fieldLabel}>Couleur de fond</div>
           <div className={styles.colLayoutGrid}>
-            {BG_OPTIONS.map((opt) => (
+            {FILL_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
-                className={`${styles.colLayoutBtn} ${currentBgType === opt.value ? styles.colLayoutBtnActive : ''}`}
-                onClick={() =>
-                  onBackgroundChange({ type: opt.value, colorKey: currentColorKey })
-                }
+                className={`${styles.colLayoutBtn} ${currentFill === opt.value ? styles.colLayoutBtnActive : ''}`}
+                onClick={() => writeBackground({ fill: opt.value })}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldLabel}>Motif</div>
+          <div className={styles.colLayoutGrid}>
+            {PATTERN_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`${styles.colLayoutBtn} ${currentPattern === opt.value ? styles.colLayoutBtnActive : ''}`}
+                onClick={() => writeBackground({ pattern: opt.value })}
               >
                 {opt.label}
               </button>
@@ -304,9 +317,7 @@ function RowConfigPanel({
                   key={opt.value}
                   type="button"
                   className={`${styles.colLayoutBtn} ${currentColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
-                  onClick={() =>
-                    onBackgroundChange({ type: currentBgType, colorKey: opt.value })
-                  }
+                  onClick={() => writeBackground({ colorKey: opt.value })}
                 >
                   <span
                     className={styles.colorSwatch}
