@@ -39,7 +39,7 @@ export const articlesListWidget: WidgetDefinition = {
       default: 'list',
       options: [
         { value: 'list', label: 'Liste verticale' },
-        { value: 'grid', label: 'Grille' },
+        { value: 'carousel', label: 'Carrousel' },
       ],
     },
   ],
