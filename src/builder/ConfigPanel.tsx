@@ -181,6 +181,15 @@ const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
   { value: 'text',      label: 'Texte' },
 ]
 
+type WidgetBgValue = 'default' | 'none' | 'white' | 'primary' | 'secondary'
+const WIDGET_BG_OPTIONS: { value: WidgetBgValue; label: string }[] = [
+  { value: 'default',   label: 'Défaut' },
+  { value: 'none',      label: 'Sans fond' },
+  { value: 'white',     label: 'Blanc' },
+  { value: 'primary',   label: 'Primaire' },
+  { value: 'secondary', label: 'Secondaire' },
+]
+
 function deriveColumnLayout(row: WireframeRow): ColumnLayout {
   const n = row.cells.length
   if (n <= 1) return 'single'
