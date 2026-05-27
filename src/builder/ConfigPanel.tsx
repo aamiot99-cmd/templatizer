@@ -163,13 +163,16 @@ const ALIGN_OPTIONS: { value: RowAlignment; label: string }[] = [
   { value: 'bottom', label: 'Bas' },
 ]
 
-const BG_OPTIONS: { value: RowBackgroundType; label: string }[] = [
-  { value: 'none',           label: 'Sans fond' },
-  { value: 'white',          label: 'Fond blanc' },
-  { value: 'solid',          label: 'Fond plein' },
-  { value: 'dotted',         label: 'Pointillés' },
-  { value: 'dotted-clear',   label: 'Pointillés clairs' },
-  { value: 'curves',         label: 'Courbes' },
+const FILL_OPTIONS: { value: RowFillType; label: string }[] = [
+  { value: 'none',  label: 'Sans fond' },
+  { value: 'white', label: 'Fond blanc' },
+  { value: 'solid', label: 'Fond plein' },
+]
+
+const PATTERN_OPTIONS: { value: RowPatternType; label: string }[] = [
+  { value: 'none',    label: 'Aucun' },
+  { value: 'dotted',  label: 'Pointillés' },
+  { value: 'curves',  label: 'Courbes' },
 ]
 
 const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
