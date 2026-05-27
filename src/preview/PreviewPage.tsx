@@ -40,15 +40,27 @@ const SIZE_TO_COLS: Record<string, number> = {
   'one-third': 1,
 }
 
-/** Builds the inline style applied on a widget cell to override the
- *  widget's default background via CSS variables. Returns undefined for
- *  the 'default' case so the widget renders its natural visual. */
+/** Widgets whose natural .root has NO opaque background (text sits directly
+ *  on the section bg by default). For those, we let the section's text-on-bg
+ *  vars cascade through; for everything else we explicitly set them to match
+ *  the widget's own background. */
+const TRANSPARENT_DEFAULT_WIDGETS = new Set([
+  'title',
+  'news',
+  'articlesList',
+])
+
+/** Builds the inline style applied on a widget cell to override the widget's
+ *  default background via CSS variables, AND to set the right text color for
+ *  whatever is now behind the widget content. */
 function buildWidgetCellStyle(
   bg: string,
+  widgetId: string,
   colors: { primary: string; secondary: string; text: string },
 ): React.CSSProperties | undefined {
-  if (bg === 'default') return undefined
   const style: Record<string, string> = {}
+
+  // 1) Background layer overrides
   if (bg === 'none') {
     style['--widget-bg'] = 'transparent'
     style['--widget-shadow'] = 'none'
@@ -56,14 +68,31 @@ function buildWidgetCellStyle(
   } else if (bg === 'white') {
     style['--widget-bg'] = '#ffffff'
   } else if (bg === 'primary' || bg === 'secondary') {
-    const color = colors[bg]
-    style['--widget-bg'] = color
-    if (isDarkColor(color)) {
+    style['--widget-bg'] = colors[bg]
+  }
+
+  // 2) Text color appropriate for the effective bg behind the widget content
+  const isTransparentDefault = TRANSPARENT_DEFAULT_WIDGETS.has(widgetId)
+  // Effective opaque bg: 'default' (opaque widgets), 'white', or a brand color.
+  // Transparent: 'none' always, and 'default' for widgets without their own card.
+  let effectiveBgColor: string | null = null
+  if (bg === 'white') effectiveBgColor = '#ffffff'
+  else if (bg === 'primary' || bg === 'secondary') effectiveBgColor = colors[bg]
+  else if (bg === 'default' && !isTransparentDefault) effectiveBgColor = '#ffffff'
+
+  if (effectiveBgColor !== null) {
+    if (isDarkColor(effectiveBgColor)) {
       style['--text-on-bg'] = '#ffffff'
       style['--text-on-bg-muted'] = 'rgba(255, 255, 255, 0.78)'
+    } else {
+      style['--text-on-bg'] = '#202124'
+      style['--text-on-bg-muted'] = '#5f6368'
     }
   }
-  return style as React.CSSProperties
+  // else (transparent effective bg): leave the vars unset so the section's
+  // cascade comes through naturally.
+
+  return Object.keys(style).length > 0 ? (style as React.CSSProperties) : undefined
 }
 
 /** Returns true if a #rrggbb hex color is dark enough that dark grey text
