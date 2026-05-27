@@ -442,6 +442,8 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     } else if (bg.type === 'dotted-clear') {
       sectionClass = styles.sectionRowDottedClear
       sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
+    } else if (bg.type === 'curves') {
+      sectionClass = styles.sectionRowCurves
     } else {
       // 'none' = let the default platform alternation apply
       sectionClass = defaultSectionClass()
