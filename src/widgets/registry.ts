@@ -53,6 +53,10 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [linksListWidget.id]: linksListWidget,
   [titleWidget.id]: titleWidget,
   [usersListWidget.id]: usersListWidget,
+  [articlesListWidget.id]: articlesListWidget,
+  [communityListWidget.id]: communityListWidget,
+  [communityPostsWidget.id]: communityPostsWidget,
+  [filesListWidget.id]: filesListWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {
