@@ -187,15 +187,22 @@ function deriveColumnLayout(row: WireframeRow): ColumnLayout {
 
 function RowConfigPanel({
   row,
+  brandingColors,
   onLayoutChange,
   onAlignmentChange,
+  onBackgroundChange,
 }: {
   row: WireframeRow
+  brandingColors: { primary: string; secondary: string; text: string }
   onLayoutChange: (layout: ColumnLayout) => void
   onAlignmentChange: (alignment: RowAlignment) => void
+  onBackgroundChange: (background: RowBackground) => void
 }) {
   const currentLayout = deriveColumnLayout(row)
   const currentAlignment = row.alignment ?? 'top'
+  const currentBgType: RowBackgroundType = row.background?.type ?? 'none'
+  const currentColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
+  const showColorPicker = currentBgType === 'solid' || currentBgType === 'dotted'
 
   return (
     <aside className={styles.panel}>
@@ -203,7 +210,7 @@ function RowConfigPanel({
         <span className={styles.panelBadge}>LIG</span>
         <div>
           <h3 className={styles.panelTitle}>Ligne</h3>
-          <p className={styles.panelSubtitle}>Disposition et alignement</p>
+          <p className={styles.panelSubtitle}>Disposition, alignement, fond</p>
         </div>
       </div>
       <div className={styles.fields}>
@@ -233,6 +240,47 @@ function RowConfigPanel({
                   className={`${styles.alignBtn} ${currentAlignment === opt.value ? styles.alignBtnActive : ''}`}
                   onClick={() => onAlignmentChange(opt.value)}
                 >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldLabel}>Fond de la section</div>
+          <div className={styles.alignGroup}>
+            {BG_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`${styles.alignBtn} ${currentBgType === opt.value ? styles.alignBtnActive : ''}`}
+                onClick={() =>
+                  onBackgroundChange({ type: opt.value, colorKey: currentColorKey })
+                }
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {showColorPicker && (
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Couleur</div>
+            <div className={styles.alignGroup}>
+              {COLOR_KEYS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.alignBtn} ${currentColorKey === opt.value ? styles.alignBtnActive : ''}`}
+                  onClick={() =>
+                    onBackgroundChange({ type: currentBgType, colorKey: opt.value })
+                  }
+                >
+                  <span
+                    className={styles.colorSwatch}
+                    style={{ background: brandingColors[opt.value] }}
+                    aria-hidden="true"
+                  />
                   {opt.label}
                 </button>
               ))}
