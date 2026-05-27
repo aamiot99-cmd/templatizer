@@ -125,7 +125,15 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
         </aside>
       )
     }
-    return <RowConfigPanel row={row} onLayoutChange={(l) => setRowColumnLayout(selectedRowId, l)} onAlignmentChange={(a) => updateRowAlignment(selectedRowId, a)} />
+    return (
+      <RowConfigPanel
+        row={row}
+        brandingColors={branding.colors}
+        onLayoutChange={(l) => setRowColumnLayout(selectedRowId, l)}
+        onAlignmentChange={(a) => updateRowAlignment(selectedRowId, a)}
+        onBackgroundChange={(bg) => setRowBackground(selectedRowId, bg)}
+      />
+    )
   }
 
   return (
