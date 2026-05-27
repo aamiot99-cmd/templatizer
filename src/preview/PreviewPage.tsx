@@ -441,7 +441,12 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
       }
     }
   }
-  const bgColor = branding.colors[bg?.colorKey ?? 'primary']
+  // Two independent colors: one for the fill, one for the pattern. The
+  // legacy single `colorKey` (used by old projects) falls back to both.
+  const fillColor =
+    branding.colors[bg?.fillColorKey ?? bg?.colorKey ?? 'primary']
+  const patternColor =
+    branding.colors[bg?.patternColorKey ?? bg?.colorKey ?? 'primary']
   const hasCustomBg = fill !== 'none' || pattern !== 'none'
 
   let sectionClass: string | undefined
@@ -458,8 +463,8 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
     if (pattern === 'dotted') classes.push(styles.sectionRowPatternDotted)
     sectionClass = classes.join(' ')
     sectionStyle = {
-      ['--row-bg-color' as string]: bgColor,
-      ['--dot-color' as string]: bgColor,
+      ['--row-bg-color' as string]: fillColor,
+      ['--dot-color' as string]: patternColor,
     } as React.CSSProperties
   } else {
     sectionClass = defaultSectionClass()
