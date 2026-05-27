@@ -74,7 +74,7 @@ export function LumappsCommunityList({ config, branding }: WidgetRendererProps) 
           <article key={i} className={styles.card}>
             <div
               className={styles.banner}
-              style={{ background: c.bannerGradient }}
+              style={{ backgroundImage: `url("${c.bannerUrl}")` }}
             />
             <div
               className={styles.iconAvatar}
