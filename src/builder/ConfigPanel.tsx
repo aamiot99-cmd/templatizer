@@ -207,7 +207,8 @@ function RowConfigPanel({
   const showColorPicker =
     currentBgType === 'solid' ||
     currentBgType === 'dotted' ||
-    currentBgType === 'dotted-clear'
+    currentBgType === 'dotted-clear' ||
+    currentBgType === 'curves'
 
   return (
     <aside className={styles.panel}>
