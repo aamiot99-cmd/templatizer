@@ -111,6 +111,39 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
                 }
               />
             ))}
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Fond du widget</div>
+            <div className={styles.colLayoutGrid}>
+              {WIDGET_BG_OPTIONS.map((opt) => {
+                const current = (cell.config.widgetBg as WidgetBgValue) ?? 'default'
+                const active = current === opt.value
+                const swatchColor =
+                  opt.value === 'white' ? '#ffffff'
+                  : opt.value === 'primary' ? branding.colors.primary
+                  : opt.value === 'secondary' ? branding.colors.secondary
+                  : null
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`${styles.colLayoutBtn} ${active ? styles.colLayoutBtnActive : ''}`}
+                    onClick={() =>
+                      updateCellConfig(rowId, cell.id, { widgetBg: opt.value })
+                    }
+                  >
+                    {swatchColor && (
+                      <span
+                        className={styles.colorSwatch}
+                        style={{ background: swatchColor }}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {opt.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </aside>
     )
