@@ -421,33 +421,46 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
         ? styles.sectionWhite
         : styles.sectionDefault
 
+  // Normalize the row background config: new model (fill + pattern) takes
+  // precedence; legacy `type` is mapped to the new model for backward compat.
+  const bg = row.background
+  let fill: 'none' | 'white' | 'solid' = 'none'
+  let pattern: 'none' | 'dotted' | 'curves' = 'none'
+  if (bg) {
+    if (bg.fill !== undefined || bg.pattern !== undefined) {
+      fill = bg.fill ?? 'none'
+      pattern = bg.pattern ?? 'none'
+    } else {
+      switch (bg.type) {
+        case 'white':        fill = 'white'; break
+        case 'solid':        fill = 'solid'; break
+        case 'dotted':       fill = 'white'; pattern = 'dotted'; break
+        case 'dotted-clear': fill = 'none';  pattern = 'dotted'; break
+        case 'curves':       fill = 'none';  pattern = 'curves'; break
+        default: break
+      }
+    }
+  }
+  const bgColor = branding.colors[bg?.colorKey ?? 'primary']
+  const hasCustomBg = fill !== 'none' || pattern !== 'none'
+
   let sectionClass: string | undefined
-  let sectionStyle: React.CSSProperties | undefined
+  let sectionStyle: React.CSSProperties | undefined = undefined
 
   if (isFullBleed) {
     sectionClass = styles.sectionFullBleed
   } else if (forceWhite) {
     sectionClass = styles.sectionWhite
-  } else if (row.background) {
-    const bg = row.background
-    const color = branding.colors[bg.colorKey ?? 'primary']
-    if (bg.type === 'white') {
-      sectionClass = styles.sectionRowWhite
-    } else if (bg.type === 'solid') {
-      sectionClass = styles.sectionRowSolid
-      sectionStyle = { ['--row-bg-color' as string]: color } as React.CSSProperties
-    } else if (bg.type === 'dotted') {
-      sectionClass = styles.sectionRowDotted
-      sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
-    } else if (bg.type === 'dotted-clear') {
-      sectionClass = styles.sectionRowDottedClear
-      sectionStyle = { ['--dot-color' as string]: color } as React.CSSProperties
-    } else if (bg.type === 'curves') {
-      sectionClass = styles.sectionRowCurves
-    } else {
-      // 'none' = let the default platform alternation apply
-      sectionClass = defaultSectionClass()
-    }
+  } else if (hasCustomBg) {
+    const classes: string[] = [styles.sectionRow]
+    if (fill === 'white') classes.push(styles.sectionRowFillWhite)
+    else if (fill === 'solid') classes.push(styles.sectionRowFillSolid)
+    if (pattern === 'dotted') classes.push(styles.sectionRowPatternDotted)
+    sectionClass = classes.join(' ')
+    sectionStyle = {
+      ['--row-bg-color' as string]: bgColor,
+      ['--dot-color' as string]: bgColor,
+    } as React.CSSProperties
   } else {
     sectionClass = defaultSectionClass()
   }
