@@ -30,7 +30,7 @@
 /* ── Card ── */
 .card {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 1fr 1.1fr;
   gap: 0;
   background: #ffffff;
   border: 1px solid #e8eaed;
@@ -38,17 +38,16 @@
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(60, 64, 67, 0.08);
   width: 100%;
-  max-width: 720px;
 }
 
-/* Carousel variant: illustration takes more horizontal space than the text. */
+/* Carousel variant: illustration takes even more horizontal space than the text. */
 .card[data-variant='carousel'] {
   grid-template-columns: 1.4fr 1fr;
 }
 
 .thumb {
   height: 100%;
-  min-height: 180px;
+  min-height: 200px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
