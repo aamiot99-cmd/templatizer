@@ -33,19 +33,19 @@ const STEPS: StepConfig[] = [
     render: () => <BrandingStep />,
   },
   {
+    id: 'navigation',
+    label: 'Navigation',
+    title: 'Définissez votre menu de navigation',
+    subtitle: 'Les entrées du menu principal de votre intranet.',
+    render: () => <NavStep />,
+  },
+  {
     id: 'wireframe',
     label: 'Wireframe',
     title: 'Composez votre page',
     subtitle:
       'Glissez les widgets depuis le panneau de gauche, organisez-les en lignes.',
     render: () => <WireframeStep />,
-  },
-  {
-    id: 'navigation',
-    label: 'Navigation',
-    title: 'Définissez votre menu de navigation',
-    subtitle: 'Les entrées du menu principal de votre intranet.',
-    render: () => <NavStep />,
   },
   {
     id: 'preview',
@@ -95,28 +95,6 @@ export function Wizard() {
         </ul>
       </nav>
 
-      {/* Enfant direct du wizard (hors sidebar) → pas de conflit de stacking context */}
-      <div className={styles.stepsPopover}>
-        <h3 className={styles.sidebarTitle}>Étapes</h3>
-        <ul className={styles.steps}>
-          {STEPS.map((step, index) => {
-            const active = index === currentStepIndex
-            return (
-              <li key={step.id}>
-                <button
-                  type="button"
-                  className={`${styles.step} ${active ? styles.stepActive : ''}`}
-                  onClick={() => setCurrentStepIndex(index)}
-                >
-                  <span className={styles.stepNumber}>{index + 1}</span>
-                  <span className={styles.stepLabel}>{step.label}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-
       <section className={styles.content}>
         <header className={styles.contentHeader}>
           <p className={styles.contentEyebrow}>
@@ -142,7 +120,7 @@ export function Wizard() {
             className={`${styles.navButton} ${styles.navButtonPrimary}`}
             onClick={goNext}
           >
-            {isLastStep ? 'Générer la page ↗' : 'Suivant →'}
+            {isLastStep ? 'Générer le site ↗' : 'Suivant →'}
           </button>
         </div>
       </section>

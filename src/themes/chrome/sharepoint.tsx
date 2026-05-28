@@ -8,6 +8,8 @@ interface SharepointChromeProps {
   navEntries: NavEntry[]
   hubMenu?: HubMenu
   children: ReactNode
+  onNavClick?: (entryId: string) => void
+  activeEntryId?: string
 }
 
 const DEFAULT_NAV: NavEntry[] = [
@@ -137,7 +139,7 @@ function HelpIcon() {
   )
 }
 
-export function SharepointChrome({ branding, navEntries, hubMenu, children }: SharepointChromeProps) {
+export function SharepointChrome({ branding, navEntries, hubMenu, children, onNavClick, activeEntryId }: SharepointChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const userName = 'Alex Dupont'
   const userInitials = initials(userName)
@@ -146,7 +148,14 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 10) }
+    function onScroll() {
+      const y = window.scrollY
+      setScrolled((prev) => {
+        if (!prev && y > 60) return true
+        if (prev && y < 5) return false
+        return prev
+      })
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -243,17 +252,28 @@ export function SharepointChrome({ branding, navEntries, hubMenu, children }: Sh
               <nav className={styles.siteNav}>
                 {nav.map((entry, idx) => {
                   const hasChildren = Boolean(entry.children && entry.children.length > 0)
+                  const isActive = activeEntryId ? entry.id === activeEntryId : idx === 0
+                  const isClickable = Boolean(entry.hasMockup && onNavClick)
                   return (
                     <div
                       key={entry.id}
-                      className={`${styles.navItem} ${idx === 0 ? styles.navItemActive : ''}`}
+                      className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                      style={isClickable ? { cursor: 'pointer' } : undefined}
+                      onClick={isClickable ? () => onNavClick!(entry.id) : undefined}
                     >
                       <span>{entry.label}</span>
                       {hasChildren && <span className={styles.navChevron}><ChevronDown /></span>}
                       {hasChildren && (
                         <div className={styles.dropdown}>
                           {entry.children!.map((child) => (
-                            <div key={child.id} className={styles.dropdownItem}>{child.label}</div>
+                            <div
+                              key={child.id}
+                              className={styles.dropdownItem}
+                              style={child.hasMockup && onNavClick ? { cursor: 'pointer' } : undefined}
+                              onClick={child.hasMockup && onNavClick ? (e) => { e.stopPropagation(); onNavClick(child.id) } : undefined}
+                            >
+                              {child.label}
+                            </div>
                           ))}
                         </div>
                       )}
