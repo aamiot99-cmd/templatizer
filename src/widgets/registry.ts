@@ -51,11 +51,9 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [imageMapWidget.id]: imageMapWidget,
   [highlightedContentWidget.id]: highlightedContentWidget,
   [documentCenterWidget.id]: documentCenterWidget,
-<<<<<<< HEAD
   [youtubeWidget.id]: youtubeWidget,
   [orgChartWidget.id]: orgChartWidget,
   [videoWidget.id]: videoWidget,
-=======
   [calendarWidget.id]: calendarWidget,
   [imageGalleryWidget.id]: imageGalleryWidget,
   [linksListWidget.id]: linksListWidget,
@@ -65,7 +63,6 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [communityListWidget.id]: communityListWidget,
   [communityPostsWidget.id]: communityPostsWidget,
   [filesListWidget.id]: filesListWidget,
->>>>>>> feature/aamiot
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {
