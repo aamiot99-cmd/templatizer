@@ -18,11 +18,9 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 import { documentCenterWidget } from './documentCenter'
-<<<<<<< HEAD
 import { youtubeWidget } from './youtube'
 import { orgChartWidget } from './orgChart'
 import { videoWidget } from './video'
-=======
 import { calendarWidget } from './calendar'
 import { imageGalleryWidget } from './imageGallery'
 import { linksListWidget } from './linksList'
@@ -32,7 +30,6 @@ import { articlesListWidget } from './articlesList'
 import { communityListWidget } from './communityList'
 import { communityPostsWidget } from './communityPosts'
 import { filesListWidget } from './filesList'
->>>>>>> feature/aamiot
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
