@@ -394,13 +394,13 @@ export const useProjectStore = create<ProjectStore>()(
         ),
 
       setRowBackground: (rowId, background) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) =>
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) =>
               r.id === rowId ? { ...r, background } : r,
             ),
-          },
-        })),
+          }),
+        ),
 
       fillCell: (rowId, cellId, widgetId, config) =>
         set((state) =>
