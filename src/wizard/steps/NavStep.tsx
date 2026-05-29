@@ -48,6 +48,7 @@ export function NavStep() {
                 entries={hubMenu.entries}
                 onChange={setHubMenuEntries}
                 onReset={() => setHubMenuEntries(defaultHubMenu().entries)}
+                showMockupToggle={false}
               />
             </div>
           )}
@@ -57,12 +58,13 @@ export function NavStep() {
       <SubSection
         number={showHubSection ? 2 : 1}
         title="Structure du menu"
-        description="Les éléments du menu horizontal de l'intranet. Cliquez sur « + sous-entrée » à droite d'une entrée pour lui ajouter un menu déroulant."
+        description="Les éléments du menu horizontal de l'intranet. Activez « Maquette » sur les pages pour lesquelles vous souhaitez concevoir un wireframe."
       >
         <NavEntriesEditor
           entries={navEntries}
           onChange={setNavEntries}
           onReset={() => setNavEntries(defaultNavEntries())}
+          showMockupToggle={true}
         />
       </SubSection>
     </div>
@@ -73,9 +75,10 @@ interface NavEntriesEditorProps {
   entries: NavEntry[]
   onChange: (entries: NavEntry[]) => void
   onReset: () => void
+  showMockupToggle: boolean
 }
 
-function NavEntriesEditor({ entries, onChange, onReset }: NavEntriesEditorProps) {
+function NavEntriesEditor({ entries, onChange, onReset, showMockupToggle }: NavEntriesEditorProps) {
   function updateEntry(id: string, patch: Partial<NavEntry>) {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)))
   }
@@ -187,25 +190,38 @@ function NavEntriesEditor({ entries, onChange, onReset }: NavEntriesEditorProps)
                   placeholder="URL"
                 />
                 <div className={styles.rowButtons}>
-                  <button
-                    type="button"
-                    className={styles.addChildButton}
-                    onClick={() => addChild(entry.id)}
-                    title="Ajouter une sous-entrée"
-                  >
-                    + sous-entrée
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.removeButton}
-                    onClick={() => removeEntry(entry.id)}
-                    aria-label="Supprimer"
-                  >
-                    ×
-                  </button>
+                  {showMockupToggle && (
+                    <span className={styles.mockupGroup}>
+                      <span className={styles.mockupLabel}>Maquette</span>
+                      <label
+                        className={styles.mockupSwitch}
+                        title="Créer une maquette pour cette page"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={entryIdx === 0 || Boolean(entry.hasMockup)}
+                          disabled={entryIdx === 0}
+                          onChange={() =>
+                            updateEntry(entry.id, { hasMockup: !entry.hasMockup })
+                          }
+                        />
+                        <span className={styles.mockupSlider} />
+                      </label>
+                    </span>
+                  )}
+                  {entryIdx !== 0 && (
+                    <button
+                      type="button"
+                      className={styles.removeButton}
+                      onClick={() => removeEntry(entry.id)}
+                      aria-label="Supprimer"
+                    >
+                      ×
+                    </button>
+                  )}
                 </div>
               </div>
-              {entry.children && entry.children.length > 0 && (
+              {entry.children && entry.children.length > 0 ? (
                 <div className={styles.children}>
                   <div className={styles.childrenLabel}>Sous-entrées</div>
                   {entry.children.map((child, childIdx) => (
@@ -235,16 +251,55 @@ function NavEntriesEditor({ entries, onChange, onReset }: NavEntriesEditorProps)
                         }
                         placeholder="URL"
                       />
-                      <button
-                        type="button"
-                        className={styles.removeButton}
-                        onClick={() => removeChild(entry.id, child.id)}
-                        aria-label="Supprimer"
-                      >
-                        ×
-                      </button>
+                      <div className={styles.rowButtons}>
+                        {showMockupToggle && (
+                          <span className={styles.mockupGroup}>
+                            <span className={styles.mockupLabel}>Maquette</span>
+                            <label
+                              className={styles.mockupSwitch}
+                              title="Créer une maquette pour cette page"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={Boolean(child.hasMockup)}
+                                onChange={() =>
+                                  updateChild(entry.id, child.id, {
+                                    hasMockup: !child.hasMockup,
+                                  })
+                                }
+                              />
+                              <span className={styles.mockupSlider} />
+                            </label>
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          className={styles.removeButton}
+                          onClick={() => removeChild(entry.id, child.id)}
+                          aria-label="Supprimer"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                   ))}
+                  <button
+                    type="button"
+                    className={styles.addChildLink}
+                    onClick={() => addChild(entry.id)}
+                  >
+                    + Ajouter une sous-entrée
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.entryFooter}>
+                  <button
+                    type="button"
+                    className={styles.addChildLink}
+                    onClick={() => addChild(entry.id)}
+                  >
+                    + Ajouter une sous-entrée
+                  </button>
                 </div>
               )}
             </div>

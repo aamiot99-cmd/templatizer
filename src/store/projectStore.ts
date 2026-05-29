@@ -19,7 +19,7 @@ import type {
 import { THEMES } from '../themes'
 
 const STORAGE_KEY = 'templatizer_state'
-const SCHEMA_VERSION = 1
+const SCHEMA_VERSION = 3
 
 function uid(): string {
   return Math.random().toString(36).slice(2, 10)
@@ -40,7 +40,7 @@ function defaultBranding(platform: Platform): Branding {
 
 export function defaultNavEntries(): NavEntry[] {
   return [
-    { id: 'nav-1', label: 'Accueil', url: '#' },
+    { id: 'nav-1', label: 'Accueil', url: '#', hasMockup: true },
     {
       id: 'nav-2',
       label: 'Centre documentaire',
@@ -89,14 +89,38 @@ export function defaultHubMenu(): HubMenu {
 
 function initialProjectState(): ProjectState {
   const platform: Platform = 'jint'
+  const homeId = 'nav-1'
   return {
     platform,
     branding: defaultBranding(platform),
-    wireframe: { rows: [] },
+    wireframes: { [homeId]: { rows: [] } },
+    activePageId: homeId,
     navEntries: defaultNavEntries(),
     hubMenu: defaultHubMenu(),
   }
 }
+
+// ── Active wireframe helpers ──────────────────────────────────────────────────
+
+function getActiveWireframe(
+  state: Pick<ProjectState, 'wireframes' | 'activePageId'>,
+): Wireframe {
+  return state.wireframes[state.activePageId] ?? { rows: [] }
+}
+
+function setActiveWireframe(
+  state: Pick<ProjectState, 'wireframes' | 'activePageId'>,
+  wireframe: Wireframe,
+): { wireframes: Record<string, Wireframe> } {
+  return {
+    wireframes: {
+      ...state.wireframes,
+      [state.activePageId]: wireframe,
+    },
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface ProjectActions {
   loadSnapshot: (snapshot: ProjectState) => void
@@ -104,6 +128,8 @@ interface ProjectActions {
   setPlatform: (platform: Platform) => void
   updateBranding: (patch: Partial<Branding>) => void
   updateBrandingColors: (patch: Partial<Branding['colors']>) => void
+
+  setActivePageId: (id: string) => void
 
   addRow: (index?: number) => string
   removeRow: (rowId: string) => void
@@ -220,14 +246,28 @@ export const useProjectStore = create<ProjectStore>()(
     (set) => ({
       ...initialProjectState(),
 
-      loadSnapshot: (snapshot) =>
+      loadSnapshot: (snapshot) => {
+        const snap = snapshot as any
+        let wireframes: Record<string, Wireframe>
+        let activePageId: string
+        if (snap.wireframes) {
+          wireframes = snap.wireframes
+          activePageId = snap.activePageId ?? snap.navEntries?.[0]?.id ?? 'nav-1'
+        } else {
+          // v1 snapshot: single wireframe → wireframes map
+          const homeId = snap.navEntries?.[0]?.id ?? 'nav-1'
+          wireframes = { [homeId]: snap.wireframe ?? { rows: [] } }
+          activePageId = homeId
+        }
         set({
-          platform: snapshot.platform,
-          branding: snapshot.branding,
-          wireframe: snapshot.wireframe,
-          navEntries: snapshot.navEntries,
-          hubMenu: snapshot.hubMenu,
-        }),
+          platform: snap.platform,
+          branding: snap.branding,
+          wireframes,
+          activePageId,
+          navEntries: snap.navEntries,
+          hubMenu: snap.hubMenu,
+        })
+      },
 
       setPlatform: (platform) =>
         set((state) => {
@@ -256,46 +296,54 @@ export const useProjectStore = create<ProjectStore>()(
           },
         })),
 
+      setActivePageId: (id) =>
+        set((state) => ({
+          activePageId: id,
+          wireframes: state.wireframes[id]
+            ? state.wireframes
+            : { ...state.wireframes, [id]: { rows: [] } },
+        })),
+
       addRow: (index) => {
         const newRow: WireframeRow = { id: uid(), cells: [] }
         set((state) => {
-          const rows = [...state.wireframe.rows]
+          const rows = [...getActiveWireframe(state).rows]
           const at = index ?? rows.length
           rows.splice(at, 0, newRow)
-          return { wireframe: { rows } }
+          return setActiveWireframe(state, { rows })
         })
         return newRow.id
       },
 
       removeRow: (rowId) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.filter((r) => r.id !== rowId),
-          },
-        })),
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.filter((r) => r.id !== rowId),
+          }),
+        ),
 
       reorderRows: (fromIndex, toIndex) =>
         set((state) => {
-          const rows = [...state.wireframe.rows]
+          const rows = [...getActiveWireframe(state).rows]
           const [moved] = rows.splice(fromIndex, 1)
           rows.splice(toIndex, 0, moved)
-          return { wireframe: { rows } }
+          return setActiveWireframe(state, { rows })
         }),
 
       setRowColumnRatios: (rowId, ratios) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               return normalizeRow({ ...r, columnRatios: ratios })
             }),
-          },
-        })),
+          }),
+        ),
 
       cycleRowLayout: (rowId) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               if (r.cells.length !== 2) return r
               const current = r.columnRatios ?? [0.5, 0.5]
@@ -306,8 +354,8 @@ export const useProjectStore = create<ProjectStore>()(
                 TWO_CELL_LAYOUTS[(idx + 1) % TWO_CELL_LAYOUTS.length]
               return { ...r, columnRatios: next }
             }),
-          },
-        })),
+          }),
+        ),
 
       setRowColumnLayout: (rowId, layout) =>
         set((state) => {
@@ -319,47 +367,45 @@ export const useProjectStore = create<ProjectStore>()(
             three:         [1 / 3, 1 / 3, 1 / 3],
           }
           const targetCount = RATIOS[layout].length
-          return {
-            wireframe: {
-              rows: state.wireframe.rows.map((r) => {
-                if (r.id !== rowId) return r
-                let cells = [...r.cells]
-                while (cells.length < targetCount) {
-                  cells = [...cells, { id: uid(), widgetId: '', config: {} }]
-                }
-                if (cells.length > targetCount) {
-                  const filled = cells.filter((c) => c.widgetId !== '')
-                  const empty = cells.filter((c) => c.widgetId === '')
-                  cells = [...filled, ...empty].slice(0, targetCount)
-                }
-                return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
-              }),
-            },
-          }
+          return setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
+              if (r.id !== rowId) return r
+              let cells = [...r.cells]
+              while (cells.length < targetCount) {
+                cells = [...cells, { id: uid(), widgetId: '', config: {} }]
+              }
+              if (cells.length > targetCount) {
+                const filled = cells.filter((c) => c.widgetId !== '')
+                const empty = cells.filter((c) => c.widgetId === '')
+                cells = [...filled, ...empty].slice(0, targetCount)
+              }
+              return normalizeRow({ ...r, cells, columnRatios: RATIOS[layout] })
+            }),
+          })
         }),
 
       updateRowAlignment: (rowId, alignment) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) =>
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) =>
               r.id === rowId ? { ...r, alignment } : r,
             ),
-          },
-        })),
+          }),
+        ),
 
       setRowBackground: (rowId, background) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) =>
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) =>
               r.id === rowId ? { ...r, background } : r,
             ),
-          },
-        })),
+          }),
+        ),
 
       fillCell: (rowId, cellId, widgetId, config) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               return {
                 ...r,
@@ -368,8 +414,8 @@ export const useProjectStore = create<ProjectStore>()(
                 ),
               }
             }),
-          },
-        })),
+          }),
+        ),
 
       addCell: (rowId, widgetId, config, size = 'full', index) => {
         const newCell: WireframeCell = {
@@ -378,9 +424,9 @@ export const useProjectStore = create<ProjectStore>()(
           config,
           size,
         }
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               if (r.cells.length >= MAX_CELLS_PER_ROW) return r
               const cells = [...r.cells]
@@ -388,15 +434,15 @@ export const useProjectStore = create<ProjectStore>()(
               cells.splice(at, 0, newCell)
               return normalizeRow({ ...r, cells })
             }),
-          },
-        }))
+          }),
+        )
         return newCell.id
       },
 
       removeCell: (rowId, cellId) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) =>
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) =>
               r.id === rowId
                 ? normalizeRow({
                     ...r,
@@ -404,13 +450,13 @@ export const useProjectStore = create<ProjectStore>()(
                   })
                 : r,
             ),
-          },
-        })),
+          }),
+        ),
 
       updateCellConfig: (rowId, cellId, patch) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               return {
                 ...r,
@@ -433,13 +479,13 @@ export const useProjectStore = create<ProjectStore>()(
                 }),
               }
             }),
-          },
-        })),
+          }),
+        ),
 
       updateCellSize: (rowId, cellId, size) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) =>
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) =>
               r.id === rowId
                 ? {
                     ...r,
@@ -449,12 +495,12 @@ export const useProjectStore = create<ProjectStore>()(
                   }
                 : r,
             ),
-          },
-        })),
+          }),
+        ),
 
       moveCell: (fromRowId, cellId, toRowId, toIndex) =>
         set((state) => {
-          const wireframe = cloneWireframe(state.wireframe)
+          const wireframe = cloneWireframe(getActiveWireframe(state))
           const fromRow = wireframe.rows.find((r) => r.id === fromRowId)
           const toRow = wireframe.rows.find((r) => r.id === toRowId)
           if (!fromRow || !toRow) return state
@@ -467,14 +513,14 @@ export const useProjectStore = create<ProjectStore>()(
           wireframe.rows = wireframe.rows.map((r) =>
             r.id === fromRowId || r.id === toRowId ? normalizeRow(r) : r,
           )
-          return { wireframe }
+          return setActiveWireframe(state, wireframe)
         }),
 
       addStackedCell: (rowId, cellId, widgetId, config) => {
         const newStacked: StackedCell = { id: uid(), widgetId, config }
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               return {
                 ...r,
@@ -487,15 +533,15 @@ export const useProjectStore = create<ProjectStore>()(
                 }),
               }
             }),
-          },
-        }))
+          }),
+        )
         return newStacked.id
       },
 
       removeStackedCell: (rowId, cellId, stackedCellId) =>
-        set((state) => ({
-          wireframe: {
-            rows: state.wireframe.rows.map((r) => {
+        set((state) =>
+          setActiveWireframe(state, {
+            rows: getActiveWireframe(state).rows.map((r) => {
               if (r.id !== rowId) return r
               return {
                 ...r,
@@ -510,10 +556,42 @@ export const useProjectStore = create<ProjectStore>()(
                 }),
               }
             }),
-          },
-        })),
+          }),
+        ),
 
-      setNavEntries: (entries) => set({ navEntries: entries }),
+      setNavEntries: (entries) =>
+        set((state) => {
+          const normalized = entries.map((e, i) =>
+            i === 0 ? { ...e, hasMockup: true } : e,
+          )
+
+          // Collect all valid entry ids (existing + new) to purge orphans
+          const validIds = new Set<string>()
+          for (const entry of normalized) {
+            validIds.add(entry.id)
+            for (const child of entry.children ?? []) {
+              validIds.add(child.id)
+            }
+          }
+
+          const wireframes: Record<string, Wireframe> = {}
+          for (const [id, wf] of Object.entries(state.wireframes)) {
+            if (validIds.has(id)) wireframes[id] = wf
+          }
+
+          for (const entry of normalized) {
+            if (entry.hasMockup && !wireframes[entry.id]) {
+              wireframes[entry.id] = { rows: [] }
+            }
+            for (const child of entry.children ?? []) {
+              if (child.hasMockup && !wireframes[child.id]) {
+                wireframes[child.id] = { rows: [] }
+              }
+            }
+          }
+
+          return { navEntries: normalized, wireframes }
+        }),
 
       setHubMenuEnabled: (enabled) =>
         set((state) => ({ hubMenu: { ...state.hubMenu, enabled } })),
@@ -526,10 +604,49 @@ export const useProjectStore = create<ProjectStore>()(
     {
       name: STORAGE_KEY,
       version: SCHEMA_VERSION,
+      migrate: (persistedState: unknown, version: number) => {
+        let state = persistedState as any
+
+        if (version < 2) {
+          const homeId = state.navEntries?.[0]?.id ?? 'nav-1'
+          const navEntries = Array.isArray(state.navEntries) && state.navEntries.length > 0
+            ? [{ ...state.navEntries[0], hasMockup: true }, ...state.navEntries.slice(1)]
+            : state.navEntries
+          state = {
+            ...state,
+            wireframes: { [homeId]: state.wireframe ?? { rows: [] } },
+            activePageId: homeId,
+            navEntries,
+          }
+        }
+
+        if (version < 3) {
+          const entries: NavEntry[] = state.navEntries ?? []
+          const wireframes = { ...(state.wireframes ?? {}) }
+          for (const entry of entries) {
+            if (entry.hasMockup && !wireframes[entry.id]) {
+              wireframes[entry.id] = { rows: [] }
+            }
+            for (const child of (entry.children ?? []) as NavEntry[]) {
+              if (child.hasMockup && !wireframes[child.id]) {
+                wireframes[child.id] = { rows: [] }
+              }
+            }
+          }
+          const activePageId: string = state.activePageId ?? entries[0]?.id ?? 'nav-1'
+          if (!wireframes[activePageId]) {
+            wireframes[activePageId] = { rows: [] }
+          }
+          state = { ...state, wireframes, activePageId }
+        }
+
+        return state
+      },
       partialize: (state) => ({
         platform: state.platform,
         branding: state.branding,
-        wireframe: state.wireframe,
+        wireframes: state.wireframes,
+        activePageId: state.activePageId,
         navEntries: state.navEntries,
         hubMenu: state.hubMenu,
       }),

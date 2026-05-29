@@ -8,6 +8,8 @@ interface JintChromeProps {
   navEntries: NavEntry[]
   hubMenu?: HubMenu
   children: ReactNode
+  onNavClick?: (entryId: string) => void
+  activeEntryId?: string
 }
 
 const DEFAULT_NAV: NavEntry[] = [
@@ -145,7 +147,7 @@ function ChevronDown() {
   )
 }
 
-export function JintChrome({ branding, navEntries, hubMenu, children }: JintChromeProps) {
+export function JintChrome({ branding, navEntries, hubMenu, children, onNavClick, activeEntryId }: JintChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const userName = 'Alex Dupont'
   const userInitials = initials(userName)
@@ -261,12 +263,18 @@ export function JintChrome({ branding, navEntries, hubMenu, children }: JintChro
                 const hasChildren = Boolean(
                   entry.children && entry.children.length > 0,
                 )
+                const isActive = activeEntryId
+                  ? entry.id === activeEntryId
+                  : idx === 0
+                const isClickable = Boolean(entry.hasMockup && onNavClick)
                 return (
                   <div
                     key={entry.id}
                     className={`${styles.shNavItem} ${
-                      idx === 0 ? styles.shNavItemActive : ''
+                      isActive ? styles.shNavItemActive : ''
                     } ${hasChildren ? styles.shNavItemHasChildren : ''}`}
+                    style={isClickable ? { cursor: 'pointer' } : undefined}
+                    onClick={isClickable ? () => onNavClick!(entry.id) : undefined}
                   >
                     <span>{entry.label}</span>
                     {hasChildren && (
@@ -280,6 +288,8 @@ export function JintChrome({ branding, navEntries, hubMenu, children }: JintChro
                           <div
                             key={child.id}
                             className={styles.shDropdownItem}
+                            style={child.hasMockup && onNavClick ? { cursor: 'pointer' } : undefined}
+                            onClick={child.hasMockup && onNavClick ? (e) => { e.stopPropagation(); onNavClick(child.id) } : undefined}
                           >
                             {child.label}
                           </div>

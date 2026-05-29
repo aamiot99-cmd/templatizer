@@ -18,6 +18,9 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 import { documentCenterWidget } from './documentCenter'
+import { youtubeWidget } from './youtube'
+import { orgChartWidget } from './orgChart'
+import { videoWidget } from './video'
 import { calendarWidget } from './calendar'
 import { imageGalleryWidget } from './imageGallery'
 import { linksListWidget } from './linksList'
@@ -48,6 +51,9 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [imageMapWidget.id]: imageMapWidget,
   [highlightedContentWidget.id]: highlightedContentWidget,
   [documentCenterWidget.id]: documentCenterWidget,
+  [youtubeWidget.id]: youtubeWidget,
+  [orgChartWidget.id]: orgChartWidget,
+  [videoWidget.id]: videoWidget,
   [calendarWidget.id]: calendarWidget,
   [imageGalleryWidget.id]: imageGalleryWidget,
   [linksListWidget.id]: linksListWidget,

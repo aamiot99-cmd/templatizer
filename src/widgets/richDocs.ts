@@ -82,8 +82,92 @@ export const WIDGET_RICH_DOCS: Record<string, WidgetRichDoc> = {
       "Le Centre documentaire combine les 3 webparts Jint Search Center : Search Bar (barre de saisie), Search Filter (filtres pour affiner les résultats) et Search Result (affichage en tableau, tuiles ou cartes). Cette modularité permet de construire l'expérience de recherche adaptée aux besoins des utilisateurs, propulsée par le moteur Microsoft Search. Templatizer bundle les 3 en un seul widget occupant toute une section, pour simplifier la conception.",
     imageUrl: 'https://support.jint.co/hc/article_attachments/6978428840221',
   },
+
+  // ── SharePoint webparts ───────────────────────────────────────────────────
+  'text:sharepoint': {
+    platformName: 'Texte',
+    description:
+      "Le composant WebPart Texte ajoute des paragraphes et des tableaux à votre page. Des options de mise en forme telles que les styles, les puces, les mises en retrait, la mise en surbrillance et les liens sont disponibles. Idéal pour tout contenu éditorial structuré sur une page SharePoint.",
+    imageUrl: null,
+  },
+  'button:sharepoint': {
+    platformName: 'Bouton',
+    description:
+      "Le composant WebPart Bouton ajoute facilement un bouton à votre page avec votre propre étiquette et votre propre lien. Simple et polyvalent, il s'utilise pour orienter les utilisateurs vers une ressource, un formulaire ou une page cible.",
+    imageUrl: null,
+  },
+  'mainBanner:sharepoint': {
+    platformName: 'Bannière principale (Hero)',
+    description:
+      "Le composant WebPart Hero est un excellent moyen d'apporter un focus et un intérêt visuel à votre page. Vous pouvez afficher jusqu'à cinq éléments combinant images attrayantes, texte et liens pour attirer l'attention sur chacun. Par défaut présent sur les sites de communication, il est également disponible sur toute autre page SharePoint.",
+    imageUrl: null,
+  },
+  'news:sharepoint': {
+    platformName: 'Actualités',
+    description:
+      "Le composant WebPart Actualités permet à votre équipe de rester au courant et de s'impliquer dans des histoires importantes ou intéressantes. Vous pouvez créer rapidement des billets originaux — annonces, informations, mises à jour — qui peuvent inclure des graphiques et une mise en forme enrichie.",
+    imageUrl: null,
+  },
+  'callToAction:sharepoint': {
+    platformName: 'Appel à l\'action',
+    description:
+      "Le composant WebPart Appel à l'action crée un bouton avec un message d'incitation à l'action pour les utilisateurs. Il permet de mettre en avant une action prioritaire avec un visuel accrocheur et un lien direct vers la ressource cible.",
+    imageUrl: null,
+  },
+  'editorialCard:sharepoint': {
+    platformName: 'Carte éditoriale (Image)',
+    description:
+      "Le composant WebPart Image insère une image sur la page, soit à partir de votre site, de votre OneDrive ou de votre disque dur. Utilisé en carte éditoriale, il permet d'illustrer un contenu clé avec une image pleine largeur ou intégrée dans un bloc.",
+    imageUrl: null,
+  },
+  'quickLinks:sharepoint': {
+    platformName: 'Liens rapides',
+    description:
+      "Le composant WebPart Liens rapides épingle des éléments à votre page pour un accès facile. Il supporte plusieurs styles d'affichage (liste, grille, compacte) et permet de regrouper les ressources essentielles de façon claire et visuelle.",
+    imageUrl: null,
+  },
+  'documentLibrary:sharepoint': {
+    platformName: 'Bibliothèque de documents',
+    description:
+      "Le composant WebPart Bibliothèque de documents affiche une bibliothèque que vous pouvez personnaliser avec votre propre titre, affichage et taille. Les utilisateurs peuvent afficher ou modifier des fichiers directement depuis le composant, ou accéder à la bibliothèque complète via « Afficher tout ».",
+    imageUrl: null,
+  },
+  'highlightedContent:sharepoint': {
+    platformName: 'Contenu mis en évidence',
+    description:
+      "Le composant WebPart Contenu en surbrillance affiche dynamiquement du contenu en fonction du type (documents, pages, actualités, vidéos, images…), du filtrage ou d'une chaîne de recherche. Vous pouvez définir l'étendue sur un site ou une collection de sites et trier les résultats.",
+    imageUrl: null,
+  },
+  'events:sharepoint': {
+    platformName: 'Événements',
+    description:
+      "Le composant WebPart Événements vous permet d'ajouter et d'afficher des événements à venir sur votre page. Vous pouvez inclure une carte avec l'emplacement, des informations de réunion en ligne, et filtrer par catégorie ou calendrier source.",
+    imageUrl: null,
+  },
+  'directory:sharepoint': {
+    platformName: 'Personnes',
+    description:
+      "Le composant WebPart Personnes affiche un groupe sélectionné de collaborateurs et leurs profils sur votre page. Il s'utilise pour les informations de contact, la présentation d'une équipe, ou la mise en avant des intervenants d'un événement.",
+    imageUrl: null,
+  },
 }
 
-export function getRichDoc(widgetId: string): WidgetRichDoc | null {
-  return WIDGET_RICH_DOCS[widgetId] ?? null
+export function getRichDoc(widgetId: string, platform?: string): WidgetRichDoc | null {
+  if (platform) {
+    const byPlatform = WIDGET_RICH_DOCS[`${widgetId}:${platform}`]
+    if (byPlatform) return byPlatform
+    // Powell hérite des entrées SharePoint (même logique que resolveRenderer)
+    if (platform === 'powell') {
+      const bySP = WIDGET_RICH_DOCS[`${widgetId}:sharepoint`]
+      if (bySP) return bySP
+    }
+  }
+  // Entrée générique — priorité aux descriptions Jint-spécifiques existantes
+  const generic = WIDGET_RICH_DOCS[widgetId]
+  if (generic) return generic
+  // Jint utilise aussi les webparts SharePoint en fallback
+  if (platform === 'jint') {
+    return WIDGET_RICH_DOCS[`${widgetId}:sharepoint`] ?? null
+  }
+  return null
 }

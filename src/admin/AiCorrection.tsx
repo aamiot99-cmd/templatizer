@@ -11,7 +11,9 @@ interface AiCorrectionProps {
 
 export function AiCorrection({ open, onClose }: AiCorrectionProps) {
   const platform = useProjectStore((s) => s.platform)
-  const wireframe = useProjectStore((s) => s.wireframe)
+  const wireframes = useProjectStore((s) => s.wireframes)
+  const activePageId = useProjectStore((s) => s.activePageId)
+  const wireframe = wireframes[activePageId] ?? { rows: [] }
   const navEntries = useProjectStore((s) => s.navEntries)
   const loadSnapshot = useProjectStore((s) => s.loadSnapshot)
   const branding = useProjectStore((s) => s.branding)
@@ -63,7 +65,8 @@ export function AiCorrection({ open, onClose }: AiCorrectionProps) {
       loadSnapshot({
         platform,
         branding,
-        wireframe: result.wireframe,
+        wireframes: { ...wireframes, [activePageId]: result.wireframe },
+        activePageId,
         navEntries: result.navEntries,
         hubMenu,
       })

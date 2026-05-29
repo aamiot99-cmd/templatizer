@@ -12,9 +12,9 @@
 }
 
 .title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--color-text);
+  font-size: 28px;
+  font-weight: 700;
+  color: #323130;
 }
 
 .viewAll {

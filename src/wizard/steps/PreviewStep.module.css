@@ -280,3 +280,63 @@
   color: var(--text);
   font-weight: 600;
 }
+
+.navTopMockup {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 2px 6px 2px 0;
+  transition: color 0.15s;
+}
+
+.navTopMockup:hover {
+  color: var(--wizard-accent);
+}
+
+.navTopSelected {
+  color: var(--wizard-accent);
+  font-weight: 700;
+}
+
+.navChildMockup {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 0;
+  transition: color 0.15s;
+}
+
+.navChildMockup:hover {
+  color: var(--wizard-accent);
+}
+
+.navChildSelected {
+  color: var(--wizard-accent);
+  font-weight: 600;
+}
+
+.mockupBadge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  background: var(--wizard-accent-soft);
+  color: var(--wizard-accent);
+  border: 1px solid var(--wizard-accent-border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.wireframeCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.wireframePageName {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}

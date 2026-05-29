@@ -9,6 +9,8 @@ export interface ChromeProps {
   navEntries: NavEntry[]
   hubMenu?: HubMenu
   children: ReactNode
+  onNavClick?: (entryId: string) => void
+  activeEntryId?: string
 }
 
 // Jalios n'a pas de chrome dédié : son aperçu affiche les widgets directement,
