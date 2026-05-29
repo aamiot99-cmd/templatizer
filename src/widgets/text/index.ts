@@ -1,5 +1,6 @@
 import type { WidgetDefinition } from '../../types'
 import { SharepointText } from './renderers/sharepoint'
+import { LumappsText } from './renderers/lumapps'
 
 export const textWidget: WidgetDefinition = {
   id: 'text',
@@ -11,7 +12,7 @@ export const textWidget: WidgetDefinition = {
   },
   platformLabels: {
     sharepoint: 'Texte',
-    lumapps: 'Texte',
+    lumapps: 'Rich Text',
     jalios: 'Texte',
     jint: 'Texte',
   },
@@ -26,5 +27,6 @@ export const textWidget: WidgetDefinition = {
   ],
   renderers: {
     sharepoint: SharepointText,
+    lumapps: LumappsText,
   },
 }

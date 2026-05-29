@@ -9,6 +9,7 @@ import type {
   Platform,
   ProjectState,
   RowAlignment,
+  RowBackground,
   StackedCell,
   WidgetSize,
   Wireframe,
@@ -137,6 +138,7 @@ interface ProjectActions {
   cycleRowLayout: (rowId: string) => void
   setRowColumnLayout: (rowId: string, layout: ColumnLayout) => void
   updateRowAlignment: (rowId: string, alignment: RowAlignment) => void
+  setRowBackground: (rowId: string, background: RowBackground) => void
 
   fillCell: (
     rowId: string,
@@ -390,6 +392,15 @@ export const useProjectStore = create<ProjectStore>()(
             ),
           }),
         ),
+
+      setRowBackground: (rowId, background) =>
+        set((state) => ({
+          wireframe: {
+            rows: state.wireframe.rows.map((r) =>
+              r.id === rowId ? { ...r, background } : r,
+            ),
+          },
+        })),
 
       fillCell: (rowId, cellId, widgetId, config) =>
         set((state) =>

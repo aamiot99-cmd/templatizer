@@ -17,11 +17,41 @@ export interface WireframeCell {
 export type RowAlignment = 'top' | 'center' | 'bottom'
 export type ColumnLayout = 'single' | 'two' | 'third-left' | 'third-right' | 'three'
 
+export type RowFillType = 'none' | 'solid' | 'white'
+export type RowPatternType = 'none' | 'dotted' | 'curves'
+export type BrandColorKey = 'primary' | 'secondary' | 'text'
+
+/** Legacy mono-axis types kept around so previously saved projects keep
+ *  rendering correctly. New writes use `fill` + `pattern` independently. */
+export type RowBackgroundType =
+  | 'none'
+  | 'solid'
+  | 'white'
+  | 'dotted'
+  | 'dotted-clear'
+  | 'curves'
+
+export interface RowBackground {
+  /** Color/fill layer: 'none' lets the platform default through. */
+  fill?: RowFillType
+  /** Decorative motif layer overlaid on top of the fill. */
+  pattern?: RowPatternType
+  /** Theme color key used by the 'solid' fill. */
+  fillColorKey?: BrandColorKey
+  /** Theme color key used by the pattern (dotted/curves). */
+  patternColorKey?: BrandColorKey
+  /** @deprecated single colorKey kept for backward-compat (used by both layers). */
+  colorKey?: BrandColorKey
+  /** @deprecated single-axis type (kept for backward-compat with old projects). */
+  type?: RowBackgroundType
+}
+
 export interface WireframeRow {
   id: string
   cells: WireframeCell[]
   columnRatios?: number[]
   alignment?: RowAlignment
+  background?: RowBackground
 }
 
 export interface Wireframe {

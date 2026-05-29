@@ -40,6 +40,74 @@ const SIZE_TO_COLS: Record<string, number> = {
   'one-third': 1,
 }
 
+/** Widgets whose natural .root has NO opaque background (text sits directly
+ *  on the section bg by default). For those, we let the section's text-on-bg
+ *  vars cascade through; for everything else we explicitly set them to match
+ *  the widget's own background. */
+const TRANSPARENT_DEFAULT_WIDGETS = new Set([
+  'title',
+  'news',
+  'articlesList',
+])
+
+/** Builds the inline style applied on a widget cell to override the widget's
+ *  default background via CSS variables, AND to set the right text color for
+ *  whatever is now behind the widget content. */
+function buildWidgetCellStyle(
+  bg: string,
+  widgetId: string,
+  colors: { primary: string; secondary: string; text: string },
+): React.CSSProperties | undefined {
+  const style: Record<string, string> = {}
+
+  // 1) Background layer overrides
+  if (bg === 'none') {
+    style['--widget-bg'] = 'transparent'
+    style['--widget-shadow'] = 'none'
+    style['--widget-radius'] = '0'
+  } else if (bg === 'white') {
+    style['--widget-bg'] = '#ffffff'
+  } else if (bg === 'primary' || bg === 'secondary') {
+    style['--widget-bg'] = colors[bg]
+  }
+
+  // 2) Text color appropriate for the effective bg behind the widget content
+  const isTransparentDefault = TRANSPARENT_DEFAULT_WIDGETS.has(widgetId)
+  // Effective opaque bg: 'default' (opaque widgets), 'white', or a brand color.
+  // Transparent: 'none' always, and 'default' for widgets without their own card.
+  let effectiveBgColor: string | null = null
+  if (bg === 'white') effectiveBgColor = '#ffffff'
+  else if (bg === 'primary' || bg === 'secondary') effectiveBgColor = colors[bg]
+  else if (bg === 'default' && !isTransparentDefault) effectiveBgColor = '#ffffff'
+
+  if (effectiveBgColor !== null) {
+    if (isDarkColor(effectiveBgColor)) {
+      style['--text-on-bg'] = '#ffffff'
+      style['--text-on-bg-muted'] = 'rgba(255, 255, 255, 0.78)'
+    } else {
+      style['--text-on-bg'] = '#202124'
+      style['--text-on-bg-muted'] = '#5f6368'
+    }
+  }
+  // else (transparent effective bg): leave the vars unset so the section's
+  // cascade comes through naturally.
+
+  return Object.keys(style).length > 0 ? (style as React.CSSProperties) : undefined
+}
+
+/** Returns true if a #rrggbb hex color is dark enough that dark grey text
+ *  loses contrast on it. Uses the ITU-R BT.601 luminance weights. */
+function isDarkColor(hex: string): boolean {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim())
+  if (!m) return false
+  const n = parseInt(m[1], 16)
+  const r = (n >> 16) & 0xff
+  const g = (n >> 8) & 0xff
+  const b = n & 0xff
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance < 0.55
+}
+
 function computeAdjustedItemCount(
   widgetId: string,
   config: ConfigValues,
@@ -435,17 +503,70 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   if (row.cells.length === 0) return null
 
-  const sectionClass = isFullBleed
-    ? styles.sectionFullBleed
-    : forceWhite
-      ? styles.sectionWhite
-      : platform === 'jint'
-        ? index % 2 === 0
-          ? styles.sectionEven
-          : styles.sectionOdd
-        : platform === 'sharepoint'
-          ? styles.sectionWhite
-          : undefined
+  const defaultSectionClass = () =>
+    platform === 'jint'
+      ? index % 2 === 0
+        ? styles.sectionEven
+        : styles.sectionOdd
+      : platform === 'sharepoint'
+        ? styles.sectionWhite
+        : styles.sectionDefault
+
+  // Normalize the row background config: new model (fill + pattern) takes
+  // precedence; legacy `type` is mapped to the new model for backward compat.
+  const bg = row.background
+  let fill: 'none' | 'white' | 'solid' = 'none'
+  let pattern: 'none' | 'dotted' | 'curves' = 'none'
+  if (bg) {
+    if (bg.fill !== undefined || bg.pattern !== undefined) {
+      fill = bg.fill ?? 'none'
+      pattern = bg.pattern ?? 'none'
+    } else {
+      switch (bg.type) {
+        case 'white':        fill = 'white'; break
+        case 'solid':        fill = 'solid'; break
+        case 'dotted':       fill = 'white'; pattern = 'dotted'; break
+        case 'dotted-clear': fill = 'none';  pattern = 'dotted'; break
+        case 'curves':       fill = 'none';  pattern = 'curves'; break
+        default: break
+      }
+    }
+  }
+  // Two independent colors: one for the fill, one for the pattern. The
+  // legacy single `colorKey` (used by old projects) falls back to both.
+  const fillColor =
+    branding.colors[bg?.fillColorKey ?? bg?.colorKey ?? 'primary']
+  const patternColor =
+    branding.colors[bg?.patternColorKey ?? bg?.colorKey ?? 'primary']
+  const hasCustomBg = fill !== 'none' || pattern !== 'none'
+
+  // When the fill is solid AND dark, flip text colors of widgets sitting
+  // directly on the section background to a light scheme via CSS vars.
+  const isDarkSection = fill === 'solid' && isDarkColor(fillColor)
+
+  let sectionClass: string | undefined
+  let sectionStyle: React.CSSProperties | undefined = undefined
+
+  if (isFullBleed) {
+    sectionClass = styles.sectionFullBleed
+  } else if (forceWhite) {
+    sectionClass = styles.sectionWhite
+  } else if (hasCustomBg) {
+    sectionClass = styles.sectionRow
+    sectionStyle = {
+      // Solid fill uses the brand color, white fill overrides to #fff.
+      ['--row-bg-color' as string]: fill === 'white' ? '#ffffff' : fillColor,
+      ['--dot-color' as string]: patternColor,
+      ...(isDarkSection
+        ? {
+            ['--text-on-bg' as string]: '#ffffff',
+            ['--text-on-bg-muted' as string]: 'rgba(255, 255, 255, 0.78)',
+          }
+        : {}),
+    } as React.CSSProperties
+  } else {
+    sectionClass = defaultSectionClass()
+  }
 
   const alignItems =
     row.alignment === 'center' ? 'center'
@@ -470,6 +591,12 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
         const stackedCells = cell.stackedCells ?? []
 
+        // Per-widget background override. 'default' = let the widget's own
+        // CSS render its natural look. Otherwise inject CSS vars consumed
+        // by each widget's .root.
+        const widgetBg = (cell.config.widgetBg as string | undefined) ?? 'default'
+        const widgetCellStyle = buildWidgetCellStyle(widgetBg, cell.widgetId, branding.colors)
+
         return (
           <div
             key={cell.id}
@@ -480,7 +607,7 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
             className={styles.widgetCell}
             style={{ flex: `${flex} 1 0` }}
           >
-            <div className={styles.widgetCellInner}>
+            <div className={styles.widgetCellInner} style={widgetCellStyle}>
               <Renderer config={config} size={size} branding={branding} />
               {stackedCells.map((sc) => {
                 const sw = getWidget(sc.widgetId)
@@ -502,13 +629,56 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const needsSpInner = (platform === 'sharepoint' || platform === 'jint') && !isFullBleed
 
+  const curvesColor = pattern === 'curves' ? patternColor : null
+
   return (
-    <div className={sectionClass}>
-      {needsSpInner ? (
-        <div className={styles.spSectionInner}>{rowContent}</div>
-      ) : (
-        rowContent
+    <div className={sectionClass} style={sectionStyle}>
+      {hasCustomBg && fill !== 'none' && (
+        <div className={styles.sectionFillLayer} aria-hidden="true" />
       )}
+      {hasCustomBg && pattern === 'dotted' && (
+        <div className={styles.sectionDottedLayer} aria-hidden="true" />
+      )}
+      {curvesColor && (
+        <svg
+          className={styles.curvesLayer}
+          viewBox="0 0 1200 300"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M 0 90 C 200 30 400 180 600 110 S 1000 40 1200 100"
+            stroke={curvesColor}
+            strokeWidth="8"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.22"
+          />
+          <path
+            d="M 0 220 C 200 280 400 150 600 210 S 1000 270 1200 200"
+            stroke={curvesColor}
+            strokeWidth="5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.16"
+          />
+          <path
+            d="M 0 40 C 300 110 500 -20 800 60 S 1100 120 1200 50"
+            stroke={curvesColor}
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.1"
+          />
+        </svg>
+      )}
+      <div className={styles.sectionRowContent}>
+        {needsSpInner ? (
+          <div className={styles.spSectionInner}>{rowContent}</div>
+        ) : (
+          rowContent
+        )}
+      </div>
     </div>
   )
 }

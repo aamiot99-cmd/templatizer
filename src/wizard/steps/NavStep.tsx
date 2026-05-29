@@ -8,15 +8,23 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 10)
 }
 
+// The Hub menu concept only exists on SharePoint-like platforms (SharePoint,
+// Jint, Powell). LumApps and Jalios do not have a Hub bar.
+const PLATFORMS_WITH_HUB = new Set(['sharepoint', 'jint', 'powell'])
+
 export function NavStep() {
+  const platform = useProjectStore((s) => s.platform)
   const navEntries = useProjectStore((s) => s.navEntries)
   const setNavEntries = useProjectStore((s) => s.setNavEntries)
   const hubMenu = useProjectStore((s) => s.hubMenu)
   const setHubMenuEnabled = useProjectStore((s) => s.setHubMenuEnabled)
   const setHubMenuEntries = useProjectStore((s) => s.setHubMenuEntries)
 
+  const showHubSection = PLATFORMS_WITH_HUB.has(platform)
+
   return (
     <div className={styles.wrapper}>
+<<<<<<< HEAD
       <SubSection
         number={1}
         title="Menu Hub"
@@ -41,13 +49,40 @@ export function NavStep() {
               onChange={setHubMenuEntries}
               onReset={() => setHubMenuEntries(defaultHubMenu().entries)}
               showMockupToggle={false}
+=======
+      {showHubSection && (
+        <SubSection
+          number={1}
+          title="Menu Hub"
+          description="Le menu Hub est une barre horizontale qui se glisse tout en haut de l'intranet, juste sous la barre noire SharePoint. Il sert à naviguer entre les sites associés à un même hub. Désactivé par défaut."
+        >
+          <label className={styles.toggleRow}>
+            <input
+              type="checkbox"
+              checked={hubMenu.enabled}
+              onChange={(e) => setHubMenuEnabled(e.target.checked)}
+              className={styles.toggleCheckbox}
+>>>>>>> feature/aamiot
             />
-          </div>
-        )}
-      </SubSection>
+            <span className={styles.toggleLabel}>
+              Activer le menu Hub
+            </span>
+          </label>
+
+          {hubMenu.enabled && (
+            <div className={styles.hubMenuEditor}>
+              <NavEntriesEditor
+                entries={hubMenu.entries}
+                onChange={setHubMenuEntries}
+                onReset={() => setHubMenuEntries(defaultHubMenu().entries)}
+              />
+            </div>
+          )}
+        </SubSection>
+      )}
 
       <SubSection
-        number={2}
+        number={showHubSection ? 2 : 1}
         title="Structure du menu"
         description="Les éléments du menu horizontal de l'intranet. Activez « Maquette » sur les pages pour lesquelles vous souhaitez concevoir un wireframe."
       >

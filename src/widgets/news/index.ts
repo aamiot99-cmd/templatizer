@@ -1,8 +1,8 @@
 import type { WidgetDefinition } from '../../types'
-import { LumappsNews } from './renderers/lumapps'
 import { SharepointNews } from './renderers/sharepoint'
 import { JaliosNews } from './renderers/jalios'
 import { JintNews } from './renderers/jint'
+import { LumappsNews } from './renderers/lumapps'
 
 export const newsWidget: WidgetDefinition = {
   id: 'news',
@@ -14,7 +14,7 @@ export const newsWidget: WidgetDefinition = {
     keywords: ['actualités', 'annonces', 'news', 'communication', 'flash info'],
   },
   platformLabels: {
-    lumapps: 'News',
+    lumapps: 'Actualités',
     sharepoint: 'Actualités',
     jalios: 'Flash Info',
     jint: 'Actualités',
@@ -75,9 +75,9 @@ export const newsWidget: WidgetDefinition = {
     },
   ],
   renderers: {
-    lumapps: LumappsNews,
     sharepoint: SharepointNews,
     jalios: JaliosNews,
     jint: JintNews,
+    lumapps: LumappsNews,
   },
 }

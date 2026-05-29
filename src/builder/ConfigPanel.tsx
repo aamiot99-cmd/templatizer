@@ -1,5 +1,16 @@
 import { ratioToSize } from '../types'
-import type { ColumnLayout, ConfigSchemaField, Platform, RowAlignment, SelectField, WireframeRow } from '../types'
+import type {
+  BrandColorKey,
+  ColumnLayout,
+  ConfigSchemaField,
+  Platform,
+  RowAlignment,
+  RowBackground,
+  RowFillType,
+  RowPatternType,
+  SelectField,
+  WireframeRow,
+} from '../types'
 import { useProjectStore } from '../store/projectStore'
 import { getWidget } from '../widgets/registry'
 import { ConfigField } from './ConfigField'
@@ -13,9 +24,11 @@ interface ConfigPanelProps {
 
 export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigPanelProps) {
   const rows = useProjectStore((s) => (s.wireframes[s.activePageId] ?? { rows: [] }).rows)
+  const branding = useProjectStore((s) => s.branding)
   const updateCellConfig = useProjectStore((s) => s.updateCellConfig)
   const setRowColumnLayout = useProjectStore((s) => s.setRowColumnLayout)
   const updateRowAlignment = useProjectStore((s) => s.updateRowAlignment)
+  const setRowBackground = useProjectStore((s) => s.setRowBackground)
 
   // Cell config takes priority over row config
   if (selectedCellId) {
@@ -108,6 +121,39 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
                 }}
               />
             ))}
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Fond du widget</div>
+            <div className={styles.colLayoutGrid}>
+              {WIDGET_BG_OPTIONS.map((opt) => {
+                const current = (cell.config.widgetBg as WidgetBgValue) ?? 'default'
+                const active = current === opt.value
+                const swatchColor =
+                  opt.value === 'white' ? '#ffffff'
+                  : opt.value === 'primary' ? branding.colors.primary
+                  : opt.value === 'secondary' ? branding.colors.secondary
+                  : null
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`${styles.colLayoutBtn} ${active ? styles.colLayoutBtnActive : ''}`}
+                    onClick={() =>
+                      updateCellConfig(rowId, cell.id, { widgetBg: opt.value })
+                    }
+                  >
+                    {swatchColor && (
+                      <span
+                        className={styles.colorSwatch}
+                        style={{ background: swatchColor }}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {opt.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </aside>
     )
@@ -123,7 +169,15 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
         </aside>
       )
     }
-    return <RowConfigPanel row={row} onLayoutChange={(l) => setRowColumnLayout(selectedRowId, l)} onAlignmentChange={(a) => updateRowAlignment(selectedRowId, a)} />
+    return (
+      <RowConfigPanel
+        row={row}
+        brandingColors={branding.colors}
+        onLayoutChange={(l) => setRowColumnLayout(selectedRowId, l)}
+        onAlignmentChange={(a) => updateRowAlignment(selectedRowId, a)}
+        onBackgroundChange={(bg) => setRowBackground(selectedRowId, bg)}
+      />
+    )
   }
 
   return (
@@ -152,6 +206,33 @@ const ALIGN_OPTIONS: { value: RowAlignment; label: string }[] = [
   { value: 'bottom', label: 'Bas' },
 ]
 
+const FILL_OPTIONS: { value: RowFillType; label: string }[] = [
+  { value: 'none',  label: 'Sans fond' },
+  { value: 'white', label: 'Fond blanc' },
+  { value: 'solid', label: 'Fond plein' },
+]
+
+const PATTERN_OPTIONS: { value: RowPatternType; label: string }[] = [
+  { value: 'none',    label: 'Aucun' },
+  { value: 'dotted',  label: 'Pointillés' },
+  { value: 'curves',  label: 'Courbes' },
+]
+
+const COLOR_KEYS: { value: BrandColorKey; label: string }[] = [
+  { value: 'primary',   label: 'Principale' },
+  { value: 'secondary', label: 'Secondaire' },
+  { value: 'text',      label: 'Texte' },
+]
+
+type WidgetBgValue = 'default' | 'none' | 'white' | 'primary' | 'secondary'
+const WIDGET_BG_OPTIONS: { value: WidgetBgValue; label: string }[] = [
+  { value: 'default',   label: 'Défaut' },
+  { value: 'none',      label: 'Sans fond' },
+  { value: 'white',     label: 'Blanc' },
+  { value: 'primary',   label: 'Primaire' },
+  { value: 'secondary', label: 'Secondaire' },
+]
+
 function deriveColumnLayout(row: WireframeRow): ColumnLayout {
   const n = row.cells.length
   if (n <= 1) return 'single'
@@ -164,15 +245,54 @@ function deriveColumnLayout(row: WireframeRow): ColumnLayout {
 
 function RowConfigPanel({
   row,
+  brandingColors,
   onLayoutChange,
   onAlignmentChange,
+  onBackgroundChange,
 }: {
   row: WireframeRow
+  brandingColors: { primary: string; secondary: string; text: string }
   onLayoutChange: (layout: ColumnLayout) => void
   onAlignmentChange: (alignment: RowAlignment) => void
+  onBackgroundChange: (background: RowBackground) => void
 }) {
   const currentLayout = deriveColumnLayout(row)
   const currentAlignment = row.alignment ?? 'top'
+
+  // Read the row background, normalizing legacy single-axis `type` to the
+  // new (fill + pattern) model so old projects keep their previous look.
+  let currentFill: RowFillType = row.background?.fill ?? 'none'
+  let currentPattern: RowPatternType = row.background?.pattern ?? 'none'
+  if (
+    row.background &&
+    row.background.fill === undefined &&
+    row.background.pattern === undefined
+  ) {
+    switch (row.background.type) {
+      case 'white':        currentFill = 'white'; break
+      case 'solid':        currentFill = 'solid'; break
+      case 'dotted':       currentFill = 'white'; currentPattern = 'dotted'; break
+      case 'dotted-clear': currentFill = 'none';  currentPattern = 'dotted'; break
+      case 'curves':       currentFill = 'none';  currentPattern = 'curves'; break
+      default: break
+    }
+  }
+  const legacyColorKey: BrandColorKey = row.background?.colorKey ?? 'primary'
+  const currentFillColorKey: BrandColorKey =
+    row.background?.fillColorKey ?? legacyColorKey
+  const currentPatternColorKey: BrandColorKey =
+    row.background?.patternColorKey ?? legacyColorKey
+  const showFillColorPicker = currentFill === 'solid'
+  const showPatternColorPicker = currentPattern !== 'none'
+
+  const writeBackground = (next: Partial<RowBackground>) => {
+    onBackgroundChange({
+      fill: next.fill ?? currentFill,
+      pattern: next.pattern ?? currentPattern,
+      fillColorKey: next.fillColorKey ?? currentFillColorKey,
+      patternColorKey: next.patternColorKey ?? currentPatternColorKey,
+    })
+  }
 
   return (
     <aside className={styles.panel}>
@@ -180,7 +300,7 @@ function RowConfigPanel({
         <span className={styles.panelBadge}>LIG</span>
         <div>
           <h3 className={styles.panelTitle}>Ligne</h3>
-          <p className={styles.panelSubtitle}>Disposition et alignement</p>
+          <p className={styles.panelSubtitle}>Disposition, alignement, fond</p>
         </div>
       </div>
       <div className={styles.fields}>
@@ -210,6 +330,80 @@ function RowConfigPanel({
                   className={`${styles.alignBtn} ${currentAlignment === opt.value ? styles.alignBtnActive : ''}`}
                   onClick={() => onAlignmentChange(opt.value)}
                 >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldLabel}>Couleur de fond</div>
+          <div className={styles.colLayoutGrid}>
+            {FILL_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`${styles.colLayoutBtn} ${currentFill === opt.value ? styles.colLayoutBtnActive : ''}`}
+                onClick={() => writeBackground({ fill: opt.value })}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldLabel}>Motif</div>
+          <div className={styles.colLayoutGrid}>
+            {PATTERN_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`${styles.colLayoutBtn} ${currentPattern === opt.value ? styles.colLayoutBtnActive : ''}`}
+                onClick={() => writeBackground({ pattern: opt.value })}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {showFillColorPicker && (
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Couleur du fond</div>
+            <div className={styles.colLayoutGrid}>
+              {COLOR_KEYS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.colLayoutBtn} ${currentFillColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
+                  onClick={() => writeBackground({ fillColorKey: opt.value })}
+                >
+                  <span
+                    className={styles.colorSwatch}
+                    style={{ background: brandingColors[opt.value] }}
+                    aria-hidden="true"
+                  />
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {showPatternColorPicker && (
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldLabel}>Couleur du motif</div>
+            <div className={styles.colLayoutGrid}>
+              {COLOR_KEYS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`${styles.colLayoutBtn} ${currentPatternColorKey === opt.value ? styles.colLayoutBtnActive : ''}`}
+                  onClick={() => writeBackground({ patternColorKey: opt.value })}
+                >
+                  <span
+                    className={styles.colorSwatch}
+                    style={{ background: brandingColors[opt.value] }}
+                    aria-hidden="true"
+                  />
                   {opt.label}
                 </button>
               ))}

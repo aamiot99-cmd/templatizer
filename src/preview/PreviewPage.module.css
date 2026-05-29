@@ -238,6 +238,59 @@
   padding: 24px 0;
 }
 
+/* Generic section spacing for platforms without dedicated chrome
+   (LumApps, Jalios). Just provides vertical breathing room between rows. */
+.sectionDefault {
+  padding: 12px 0;
+}
+
+/* ── Row backgrounds: independent fill + pattern dimensions ────────────────
+   Background layers are rendered as REAL <div>/<svg> children (not pseudo-
+   elements with negative z-index) so html2canvas-pro can capture them on
+   PNG export. The row content is positioned with z-index: 1 to paint above. */
+
+.sectionRow {
+  position: relative;
+  padding: 12px 0;
+  isolation: isolate;
+}
+
+/* Shared positioning for all bleed-to-viewport background layers. */
+.sectionFillLayer,
+.sectionDottedLayer,
+.curvesLayer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  width: 100vw;
+  pointer-events: none;
+}
+
+.sectionFillLayer {
+  background: var(--row-bg-color, #ffffff);
+}
+
+.sectionDottedLayer {
+  background-image:
+    radial-gradient(circle 22px at 6% 30%,  var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 14px at 18% 78%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 30px at 42% 18%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 10px at 58% 55%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 18px at 76% 88%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 26px at 88% 32%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle  8px at 33% 50%, var(--dot-color, #6366f1), transparent 100%),
+    radial-gradient(circle 12px at 95% 70%, var(--dot-color, #6366f1), transparent 100%);
+  background-repeat: no-repeat;
+}
+
+/* Row content paints on top of the absolutely-positioned bg layers. */
+.sectionRowContent {
+  position: relative;
+  z-index: 1;
+}
+
 /* Full-bleed SharePoint sections: no vertical padding, widget fills edge-to-edge */
 .sectionFullBleed {
   background: #ffffff;
