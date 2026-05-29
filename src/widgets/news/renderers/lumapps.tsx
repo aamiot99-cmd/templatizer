@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import type { WidgetRendererProps } from '../../../types'
 import styles from './lumapps.module.css'
 
