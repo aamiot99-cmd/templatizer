@@ -110,7 +110,8 @@ function App() {
           .saveSnapshot(id, {
             platform: state.platform,
             branding: state.branding,
-            wireframe: state.wireframe,
+            wireframes: state.wireframes,
+            activePageId: state.activePageId,
             navEntries: state.navEntries,
             hubMenu: state.hubMenu,
           })

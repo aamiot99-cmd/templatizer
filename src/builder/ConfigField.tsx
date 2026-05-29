@@ -15,6 +15,23 @@ interface ConfigFieldProps {
 export function ConfigField({ field, value, onChange }: ConfigFieldProps) {
   const currentValue = value ?? field.default
 
+  if (field.type === 'boolean') {
+    return (
+      <div className={`${styles.field} ${styles.fieldInline}`}>
+        <label className={styles.fieldLabel}>{field.label}</label>
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            className={styles.switchInput}
+            checked={Boolean(currentValue)}
+            onChange={(e) => onChange(e.target.checked)}
+          />
+          <span className={styles.switchSlider} />
+        </label>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.field}>
       <label className={styles.fieldLabel}>{field.label}</label>

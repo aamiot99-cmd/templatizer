@@ -72,7 +72,7 @@ function PoolItem({ widget, platform }: PoolItemProps) {
   })
 
   const isNativeJint = platform === 'jint' && Boolean(widget.renderers.jint)
-  const richDoc = getRichDoc(widget.id)
+  const richDoc = getRichDoc(widget.id, platform)
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null)
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const itemElRef = useRef<HTMLDivElement | null>(null)

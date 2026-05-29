@@ -1,0 +1,393 @@
+.widget {
+  padding: 4px 0;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #323130;
+  margin-bottom: 20px;
+}
+
+/* ── Nœud racine ── */
+
+.rootWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.rootBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 10px 14px;
+  min-width: 220px;
+  max-width: 440px;
+  width: 60%;
+}
+
+.rootInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.rootName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #323130;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rootRole {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+.chevron {
+  color: #0078d4;
+  font-size: 20px;
+  font-weight: 300;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* ── Trait de connexion ── */
+
+.connector {
+  width: 1px;
+  height: 22px;
+  background: #c8c6c4;
+  margin: 0 auto;
+}
+
+/* ── Box subordonnés ── */
+
+.reportsBox {
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  padding: 14px 16px;
+}
+
+.reportsHeader {
+  font-size: 12px;
+  color: #605e5c;
+  margin-bottom: 12px;
+}
+
+.reportsGrid {
+  display: grid;
+  gap: 10px 16px;
+}
+
+.reportItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.reportText {
+  min-width: 0;
+  flex: 1;
+}
+
+.reportName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #323130;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reportRole {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+/* ── Avatars ── */
+
+.avatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  overflow: hidden;
+}
+
+.avatarMd {
+  width: 38px;
+  height: 38px;
+  font-size: 13px;
+}
+
+.avatarSm {
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+}
+
+.avatarGrey {
+  background: #edebe9;
+}
+
+.avatarGrey svg {
+  width: 70%;
+  height: 70%;
+}
+
+.avatarLg {
+  width: 56px;
+  height: 56px;
+  font-size: 18px;
+}
+
+.avatarXs {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* ── Profile card popup ── */
+
+.profileCard {
+  position: fixed;
+  z-index: 9999;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  max-height: 480px;
+  pointer-events: all;
+}
+
+.pcHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #edebe9;
+}
+
+.pcHeaderInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.pcName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #323130;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcTitle {
+  font-size: 12px;
+  color: #605e5c;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcDept {
+  font-size: 12px;
+  color: #605e5c;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcAvailability {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #107c10;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.availDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #107c10;
+  flex-shrink: 0;
+}
+
+/* Actions */
+
+.pcActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 8px;
+  border-bottom: 1px solid #edebe9;
+}
+
+.pcAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.pcAction:hover {
+  background: #f3f2f1;
+}
+
+.pcAction svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pcAction span {
+  font-size: 10px;
+  color: #0078d4;
+}
+
+/* Status */
+
+.pcStatus {
+  padding: 10px 16px;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pcStatusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #605e5c;
+}
+
+.pcStatusIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Sections (Contact, Responsable) */
+
+.pcSection {
+  padding: 10px 16px;
+  border-bottom: 1px solid #edebe9;
+}
+
+.pcSection:last-child {
+  border-bottom: none;
+}
+
+.pcSectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #323130;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.pcSectionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #323130;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.pcSectionRow span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcRowIcon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.pcShowMore {
+  background: none;
+  border: none;
+  color: #0078d4;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 2px;
+}
+
+.pcShowMore:hover {
+  text-decoration: underline;
+}
+
+.pcManagerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pcManagerInfo {
+  min-width: 0;
+}
+
+.pcManagerName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #323130;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcManagerTitle {
+  font-size: 11px;
+  color: #605e5c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}

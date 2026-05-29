@@ -21,7 +21,8 @@ function blankProjectState(): ProjectState {
         text: theme.colors.text,
       },
     },
-    wireframe: { rows: [] },
+    wireframes: { 'nav-1': { rows: [] } },
+    activePageId: 'nav-1',
     navEntries: defaultNavEntries(),
     hubMenu: defaultHubMenu(),
   }

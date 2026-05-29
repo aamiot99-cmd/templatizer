@@ -18,6 +18,9 @@ import { textWidget } from './text'
 import { miscWidget } from './misc'
 import { buttonWidget } from './button'
 import { documentCenterWidget } from './documentCenter'
+import { youtubeWidget } from './youtube'
+import { orgChartWidget } from './orgChart'
+import { videoWidget } from './video'
 
 export const WIDGETS: Record<string, WidgetDefinition> = {
   [textWidget.id]: textWidget,
@@ -39,6 +42,9 @@ export const WIDGETS: Record<string, WidgetDefinition> = {
   [imageMapWidget.id]: imageMapWidget,
   [highlightedContentWidget.id]: highlightedContentWidget,
   [documentCenterWidget.id]: documentCenterWidget,
+  [youtubeWidget.id]: youtubeWidget,
+  [orgChartWidget.id]: orgChartWidget,
+  [videoWidget.id]: videoWidget,
 }
 
 export function getWidget(id: string): WidgetDefinition | undefined {

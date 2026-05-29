@@ -5,6 +5,7 @@ import type { JSX } from 'react'
 export type LayoutIconEntry = string | (() => JSX.Element)
 
 export const LAYOUT_ICONS: Record<string, LayoutIconEntry> = {
+  theatre:       '/layout-icons/theatre.png',
   featured:      '/layout-icons/featured.png',
   list:          '/layout-icons/list.png',
   sidebyside:    '/layout-icons/sidebyside.png',

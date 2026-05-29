@@ -8,6 +8,8 @@ export interface ChromeProps {
   navEntries: NavEntry[]
   hubMenu?: HubMenu
   children: ReactNode
+  onNavClick?: (entryId: string) => void
+  activeEntryId?: string
 }
 
 // Jalios et LumApps n'ont pas de chrome : leur aperçu affiche les widgets
