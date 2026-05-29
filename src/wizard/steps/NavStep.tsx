@@ -24,32 +24,6 @@ export function NavStep() {
 
   return (
     <div className={styles.wrapper}>
-<<<<<<< HEAD
-      <SubSection
-        number={1}
-        title="Menu Hub"
-        description="Le menu Hub est une barre horizontale qui se glisse tout en haut de l'intranet, juste sous la barre noire SharePoint. Il sert à naviguer entre les sites associés à un même hub. Désactivé par défaut."
-      >
-        <label className={styles.toggleRow}>
-          <input
-            type="checkbox"
-            checked={hubMenu.enabled}
-            onChange={(e) => setHubMenuEnabled(e.target.checked)}
-            className={styles.toggleCheckbox}
-          />
-          <span className={styles.toggleLabel}>
-            Activer le menu Hub
-          </span>
-        </label>
-
-        {hubMenu.enabled && (
-          <div className={styles.hubMenuEditor}>
-            <NavEntriesEditor
-              entries={hubMenu.entries}
-              onChange={setHubMenuEntries}
-              onReset={() => setHubMenuEntries(defaultHubMenu().entries)}
-              showMockupToggle={false}
-=======
       {showHubSection && (
         <SubSection
           number={1}
@@ -62,7 +36,6 @@ export function NavStep() {
               checked={hubMenu.enabled}
               onChange={(e) => setHubMenuEnabled(e.target.checked)}
               className={styles.toggleCheckbox}
->>>>>>> feature/aamiot
             />
             <span className={styles.toggleLabel}>
               Activer le menu Hub
@@ -75,6 +48,7 @@ export function NavStep() {
                 entries={hubMenu.entries}
                 onChange={setHubMenuEntries}
                 onReset={() => setHubMenuEntries(defaultHubMenu().entries)}
+                showMockupToggle={false}
               />
             </div>
           )}
