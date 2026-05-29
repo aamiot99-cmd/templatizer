@@ -6,7 +6,7 @@ import { useProjectStore } from '../store/projectStore'
 import { getWidget, resolveRenderer } from '../widgets/registry'
 import { PLATFORM_LABELS } from '../types'
 import { ratioToSize } from '../types'
-import type { Branding, ConfigValues, Platform, WidgetSize, WireframeRow } from '../types'
+import type { Branding, ConfigValues, NavEntry, Platform, WidgetSize, WireframeRow } from '../types'
 import styles from './PreviewPage.module.css'
 
 type ExportMode = 'rendered' | 'wireframe'
@@ -62,7 +62,6 @@ function computeAdjustedItemCount(
     if (layout === 'sidebyside') {
       const rowH = NEWS_SIDEBYSIDE_ROW_H[size] ?? 163
       const count = Math.max(1, Math.ceil((targetH - headerH) / rowH))
-      // full = 2-column grid so multiply by 2; two-thirds = single column, round to even
       if (size === 'full') return Math.min(8, count * 2)
       return Math.min(8, Math.ceil(count / 2) * 2)
     }
@@ -91,10 +90,23 @@ function computeAdjustedItemCount(
   return null
 }
 
+function flatMockupPages(entries: NavEntry[]): NavEntry[] {
+  const result: NavEntry[] = []
+  for (const e of entries) {
+    if (e.hasMockup) result.push(e)
+    if (e.children) {
+      for (const c of e.children) {
+        if (c.hasMockup) result.push(c)
+      }
+    }
+  }
+  return result
+}
+
 export function PreviewPage() {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
-  const rows = useProjectStore((s) => s.wireframe.rows)
+  const wireframes = useProjectStore((s) => s.wireframes)
   const navEntries = useProjectStore((s) => s.navEntries)
   const hubMenu = useProjectStore((s) => s.hubMenu)
   const renderedRef = useRef<HTMLDivElement>(null)
@@ -102,6 +114,18 @@ export function PreviewPage() {
   const menuRef = useRef<HTMLDivElement>(null)
   const [exporting, setExporting] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const mockupPages = flatMockupPages(navEntries)
+  const [activePage, setActivePage] = useState<string>(
+    () => mockupPages[0]?.id ?? Object.keys(wireframes)[0] ?? '',
+  )
+
+  // Keep activePage valid when navEntries change
+  const effectivePageId = mockupPages.some((p) => p.id === activePage)
+    ? activePage
+    : (mockupPages[0]?.id ?? activePage)
+
+  const activeRows = wireframes[effectivePageId]?.rows ?? []
 
   useEffect(() => {
     document.title = `${branding.name} · ${PLATFORM_LABELS[platform]}`
@@ -115,6 +139,10 @@ export function PreviewPage() {
     document.addEventListener('mousedown', onDocClick)
     return () => document.removeEventListener('mousedown', onDocClick)
   }, [menuOpen])
+
+  const handleNavClick = (entryId: string) => {
+    setActivePage(entryId)
+  }
 
   async function handleExport(mode: ExportMode) {
     setMenuOpen(false)
@@ -132,8 +160,6 @@ export function PreviewPage() {
       const slug = branding.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'page'
       const stamp = new Date().toISOString().slice(0, 10)
       const suffix = mode === 'wireframe' ? '-wireframe' : ''
-      // JPEG at 0.9 quality keeps the rendered photo-heavy preview compact;
-      // wireframe (mostly flat colors + text) stays as PNG for crisp lines.
       const isJpeg = mode === 'rendered'
       const ext = isJpeg ? 'jpg' : 'png'
       link.download = `${slug}-${platform}${suffix}-${stamp}.${ext}`
@@ -152,27 +178,21 @@ export function PreviewPage() {
   const Chrome = getChrome(platform)
   const pageClass = platform === 'sharepoint' ? styles.pageWhite : styles.page
 
-  if (rows.length === 0) {
-    return (
-      <div className={pageClass}>
-        <div className={styles.emptyState}>
-          <h2>Aucun widget placé</h2>
-          <p>
-            Retournez dans l'éditeur, composez votre wireframe à l'étape
-            "Wireframe" puis relancez la génération.
-          </p>
-        </div>
+  const widgetContent =
+    activeRows.length === 0 ? (
+      <div className={styles.emptyState}>
+        <h2>Page vide</h2>
+        <p>
+          Retournez dans l'éditeur et composez cette page à l'étape "Wireframe".
+        </p>
+      </div>
+    ) : (
+      <div className={styles.widgetRows}>
+        {activeRows.map((row, idx) => (
+          <RenderedRow key={row.id} row={row} index={idx} />
+        ))}
       </div>
     )
-  }
-
-  const widgetContent = (
-    <div className={styles.widgetRows}>
-      {rows.map((row, idx) => (
-        <RenderedRow key={row.id} row={row} index={idx} />
-      ))}
-    </div>
-  )
 
   if (!Chrome) {
     return (
@@ -240,7 +260,13 @@ export function PreviewPage() {
       </div>
       <div ref={renderedRef}>
         <ThemeProvider platform={platform} branding={branding}>
-          <Chrome branding={branding} navEntries={navEntries} hubMenu={hubMenu}>
+          <Chrome
+            branding={branding}
+            navEntries={navEntries}
+            hubMenu={hubMenu}
+            onNavClick={handleNavClick}
+            activeEntryId={effectivePageId}
+          >
             {widgetContent}
           </Chrome>
         </ThemeProvider>
@@ -248,7 +274,7 @@ export function PreviewPage() {
       <div className={styles.offscreen} aria-hidden="true">
         <WireframeCapture
           ref={wireframeRef}
-          rows={rows}
+          rows={activeRows}
           branding={branding}
           platform={platform}
         />
@@ -340,7 +366,6 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
   const platform = useProjectStore((s) => s.platform)
   const branding = useProjectStore((s) => s.branding)
 
-  // Calculs dérivés avant les hooks - safe même si row.cells est vide
   const ratios =
     row.columnRatios && row.columnRatios.length === row.cells.length
       ? row.columnRatios
@@ -358,7 +383,6 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const hasStacked = row.cells.some((c) => c.stackedCells && c.stackedCells.length > 0)
 
-  // Tous les hooks avant tout early return (règle des Hooks React)
   const [_itemCountOverrides, setItemCountOverrides] = useState<Record<string, number>>({})
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
@@ -409,7 +433,6 @@ function RenderedRow({ row, index }: { row: WireframeRow; index: number }) {
 
   const itemCountOverrides = hasStacked ? _itemCountOverrides : {}
 
-  // Early return après tous les hooks
   if (row.cells.length === 0) return null
 
   const sectionClass = isFullBleed

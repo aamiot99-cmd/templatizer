@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { Builder } from '../../builder'
 import { useProjectStore } from '../../store/projectStore'
+import type { NavEntry } from '../../types'
 import styles from './WireframeStep.module.css'
 
 interface Zone {
@@ -29,11 +31,55 @@ const ZONES: Zone[] = [
   },
 ]
 
+function flatMockupPages(entries: NavEntry[]): NavEntry[] {
+  const result: NavEntry[] = []
+  for (const e of entries) {
+    if (e.hasMockup) result.push(e)
+    if (e.children) {
+      for (const c of e.children) {
+        if (c.hasMockup) result.push(c)
+      }
+    }
+  }
+  return result
+}
+
 export function WireframeStep() {
   const platform = useProjectStore((s) => s.platform)
+  const navEntries = useProjectStore((s) => s.navEntries)
+  const activePageId = useProjectStore((s) => s.activePageId)
+  const setActivePageId = useProjectStore((s) => s.setActivePageId)
+
+  const mockupPages = flatMockupPages(navEntries)
+
+  // Sync activePageId to the first mockup page if the current one isn't in the list
+  useEffect(() => {
+    if (
+      mockupPages.length > 0 &&
+      !mockupPages.some((p) => p.id === activePageId)
+    ) {
+      setActivePageId(mockupPages[0].id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navEntries])
 
   return (
     <div className={styles.wrapper}>
+      {mockupPages.length > 0 && (
+        <div className={styles.pageTabsBar}>
+          {mockupPages.map((page) => (
+            <button
+              key={page.id}
+              type="button"
+              className={`${styles.pageTab} ${page.id === activePageId ? styles.pageTabActive : ''}`}
+              onClick={() => setActivePageId(page.id)}
+            >
+              {page.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className={styles.legend}>
         {ZONES.map((zone) => (
           <div key={zone.number} className={styles.zone}>
@@ -45,7 +91,15 @@ export function WireframeStep() {
           </div>
         ))}
       </div>
-      <Builder platform={platform} />
+
+      {mockupPages.length === 0 ? (
+        <div className={styles.noMockupHint}>
+          Aucune page maquettée. Activez « Maquette » sur au moins une entrée
+          dans l'étape Navigation.
+        </div>
+      ) : (
+        <Builder platform={platform} />
+      )}
     </div>
   )
 }

@@ -12,7 +12,7 @@ interface ConfigPanelProps {
 }
 
 export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigPanelProps) {
-  const rows = useProjectStore((s) => s.wireframe.rows)
+  const rows = useProjectStore((s) => (s.wireframes[s.activePageId] ?? { rows: [] }).rows)
   const updateCellConfig = useProjectStore((s) => s.updateCellConfig)
   const setRowColumnLayout = useProjectStore((s) => s.setRowColumnLayout)
   const updateRowAlignment = useProjectStore((s) => s.updateRowAlignment)
@@ -66,11 +66,16 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
     }
 
     function applyNumberStep(field: ConfigSchemaField) {
-      if (field.type !== 'number' || field.key !== 'itemCount') return field
+      if (field.type !== 'number') return field
       const layoutField = w.configSchema.find((f) => f.key === 'layout')
       const currentLayout = (cell.config.layout ?? layoutField?.default) as string
-      if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
-      if (currentLayout === 'vignettes') return { ...field, max: 5 }
+      if (field.key === 'itemCount') {
+        if (currentLayout === 'sidebyside') return { ...field, step: 2, min: 2 }
+        if (currentLayout === 'vignettes') return { ...field, max: 5 }
+      }
+      if (field.key === 'rowCount' && currentLayout === 'grille') {
+        return { ...field, min: 2 }
+      }
       return field
     }
 
@@ -93,9 +98,14 @@ export function ConfigPanel({ platform, selectedCellId, selectedRowId }: ConfigP
                 key={`${selectedCellId}-${field.key}`}
                 field={field}
                 value={cell.config[field.key]}
-                onChange={(value) =>
-                  updateCellConfig(rowId, cell.id, { [field.key]: value })
-                }
+                onChange={(value) => {
+                  const updates: Record<string, string | number | boolean> = { [field.key]: value }
+                  if (field.key === 'layout' && value === 'grille') {
+                    const currentRowCount = (cell.config.rowCount as number) ?? 1
+                    if (currentRowCount < 2) updates.rowCount = 2
+                  }
+                  updateCellConfig(rowId, cell.id, updates)
+                }}
               />
             ))}
         </div>
@@ -212,7 +222,7 @@ function RowConfigPanel({
 }
 
 function findCell(
-  rows: ReturnType<typeof useProjectStore.getState>['wireframe']['rows'],
+  rows: WireframeRow[],
   cellId: string | null,
 ) {
   if (!cellId) return null

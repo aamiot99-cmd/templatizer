@@ -93,10 +93,11 @@ export function composeProjectStateFromAiLayout(
     }))
     .filter((r) => r.cells.length > 0)
 
-  const navEntries = layout.navEntries.map((entry) => ({
+  const navEntries = layout.navEntries.map((entry, idx) => ({
     id: uid('nav'),
     label: entry.label,
     url: '#',
+    hasMockup: idx === 0,
     children:
       entry.children?.map((child) => ({
         id: uid('nav'),
@@ -105,10 +106,13 @@ export function composeProjectStateFromAiLayout(
       })) ?? [],
   }))
 
+  const homeId = navEntries[0]?.id ?? uid('nav')
+
   return {
     platform,
     branding,
-    wireframe: { rows },
+    wireframes: { [homeId]: { rows } },
+    activePageId: homeId,
     navEntries,
     hubMenu: { enabled: false, entries: [] },
   }

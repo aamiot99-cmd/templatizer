@@ -43,7 +43,7 @@ type ActiveDrag =
   | null
 
 export function Builder({ platform }: BuilderProps) {
-  const rows = useProjectStore((s) => s.wireframe.rows)
+  const rows = useProjectStore((s) => (s.wireframes[s.activePageId] ?? { rows: [] }).rows)
   const addCell = useProjectStore((s) => s.addCell)
   const fillCell = useProjectStore((s) => s.fillCell)
   const addStackedCell = useProjectStore((s) => s.addStackedCell)

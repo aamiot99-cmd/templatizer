@@ -5,6 +5,7 @@ export interface NavEntry {
   id: string
   label: string
   url: string
+  hasMockup?: boolean
   children?: NavEntry[]
 }
 
@@ -16,7 +17,8 @@ export interface HubMenu {
 export interface ProjectState {
   platform: Platform
   branding: Branding
-  wireframe: Wireframe
+  wireframes: Record<string, Wireframe>
+  activePageId: string
   navEntries: NavEntry[]
   hubMenu: HubMenu
 }
