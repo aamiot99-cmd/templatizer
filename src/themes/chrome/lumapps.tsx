@@ -7,6 +7,8 @@ interface LumappsChromeProps {
   branding: Branding
   navEntries: NavEntry[]
   children: ReactNode
+  onNavClick?: (entryId: string) => void
+  activeEntryId?: string
 }
 
 const DEFAULT_NAV: NavEntry[] = [
@@ -107,9 +109,14 @@ function ChevronDown() {
   )
 }
 
-export function LumappsChrome({ branding, navEntries, children }: LumappsChromeProps) {
+export function LumappsChrome({ branding, navEntries, children, onNavClick, activeEntryId }: LumappsChromeProps) {
   const nav = navEntries.length > 0 ? navEntries : DEFAULT_NAV
   const tenantInitials = initials(branding.name)
+
+  // The home page is the first nav entry (its mockup is always enabled).
+  const homeId = nav[0]?.id
+  const homeClickable = Boolean(homeId && onNavClick && nav[0]?.hasMockup)
+  const homeActive = activeEntryId ? activeEntryId === homeId : true
 
   // Pull the current Google avatar of the admin building the page.
   const { session } = useAuthSession()
@@ -173,14 +180,27 @@ export function LumappsChrome({ branding, navEntries, children }: LumappsChromeP
       {/* Navigation bar */}
       <div className={styles.navBar}>
         <div className={styles.navBarInner}>
-          <button type="button" className={`${styles.navHome} ${styles.navHomeActive}`} aria-label="Accueil">
+          <button
+            type="button"
+            className={`${styles.navHome} ${homeActive ? styles.navHomeActive : ''}`}
+            aria-label="Accueil"
+            style={homeClickable ? { cursor: 'pointer' } : undefined}
+            onClick={homeClickable ? () => onNavClick!(homeId!) : undefined}
+          >
             <HomeIcon />
           </button>
           <nav className={styles.nav}>
             {nav.map((entry) => {
               const hasChildren = Boolean(entry.children && entry.children.length > 0)
+              const isActive = entry.id === activeEntryId
+              const isClickable = Boolean(entry.hasMockup && onNavClick)
               return (
-                <div key={entry.id} className={`${styles.navItem} ${hasChildren ? styles.navItemHasChildren : ''}`}>
+                <div
+                  key={entry.id}
+                  className={`${styles.navItem} ${isActive ? styles.navItemActive : ''} ${hasChildren ? styles.navItemHasChildren : ''}`}
+                  style={isClickable ? { cursor: 'pointer' } : undefined}
+                  onClick={isClickable ? () => onNavClick!(entry.id) : undefined}
+                >
                   <span>{entry.label}</span>
                   {hasChildren && (
                     <span className={styles.navChevron}>
@@ -190,7 +210,12 @@ export function LumappsChrome({ branding, navEntries, children }: LumappsChromeP
                   {hasChildren && (
                     <div className={styles.dropdown}>
                       {entry.children!.map((child) => (
-                        <div key={child.id} className={styles.dropdownItem}>
+                        <div
+                          key={child.id}
+                          className={styles.dropdownItem}
+                          style={child.hasMockup && onNavClick ? { cursor: 'pointer' } : undefined}
+                          onClick={child.hasMockup && onNavClick ? (e) => { e.stopPropagation(); onNavClick(child.id) } : undefined}
+                        >
                           {child.label}
                         </div>
                       ))}

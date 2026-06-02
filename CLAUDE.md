@@ -84,6 +84,7 @@ templatizer/
 │   │   ├── chrome/            # Barres top + navigation rendues pour chaque plateforme
 │   │   │   ├── index.ts       # Résolution du chrome par plateforme
 │   │   │   ├── jint.tsx       # Chrome Jint (barre M365 + site)
+│   │   │   ├── lumapps.tsx    # Chrome LumApps (top bar + barre de navigation)
 │   │   │   └── sharepoint.tsx # Chrome SharePoint (app bar + site bar)
 │   │   ├── jalios.ts          # Tokens Jalios
 │   │   ├── jint.ts            # Tokens Jint
@@ -157,6 +158,8 @@ Les composants réutilisables entre plusieurs renderers (ex. pagination, icônes
 3. **NE JAMAIS modifier `legacy/`** — conservé à titre de référence historique.
 4. **`dist/` est gitignored** — ne pas l'ajouter au tracking git.
 5. Toute modification de comportement utilisateur visible doit être décrite dans le message de commit et validée manuellement.
+6. **NE JAMAIS faire de `git push` sans confirmation explicite de l'utilisateur** — Claude peut préparer commits et branches, mais l'envoi vers le dépôt distant doit toujours être validé au préalable.
+7. **Portée des features limitée à la techno courante par défaut** — tant que l'utilisateur n'a pas exprimé explicitement son souhait qu'une feature soit transverse aux technos, la feature demandée ne concerne que la techno (plateforme) sur laquelle on travaille de base. Claude pourra proposer de rendre une feature transverse si cela est pertinent.
 
 ---
 
@@ -176,7 +179,8 @@ La structure `.lm-shell > .lm-center > .lm-main + .lm-sidebar` est **obligatoire
 
 ## Points de vigilance identifiés lors de l'audit
 
-- Chrome Jalios et LumApps **intentionnellement absents** : ces plateformes affichent les widgets sans enveloppe de navigation dans l'aperçu. À créer si un contexte shell devient nécessaire en atelier.
+- Chrome **Jalios intentionnellement absent** : cette plateforme affiche les widgets sans enveloppe de navigation dans l'aperçu. À créer si un contexte shell devient nécessaire en atelier. **LumApps a désormais un chrome** (`chrome/lumapps.tsx`, top bar + barre de navigation), enregistré dans `chrome/index.ts` au même titre que Jint et SharePoint.
+- Les trois chromes (Jint, SharePoint, LumApps) supportent la navigation multi-pages via les props `onNavClick` / `activeEntryId` : seules les entrées (et sous-entrées) avec `hasMockup` sont cliquables dans l'aperçu.
 - Jint utilise SharePoint comme fallback renderer pour les widgets sans renderer `jint:` — comportement intentionnel documenté dans `registry.ts:resolveRenderer`.
 - 5 violations `rules-of-hooks` / `setState-in-useEffect` corrigées en phases 2–3 (`PreviewPage`, `useAuthSession`, `JintApps`, `Divider`).
 - Build `tsc -b` était cassé avant l'audit (namespace `JSX` supprimé en React 19) — corrigé en phase 2 via `ReactElement` importé depuis `react`.
